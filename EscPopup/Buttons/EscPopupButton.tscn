@@ -1,17 +1,13 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_48.tres" type="DynamicFont" id=1]
-[ext_resource path="res://OptionsPopup/Buttons/OptionsPopupButton.gd" type="Script" id=2]
+[ext_resource path="res://EscPopup/Buttons/EscPopupButton.gd" type="Script" id=2]
 
-[node name="OptionsPopupButton" type="Button"]
+[node name="EscPopupButton" type="Button"]
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = 100.0
-margin_bottom = 167.0
 rect_pivot_offset = Vector2( 330.39, -144.984 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Test long text button"
 script = ExtResource( 2 )

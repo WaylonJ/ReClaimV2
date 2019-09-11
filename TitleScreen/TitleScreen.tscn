@@ -8,7 +8,7 @@
 [ext_resource path="res://TitleScreen/Buttons/ContinueButton.tscn" type="PackedScene" id=6]
 [ext_resource path="res://TitleScreen/Buttons/OptionsButton.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Fade_In/FadeIn.tscn" type="PackedScene" id=8]
-[ext_resource path="res://OptionsPopup/OptionsPopup.tscn" type="PackedScene" id=9]
+[ext_resource path="res://EscPopup/EscPopup.tscn" type="PackedScene" id=9]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
@@ -75,6 +75,6 @@ size_flags_vertical = 3
 visible = false
 color = Color( 0, 0, 0, 0 )
 
-[node name="OptionsPopup" parent="." instance=ExtResource( 9 )]
+[node name="EscPopup" parent="." instance=ExtResource( 9 )]
 [connection signal="pressed" from="Menu/CenterRow/Buttons/NewGameButton" to="." method="_on_NewGameButton_pressed"]
-[connection signal="pressed" from="Menu/CenterRow/Buttons/OptionsButton" to="OptionsPopup" method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="Menu/CenterRow/Buttons/OptionsButton" to="EscPopup" method="_on_OptionsButton_pressed"]
