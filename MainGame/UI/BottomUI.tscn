@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://MainGame/UI/Resources/PH_UI_BasePortrait.png" type="Texture" id=1]
 [ext_resource path="res://MainGame/UI/NoSelectionOptions.gd" type="Script" id=2]
@@ -6,95 +6,118 @@
 [ext_resource path="res://MainGame/UI/ConstructionOptions.gd" type="Script" id=4]
 [ext_resource path="res://MainGame/UI/Buttons/ConstructionCategory.tscn" type="PackedScene" id=5]
 [ext_resource path="res://MainGame/UI/Buttons/ConstructionCategory.gd" type="Script" id=6]
-[ext_resource path="res://MainGame/UI/Resources/PH_UI_ResourceBldg.png" type="Texture" id=7]
-[ext_resource path="res://MainGame/UI/Resources/PH_UI_MilitaryBldg.png" type="Texture" id=8]
-[ext_resource path="res://MainGame/UI/Resources/PH_UI_UtilityBldg.png" type="Texture" id=9]
-[ext_resource path="res://MainGame/UI/Resources/PH_UI_BackButton.png" type="Texture" id=10]
-[ext_resource path="res://MainGame/UI/Resources/PH_UI_TempResource.png" type="Texture" id=11]
-[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=12]
-[ext_resource path="res://MainGame/UI/Resources/PH_UI_ManaIcon.png" type="Texture" id=13]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_ResourceBldgSmall.png" type="Texture" id=7]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_MilitaryBldgSmall.png" type="Texture" id=8]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_UtilityBldgSmall.png" type="Texture" id=9]
+[ext_resource path="res://MainGame/UI/Resources/Empty.png" type="Texture" id=10]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_BackButtonSmall.png" type="Texture" id=11]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_TempResource.png" type="Texture" id=12]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=13]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_ManaIcon.png" type="Texture" id=14]
 
 [node name="BottomUI" type="HBoxContainer"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -1.05267
-margin_top = -175.0
-margin_right = -1.05273
+margin_top = -180.0
 custom_constants/separation = 10
 
 [node name="TimeStop" type="Button" parent="."]
-margin_right = 200.0
-margin_bottom = 175.0
-rect_min_size = Vector2( 200, 175 )
+margin_right = 180.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="."]
-margin_left = 210.0
-margin_right = 910.0
-margin_bottom = 175.0
+margin_left = 190.0
+margin_right = 898.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
 alignment = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="MiddleSection"]
-margin_right = 700.0
-margin_bottom = 175.0
-rect_min_size = Vector2( 700, 0 )
-custom_constants/separation = 150
+margin_right = 708.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 700, 180 )
+custom_constants/separation = 0
 alignment = 1
 
-[node name="Portrait" type="TextureRect" parent="MiddleSection/NoSelection"]
+[node name="TileInfo" type="HBoxContainer" parent="MiddleSection/NoSelection"]
+editor/display_folded = true
+margin_right = 408.0
+margin_bottom = 180.0
+
+[node name="Portrait" type="TextureRect" parent="MiddleSection/NoSelection/TileInfo"]
 margin_right = 150.0
-margin_bottom = 175.0
+margin_bottom = 180.0
 rect_min_size = Vector2( 150, 150 )
 texture = ExtResource( 1 )
 stretch_mode = 4
 
+[node name="Description" type="Label" parent="MiddleSection/NoSelection/TileInfo"]
+margin_left = 154.0
+margin_top = 83.0
+margin_right = 329.0
+margin_bottom = 97.0
+rect_min_size = Vector2( 175, 0 )
+
+[node name="Production" type="Panel" parent="MiddleSection/NoSelection/TileInfo"]
+margin_left = 333.0
+margin_right = 408.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 75, 0 )
+
 [node name="BasicOptions" type="VBoxContainer" parent="MiddleSection/NoSelection"]
 editor/display_folded = true
 visible = false
-margin_left = 300.0
-margin_right = 700.0
-margin_bottom = 175.0
-rect_min_size = Vector2( 400, 0 )
+margin_left = 408.0
+margin_right = 708.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 30
 alignment = 1
 script = ExtResource( 2 )
 
 [node name="Constructions" type="Button" parent="MiddleSection/NoSelection/BasicOptions"]
-margin_top = 5.0
+margin_top = 8.0
 margin_right = 300.0
-margin_bottom = 72.0
+margin_bottom = 75.0
 rect_min_size = Vector2( 300, 60 )
 size_flags_horizontal = 0
 custom_fonts/font = ExtResource( 3 )
 text = "Construction"
 
 [node name="Improvements" type="Button" parent="MiddleSection/NoSelection/BasicOptions"]
-margin_top = 102.0
+margin_top = 105.0
 margin_right = 300.0
-margin_bottom = 169.0
+margin_bottom = 172.0
 rect_min_size = Vector2( 300, 60 )
 size_flags_horizontal = 0
 custom_fonts/font = ExtResource( 3 )
 text = "Improvements"
 
 [node name="ConstructionOptions" type="VBoxContainer" parent="MiddleSection/NoSelection"]
-margin_left = 300.0
-margin_right = 700.0
-margin_bottom = 175.0
-rect_min_size = Vector2( 400, 0 )
-size_flags_horizontal = 3
-alignment = 1
+margin_left = 408.0
+margin_right = 708.0
+margin_bottom = 180.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/separation = 0
+alignment = 2
 script = ExtResource( 4 )
 
 [node name="TopRow" type="HBoxContainer" parent="MiddleSection/NoSelection/ConstructionOptions"]
-margin_right = 400.0
-margin_bottom = 85.0
+editor/display_folded = true
+margin_right = 300.0
+margin_bottom = 60.0
 size_flags_vertical = 3
-custom_constants/separation = 45
+custom_constants/separation = 0
 
 [node name="ResourceBldg" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 5 )]
 margin_left = 0.0
-margin_right = 75.0
+margin_top = 0.0
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
 script = ExtResource( 6 )
 
 [node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"]
@@ -103,9 +126,11 @@ anchor_bottom = 1.0
 texture = ExtResource( 7 )
 
 [node name="MilitaryBldg" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 5 )]
-editor/display_folded = true
-margin_left = 120.0
-margin_right = 195.0
+margin_left = 60.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow/MilitaryBldg"]
 anchor_right = 1.0
@@ -113,116 +138,250 @@ anchor_bottom = 1.0
 texture = ExtResource( 8 )
 
 [node name="UtilityBldg" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 5 )]
-margin_left = 240.0
-margin_right = 315.0
+margin_left = 120.0
+margin_top = 0.0
+margin_right = 180.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow/UtilityBldg"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 9 )
 
-[node name="BotRow" type="HBoxContainer" parent="MiddleSection/NoSelection/ConstructionOptions"]
-margin_top = 89.0
-margin_right = 400.0
-margin_bottom = 175.0
-size_flags_vertical = 3
-custom_constants/separation = 45
+[node name="Empty" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 5 )]
+margin_left = 180.0
+margin_top = 0.0
+margin_right = 240.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
 
-[node name="ResourceBldg2" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
-editor/display_folded = true
-margin_left = 0.0
-margin_right = 75.0
-
-[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/ResourceBldg2"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 7 )
-
-[node name="MilitaryBldg2" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
-editor/display_folded = true
-margin_left = 120.0
-margin_right = 195.0
-
-[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/MilitaryBldg2"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 8 )
-
-[node name="BackButton" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
-margin_left = 240.0
-margin_right = 315.0
-
-[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton"]
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow/Empty"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 10 )
 
-[node name="RightSection" type="HBoxContainer" parent="."]
+[node name="Empty2" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 5 )]
+margin_left = 240.0
+margin_top = 0.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/TopRow/Empty2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="MiddleRow" type="HBoxContainer" parent="MiddleSection/NoSelection/ConstructionOptions"]
+margin_top = 60.0
+margin_right = 300.0
+margin_bottom = 120.0
+custom_constants/separation = 0
+
+[node name="Empty2" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 5 )]
 editor/display_folded = true
-margin_left = 920.0
-margin_right = 1280.0
-margin_bottom = 175.0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty3" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 5 )]
+margin_left = 60.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty3"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty4" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 5 )]
+margin_left = 120.0
+margin_top = 0.0
+margin_right = 180.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty4"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty5" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 5 )]
+margin_left = 180.0
+margin_top = 0.0
+margin_right = 240.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty5"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty6" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 5 )]
+margin_left = 240.0
+margin_top = 0.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty6"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="BotRow" type="HBoxContainer" parent="MiddleSection/NoSelection/ConstructionOptions"]
+margin_top = 120.0
+margin_right = 300.0
+margin_bottom = 180.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="Empty6" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
+editor/display_folded = true
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty6"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty7" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
+margin_left = 60.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty7"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty8" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
+editor/display_folded = true
+margin_left = 120.0
+margin_top = 0.0
+margin_right = 180.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty8"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="Empty9" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
+editor/display_folded = true
+margin_left = 180.0
+margin_top = 0.0
+margin_right = 240.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty9"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="BackButton" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 5 )]
+margin_left = 240.0
+margin_top = 0.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 11 )
+
+[node name="ResourceBuildings" type="VBoxContainer" parent="MiddleSection/NoSelection"]
+visible = false
+margin_left = 683.0
+margin_right = 683.0
+margin_bottom = 188.0
+
+[node name="RightSection" type="HBoxContainer" parent="."]
+margin_left = 908.0
+margin_right = 1606.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 340, 0 )
 size_flags_horizontal = 3
 
 [node name="ResourceItems" type="VBoxContainer" parent="RightSection"]
-margin_right = 178.0
-margin_bottom = 175.0
+margin_right = 347.0
+margin_bottom = 180.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="TempItem" type="HBoxContainer" parent="RightSection/ResourceItems"]
-margin_top = 67.0
-margin_right = 178.0
-margin_bottom = 107.0
+margin_top = 70.0
+margin_right = 347.0
+margin_bottom = 110.0
 
 [node name="TextureRect" type="TextureRect" parent="RightSection/ResourceItems/TempItem"]
 margin_right = 40.0
 margin_bottom = 40.0
-texture = ExtResource( 11 )
+texture = ExtResource( 12 )
 
 [node name="Label" type="Label" parent="RightSection/ResourceItems/TempItem"]
 margin_left = 44.0
 margin_top = 4.0
 margin_right = 135.0
 margin_bottom = 35.0
-custom_fonts/font = ExtResource( 12 )
+custom_fonts/font = ExtResource( 13 )
 text = "x1   Stars"
 
 [node name="ResourceBars" type="VBoxContainer" parent="RightSection"]
-editor/display_folded = true
-margin_left = 182.0
-margin_right = 360.0
-margin_bottom = 175.0
+margin_left = 351.0
+margin_right = 698.0
+margin_bottom = 180.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="ManaBar" type="HBoxContainer" parent="RightSection/ResourceBars"]
-margin_top = 67.0
-margin_right = 178.0
-margin_bottom = 107.0
+margin_top = 70.0
+margin_right = 347.0
+margin_bottom = 110.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="RightSection/ResourceBars/ManaBar"]
 margin_right = 40.0
 margin_bottom = 40.0
-texture = ExtResource( 13 )
+texture = ExtResource( 14 )
 
 [node name="Label" type="Label" parent="RightSection/ResourceBars/ManaBar"]
 visible = false
 margin_left = 4.0
 margin_right = 60.0
 margin_bottom = 31.0
-custom_fonts/font = ExtResource( 12 )
+custom_fonts/font = ExtResource( 13 )
 text = "Mana"
 
 [node name="ProgressBar" type="ProgressBar" parent="RightSection/ResourceBars/ManaBar"]
 margin_left = 44.0
-margin_right = 178.0
+margin_right = 347.0
 margin_bottom = 40.0
+rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 1
-[connection signal="pressed" from="MiddleSection/NoSelection/BasicOptions/Constructions" to="MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="MiddleSection/NoSelection/BasicOptions/Constructions" to="MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="MiddleSection/NoSelection/BasicOptions/Constructions" to="MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
