@@ -1,0 +1,476 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_Background.png" type="Texture" id=3]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_BasePortrait.png" type="Texture" id=4]
+[ext_resource path="res://MainGame/UI/NoSelectionOptions.gd" type="Script" id=5]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_48.tres" type="DynamicFont" id=6]
+[ext_resource path="res://MainGame/UI/ConstructionOptions.gd" type="Script" id=7]
+[ext_resource path="res://MainGame/UI/Buttons/ConstructionCategory.tscn" type="PackedScene" id=8]
+[ext_resource path="res://MainGame/UI/Buttons/ConstructionCategory.gd" type="Script" id=9]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_ResourceBldgSmall.png" type="Texture" id=10]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_MilitaryBldgSmall.png" type="Texture" id=11]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_UtilityBldgSmall.png" type="Texture" id=12]
+[ext_resource path="res://MainGame/UI/Resources/Empty.png" type="Texture" id=13]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_BackButtonSmall.png" type="Texture" id=14]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_TempResource.png" type="Texture" id=15]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=16]
+[ext_resource path="res://MainGame/UI/Resources/PH_UI_ManaIcon.png" type="Texture" id=17]
+[ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=18]
+[ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=19]
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="MiddlePanel" type="Panel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -172.99
+margin_top = -423.772
+margin_right = 227.01
+margin_bottom = -173.772
+rect_min_size = Vector2( 400, 250 )
+size_flags_horizontal = 4
+script = ExtResource( 1 )
+
+[node name="PanelText" type="TextEdit" parent="MiddlePanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = ExtResource( 2 )
+text = "Sample Text Oh man so sexyaaaaaaa aaaaaaaaaa aaaaaa "
+breakpoint_gutter = true
+wrap_enabled = true
+
+[node name="BottomUI_BG" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -640.0
+margin_top = -180.0
+margin_right = 640.0
+rect_min_size = Vector2( 0, 180 )
+texture = ExtResource( 3 )
+expand = true
+
+[node name="BottomUI" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -180.0
+custom_constants/separation = 10
+
+[node name="TimeStop" type="Button" parent="BottomUI"]
+margin_right = 180.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 180, 180 )
+
+[node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
+margin_left = 190.0
+margin_right = 898.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
+margin_right = 708.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 700, 180 )
+custom_constants/separation = 0
+alignment = 1
+
+[node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+margin_right = 408.0
+margin_bottom = 180.0
+
+[node name="Portrait" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/TileInfo"]
+margin_right = 150.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 150, 150 )
+texture = ExtResource( 4 )
+stretch_mode = 4
+
+[node name="Description" type="Label" parent="BottomUI/MiddleSection/NoSelection/TileInfo"]
+margin_left = 154.0
+margin_top = 83.0
+margin_right = 329.0
+margin_bottom = 97.0
+rect_min_size = Vector2( 175, 0 )
+
+[node name="Production" type="Panel" parent="BottomUI/MiddleSection/NoSelection/TileInfo"]
+margin_left = 333.0
+margin_right = 408.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 75, 0 )
+
+[node name="BasicOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+visible = false
+margin_left = 408.0
+margin_right = 708.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 300, 0 )
+custom_constants/separation = 30
+alignment = 1
+script = ExtResource( 5 )
+
+[node name="Constructions" type="Button" parent="BottomUI/MiddleSection/NoSelection/BasicOptions"]
+margin_top = 8.0
+margin_right = 300.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 300, 60 )
+size_flags_horizontal = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Construction"
+
+[node name="Improvements" type="Button" parent="BottomUI/MiddleSection/NoSelection/BasicOptions"]
+margin_top = 105.0
+margin_right = 300.0
+margin_bottom = 172.0
+rect_min_size = Vector2( 300, 60 )
+size_flags_horizontal = 0
+custom_fonts/font = ExtResource( 6 )
+text = "Improvements"
+
+[node name="ConstructionOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+margin_left = 408.0
+margin_right = 708.0
+margin_bottom = 180.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/separation = 0
+alignment = 2
+script = ExtResource( 7 )
+
+[node name="TopRow" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions"]
+margin_right = 300.0
+margin_bottom = 60.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="ResourceBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+script = ExtResource( 9 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+
+[node name="MilitaryBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 60.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/MilitaryBldg"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.3327
+margin_top = 1.16638
+margin_right = 2.3327
+margin_bottom = 1.16638
+texture = ExtResource( 11 )
+
+[node name="UtilityBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 120.0
+margin_top = 0.0
+margin_right = 180.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/UtilityBldg"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 12 )
+
+[node name="Empty" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 180.0
+margin_top = 0.0
+margin_right = 240.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/Empty"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty2" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 240.0
+margin_top = 0.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/Empty2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="MiddleRow" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions"]
+margin_top = 60.0
+margin_right = 300.0
+margin_bottom = 120.0
+custom_constants/separation = 0
+
+[node name="Empty2" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty3" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 60.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty3"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty4" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+editor/display_folded = true
+margin_left = 120.0
+margin_top = 0.0
+margin_right = 180.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty4"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty5" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+editor/display_folded = true
+margin_left = 180.0
+margin_top = 0.0
+margin_right = 240.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty5"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty6" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+editor/display_folded = true
+margin_left = 240.0
+margin_top = 0.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty6"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="BotRow" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions"]
+margin_top = 120.0
+margin_right = 300.0
+margin_bottom = 180.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="Empty6" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+editor/display_folded = true
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty6"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty7" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+margin_left = 60.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty7"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty8" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+editor/display_folded = true
+margin_left = 120.0
+margin_top = 0.0
+margin_right = 180.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty8"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="Empty9" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 8 )]
+editor/display_folded = true
+margin_left = 180.0
+margin_top = 0.0
+margin_right = 240.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty9"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 13 )
+
+[node name="BackButton" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 8 )]
+margin_left = 240.0
+margin_top = 0.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="ResourceBuildings" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+visible = false
+margin_left = 683.0
+margin_right = 683.0
+margin_bottom = 188.0
+
+[node name="RightSection" type="HBoxContainer" parent="BottomUI"]
+margin_left = 908.0
+margin_right = 1280.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 340, 0 )
+size_flags_horizontal = 3
+
+[node name="ResourceItems" type="VBoxContainer" parent="BottomUI/RightSection"]
+margin_right = 174.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TempItem" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
+margin_top = 70.0
+margin_right = 174.0
+margin_bottom = 110.0
+
+[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/TempItem"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 15 )
+
+[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceItems/TempItem"]
+margin_left = 44.0
+margin_top = 4.0
+margin_right = 135.0
+margin_bottom = 35.0
+custom_fonts/font = ExtResource( 16 )
+text = "x1   Stars"
+
+[node name="ResourceBars" type="VBoxContainer" parent="BottomUI/RightSection"]
+margin_left = 178.0
+margin_right = 372.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ManaBar" type="HBoxContainer" parent="BottomUI/RightSection/ResourceBars"]
+margin_top = 70.0
+margin_right = 194.0
+margin_bottom = 110.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 17 )
+
+[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
+visible = false
+margin_left = 4.0
+margin_right = 60.0
+margin_bottom = 31.0
+custom_fonts/font = ExtResource( 16 )
+text = "Mana"
+
+[node name="ProgressBar" type="ProgressBar" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
+margin_left = 44.0
+margin_right = 194.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="SelectedHighlight" type="TextureRect" parent="Control"]
+show_behind_parent = true
+margin_left = 587.178
+margin_top = 544.015
+margin_right = 647.178
+margin_bottom = 604.015
+rect_clip_content = true
+texture = ExtResource( 18 )
+script = ExtResource( 19 )
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]

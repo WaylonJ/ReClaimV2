@@ -28,3 +28,8 @@ func makeBaseArray(Tile):
 		for item in row:
 			add_child(item)
 	return arr
+	
+func _input(event):
+	if event is InputEventMouseButton:
+		get_node("UI/Control/SelectedHighlight").hide()
+		print(event.position)
