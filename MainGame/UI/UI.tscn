@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://MainGame/UI/Resources/PH_UI_ManaIcon.png" type="Texture" id=17]
 [ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=18]
 [ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=19]
+[ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=20]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -57,6 +58,7 @@ texture = ExtResource( 3 )
 expand = true
 
 [node name="BottomUI" type="HBoxContainer" parent="."]
+editor/display_folded = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -83,6 +85,7 @@ custom_constants/separation = 0
 alignment = 1
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+editor/display_folded = true
 margin_right = 408.0
 margin_bottom = 180.0
 
@@ -107,6 +110,7 @@ margin_bottom = 180.0
 rect_min_size = Vector2( 75, 0 )
 
 [node name="BasicOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+editor/display_folded = true
 visible = false
 margin_left = 408.0
 margin_right = 708.0
@@ -389,6 +393,7 @@ margin_right = 683.0
 margin_bottom = 188.0
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
+editor/display_folded = true
 margin_left = 908.0
 margin_right = 1280.0
 margin_bottom = 180.0
@@ -454,14 +459,14 @@ rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
-[node name="Control" type="Control" parent="."]
+[node name="HiddenItems" type="Control" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="SelectedHighlight" type="TextureRect" parent="Control"]
+[node name="SelectedHighlight" type="TextureRect" parent="HiddenItems"]
 show_behind_parent = true
 margin_left = 587.178
 margin_top = 544.015
@@ -470,6 +475,11 @@ margin_bottom = 604.015
 rect_clip_content = true
 texture = ExtResource( 18 )
 script = ExtResource( 19 )
+
+[node name="HoveringBldgImage" type="TextureRect" parent="HiddenItems"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 20 )
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]

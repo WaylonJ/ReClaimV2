@@ -2,7 +2,6 @@ extends TextureRect
 
 var buttonCoordinates = []
 var test = "../../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"
-
 #
 #func _init():
 #	MOUSE_FILTER_PASS = 1
@@ -25,20 +24,20 @@ func _ready():
 	var buttons = get_tree().get_nodes_in_group("ConstructionButtons")
 #
 #	print(get_node(test).get_position())
-#
-#	set("Disabled", 0)
-#	self.MOUSE_FILTER_PASS = 1k
 	
 	for item in buttons:
-		item.connect("pressed", self, "_on_thisButton_pressed", [item.get_position()])
-#		print(item)
-	
-#	hide()
+		item.connect("pressed", self, "_on_thisButton_pressed", [item])
 
-func _on_thisButton_pressed(buttonPos):
-	print(buttonPos)
-	set_position(buttonPos + Vector2(598, 540))
+func _on_thisButton_pressed(button):
+	var buttonPos = button.get_position()
+	var parentPos = button.get_parent().get_position()
+	print("SelectedHighlight.gd: " + str(buttonPos) + ", parent: " + str(parentPos))
+	set_position(buttonPos + parentPos + Vector2(598, 540))
+#	get_tree().get_root().get_child(0).set("selectedTile", button.get_name())
+#	print(get_tree().get_root().get_child(0).get("selectedTile"))
+#	button.get_name())
 	show()
-	
+
+
 #func _unhandled_input(event):
 #	print(event)

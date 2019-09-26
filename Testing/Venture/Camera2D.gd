@@ -18,8 +18,9 @@ func _input(event):
 	#Controls mouse draggins
 	if event is InputEventMouseButton:
 		if event.is_pressed():
-			previousPosition = event.position
-			_drag = true
+			if event.position[1] < 540:
+				previousPosition = event.position
+				_drag = true
 		elif !event.is_pressed():
 			_drag = false
 	if event is InputEventMouseMotion && _drag:

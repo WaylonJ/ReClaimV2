@@ -2,13 +2,18 @@ extends Control
 
 var bigArray = []
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
 	var Tile = preload("Tiles/Tile.tscn")	
 
 	var baseArr = makeBaseArray(Tile)
 	
 	print("Finished creating TileSet")
+	
+	get_node("UI/HiddenItems/HoveringBldgImage").call("_get_all_tiles")
+	
+	
+	
 	
 #	baseArr[0][0].rect_position = Vector2(1111, 1111)
 
@@ -21,6 +26,7 @@ func makeBaseArray(Tile):
 		arr.append([])
 		for col in range(15):
 			var myObj = Tile.instance()
+			myObj.add_to_group("Tiles")
 			myObj.rect_position = Vector2((-7 + row) * 175, (-7 + col) * 175)
 			arr[row].append(myObj)
 	
@@ -31,5 +37,4 @@ func makeBaseArray(Tile):
 	
 func _input(event):
 	if event is InputEventMouseButton:
-		get_node("UI/Control/SelectedHighlight").hide()
-		print(event.position)
+		get_node("UI/HiddenItems/SelectedHighlight").hide()
