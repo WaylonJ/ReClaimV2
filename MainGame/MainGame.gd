@@ -12,9 +12,6 @@ func _ready():
 	
 	get_node("UI/HiddenItems/HoveringBldgImage").call("_get_all_tiles")
 	
-	
-	
-	
 #	baseArr[0][0].rect_position = Vector2(1111, 1111)
 
 
@@ -35,6 +32,7 @@ func makeBaseArray(Tile):
 			add_child(item)
 	return arr
 	
-func _input(event):
-	if event is InputEventMouseButton:
-		get_node("UI/HiddenItems/SelectedHighlight").hide()
+#func _input(event):
+	# Hides the golden highlight border after a click
+#	if event is InputEventMouseButton:
+#		get_node("UI/HiddenItems/SelectedHighlight").hide()

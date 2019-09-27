@@ -17,7 +17,7 @@ func _ready():
 func _input(event):
 	#Controls mouse draggins
 	if event is InputEventMouseButton:
-		if event.is_pressed():
+		if event.is_pressed() and not Input.is_key_pressed(KEY_SHIFT):
 			if event.position[1] < 540:
 				previousPosition = event.position
 				_drag = true
