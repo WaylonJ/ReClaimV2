@@ -37,6 +37,9 @@ func _process(delta):
 	buildingTime -= delta
 	if buildingTime <= 0:
 		buildingTime = 0
+		
+		updateGlobalValues()
+		
 		set_process(false)
 		buildingComplete = true
 		get_node("BuildingProgressBar").hide()
@@ -52,17 +55,31 @@ func startBuilding():
 	pass
 
 func createTile():
+	# Updates Portrait, desc, output
+	updateTileInfo()
+	
+
+	# Handles the time aspect to building a building.
+	buildingTimeMax = buildingTime
+	get_node("BuildingProgressBar").show()
+	set_process(true)
+	
+func updateGlobalValues():
+	# Handles updating global production values
+	get_tree().get_root().get_node("Control").updateTotalProduction(outputMana, outputAdvanced, outputResearch)
+
+func updateTileInfo():
 	match buildingName:
 		"Base":
 			description = BASE_DESCRIPTION
 			portrait = BASE_PORTRAIT
 			buildingTime = 0
-			updateOutput(10, 1, 0, 3)
+			updateOutput(10, null, 0, 3)
 
 		"ManaPool":
 			description = MANAPOOL_DESCRIPTION
 			portrait = MANA_PORTRAIT
-			buildingTime = 10
+			buildingTime = 0.5
 			updateOutput(5, null, null, null)
 
 		"ResourceBldg":
@@ -85,17 +102,15 @@ func createTile():
 
 		_:
 			print("Tile.gd: No name match, given -" + buildingName)
-
-
-	buildingTimeMax = buildingTime
-	get_node("BuildingProgressBar").show()
-	set_process(true)
-
+	
 func updateOutput(mana, unit, advanced, research):
 	outputMana = mana
 	outputUnit = unit
 	outputAdvanced = advanced
 	outputResearch = research
+
+#func updateGlobalProduction():
+#
 
 func _on_Button2_pressed():
 	print("Tile Pressed!")

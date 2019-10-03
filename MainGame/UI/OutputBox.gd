@@ -18,14 +18,18 @@ func hideAll():
 func updateUI(tile):
 	hideAll()
 	if tile.outputMana != null:
+		get_node("ManaOutput/Label").set_text(str(tile.get("outputMana")))
 		get_node("ManaOutput").show()
 
 	if tile.outputUnit != null:
+		get_node("UnitOutput/Label").set_text(str(tile.get("outputUnit")))
 		get_node("UnitOutput").show()
 
 	if tile.outputAdvanced != null:
+		get_node("AdvancedOutput/Label").set_text(str(tile.get("outputAdvanced")))
 		get_node("AdvancedOutput").show()
 
 	if tile.outputResearch != null:
+		get_node("ResearchOutput/Label").set_text(str(tile.get("outputResearch")))
 		get_node("ResearchOutput").show()
 

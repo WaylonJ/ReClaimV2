@@ -1,6 +1,6 @@
 extends TextureRect
 
-var selectedTile = null
+var selectedBldg = null
 var tempBG = null
 var currentTile = null
 var shiftHeld = false
@@ -33,7 +33,7 @@ func getAllTiles():
 #	print(get_tree().get_nodes_in_group("Tiles"))
 
 func _on_mouse_entered_highlight(tile):
-	if selectedTile != null:
+	if selectedBldg != null:
 		# Save the tile's current BG here
 		tempBG = tile.get_node("Background").get("texture")
 		
@@ -43,13 +43,15 @@ func _on_mouse_entered_highlight(tile):
 			
 			currentTile = tile
 			# Set the tile's BG to be the BG of whatever is selected.
-			match selectedTile:
+			match selectedBldg:
 				"ResourceBldg":
 					tile.get_node("Background").set("texture", Resource_Tile)
 				"MilitaryBldg":
 					tile.get_node("Background").set("texture", Military_Tile)
 				"UtilityBldg":
 					tile.get_node("Background").set("texture", Utility_Tile)
+				"ManaPool":
+					tile.get_node("Background").set("texture", Mana_Tile)
 				_:
 					pass
 				
@@ -61,43 +63,46 @@ func _on_mouse_exited_highlight(tile):
 #	currentTile = null
 
 func _on_thisButton_pressed(button):
-	selectedTile = button.get_name()
+	selectedBldg = button.get_name()
 
 func _on_BackButton_pressed():
 	unselectEverything()
 	
 func _input(event):
 	# We have a tile selected, we've clicked a tile on the board
-	if event is InputEventMouseButton and selectedTile != null and !event.is_pressed():
+	if event is InputEventMouseButton and selectedBldg != null and !event.is_pressed():
 		if tempBG == null and not Input.is_key_pressed(KEY_SHIFT):
 			unselectEverything()
 		# Ensures we're over a tile that doesn't have a building already
 		elif tempBG == Blank_Tile:
-			attemptToCreateBuilding()
-			# Shift key allows multiple constructions at once
-			if not Input.is_key_pressed(KEY_SHIFT):
-				selectedTile = null
-				hideHighlightBorder()
-			
-			tempBG = null
+			if attemptToCreateBuilding(selectedBldg):
+				# Shift key allows multiple constructions at once
+				if not Input.is_key_pressed(KEY_SHIFT):
+					selectedBldg = null
+					hideHighlightBorder()
+				
+				tempBG = null
 			
 	if Input.is_key_pressed(KEY_ESCAPE):
 		if tempBG != null:
 			unselectEverything()
 
-func attemptToCreateBuilding():
+func attemptToCreateBuilding(bldg):
 	#CHECK RESOURCE COST AND THE LIKE HERE
-	if true:
+	if get_tree().get_root().get_node("Control").checkBuildable(bldg):
 		createTile()
+		return true
+#	if true:
+#		createTile()
+		
 
 func createTile():
-	currentTile.set("buildingName", selectedTile)
+	currentTile.set("buildingName", selectedBldg)
 	currentTile.startBuilding()
 	currentTile.createTile()
 	
-
 func unselectEverything():
-	selectedTile = null
+	selectedBldg = null
 	
 	if tempBG != null:
 		currentTile.get_node("Background").set("texture", tempBG)

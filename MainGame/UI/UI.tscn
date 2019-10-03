@@ -93,7 +93,6 @@ size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
 margin_right = 500.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 500, 0 )
@@ -238,8 +237,6 @@ text = "+5"
 align = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
-visible = false
 margin_left = 500.0
 margin_right = 800.0
 margin_bottom = 180.0
@@ -339,17 +336,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 19 )
 
-[node name="Empty" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 15 )]
+[node name="ManaPool" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+"ConstructionButtons",
+] instance=ExtResource( 15 )]
 margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 60, 60 )
 
-[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/Empty"]
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ManaPool"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 20 )
+texture = ExtResource( 10 )
+stretch_mode = 1
 
 [node name="Empty2" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" instance=ExtResource( 15 )]
 margin_left = 240.0
@@ -512,8 +512,8 @@ margin_bottom = 180.0
 
 [node name="TileActions" type="VBoxContainer" parent="BottomUI/MiddleSection"]
 editor/display_folded = true
-margin_left = 500.0
-margin_right = 800.0
+margin_left = 800.0
+margin_right = 1100.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 0
@@ -714,6 +714,8 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="UpgradeMenu" type="VBoxContainer" parent="BottomUI/MiddleSection"]
+editor/display_folded = true
+visible = false
 margin_left = 800.0
 margin_right = 1100.0
 margin_bottom = 180.0
@@ -933,17 +935,17 @@ margin_bottom = 180.0
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="TempItem" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
-margin_top = 70.0
+[node name="Mana" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
+margin_top = 26.0
 margin_right = 132.0
-margin_bottom = 110.0
+margin_bottom = 66.0
 
-[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/TempItem"]
+[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Mana"]
 margin_right = 40.0
 margin_bottom = 40.0
-texture = ExtResource( 11 )
+texture = ExtResource( 10 )
 
-[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceItems/TempItem"]
+[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceItems/Mana"]
 margin_left = 44.0
 margin_top = 7.0
 margin_right = 132.0
@@ -951,16 +953,76 @@ margin_bottom = 33.0
 rect_min_size = Vector2( 88, 0 )
 custom_fonts/font = ExtResource( 2 )
 text = "100.2 mil"
-align = 1
+
+[node name="BG" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Mana/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 8 )
+expand = true
+
+[node name="Advanced" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
+margin_top = 70.0
+margin_right = 132.0
+margin_bottom = 110.0
+
+[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Advanced"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceItems/Advanced"]
+margin_left = 44.0
+margin_top = 7.0
+margin_right = 132.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 88, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "100.2 mil"
+
+[node name="BG2" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Advanced/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 8 )
+expand = true
+
+[node name="Research" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
+margin_top = 114.0
+margin_right = 132.0
+margin_bottom = 154.0
+
+[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Research"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceItems/Research"]
+margin_left = 44.0
+margin_top = 7.0
+margin_right = 132.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 88, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "100.2 mil"
+
+[node name="BG2" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Research/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 8 )
+expand = true
 
 [node name="ResourceBars" type="VBoxContainer" parent="BottomUI/RightSection"]
 margin_left = 136.0
 margin_right = 280.0
 margin_bottom = 180.0
+rect_min_size = Vector2( 144, 0 )
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="ManaBar" type="HBoxContainer" parent="BottomUI/RightSection/ResourceBars"]
+visible = false
 margin_top = 70.0
 margin_right = 144.0
 margin_bottom = 110.0
