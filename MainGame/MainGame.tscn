@@ -7,9 +7,9 @@
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.50732
+margin_left = 3.17749
 margin_top = 1.50732
-margin_right = 1.50732
+margin_right = 3.17749
 margin_bottom = 1.50732
 rect_pivot_offset = Vector2( 208.493, -51.5073 )
 size_flags_horizontal = 4

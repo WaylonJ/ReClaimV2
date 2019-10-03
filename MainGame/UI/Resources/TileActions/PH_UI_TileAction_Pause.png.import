@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_UI_ResourceBldgSmall.png-baa9156bcecf5ba70048fe919e9eb83e.stex"
+path="res://.import/PH_UI_TileAction_Pause.png-398573a3ffda0d707ac57f9d18ea7a68.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/UI/Resources/PH_UI_ResourceBldgSmall.png"
-dest_files=[ "res://.import/PH_UI_ResourceBldgSmall.png-baa9156bcecf5ba70048fe919e9eb83e.stex" ]
+source_file="res://MainGame/UI/Resources/TileActions/PH_UI_TileAction_Pause.png"
+dest_files=[ "res://.import/PH_UI_TileAction_Pause.png-398573a3ffda0d707ac57f9d18ea7a68.stex" ]
 
 [params]
 

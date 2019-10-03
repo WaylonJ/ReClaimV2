@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_UI_BasePortrait.png-b0fec7146f733c412863618c53dddc3d.stex"
+path="res://.import/PH_UI_BackButtonSmall.png-3a6bcd8684f9f57ca19bf41b2b3e2e2c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/UI/Resources/PH_UI_BasePortrait.png"
-dest_files=[ "res://.import/PH_UI_BasePortrait.png-b0fec7146f733c412863618c53dddc3d.stex" ]
+source_file="res://MainGame/UI/Resources/BldgButtons/PH_UI_BackButtonSmall.png"
+dest_files=[ "res://.import/PH_UI_BackButtonSmall.png-3a6bcd8684f9f57ca19bf41b2b3e2e2c.stex" ]
 
 [params]
 

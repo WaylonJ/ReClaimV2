@@ -15,7 +15,7 @@ var Utility_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_UtilityBldg.p
 func _ready():
 	pass
 
-func _get_all_tiles():
+func getAllTiles():
 	
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	
@@ -38,8 +38,8 @@ func _on_mouse_entered_highlight(tile):
 		tempBG = tile.get_node("Background").get("texture")
 		
 		if tempBG == Blank_Tile:
-			var emptyPrompt = tile.emptyPrompt
-			print(emptyPrompt)
+#			var emptyPrompt = tile.emptyPrompt
+#			print(emptyPrompt)
 			
 			currentTile = tile
 			# Set the tile's BG to be the BG of whatever is selected.
@@ -57,6 +57,7 @@ func _on_mouse_entered_highlight(tile):
 func _on_mouse_exited_highlight(tile):
 	if tempBG != null:
 		tile.get_node("Background").set("texture", tempBG)
+		tempBG = null
 #	currentTile = null
 
 func _on_thisButton_pressed(button):
@@ -67,20 +68,33 @@ func _on_BackButton_pressed():
 	
 func _input(event):
 	# We have a tile selected, we've clicked a tile on the board
-	if event is InputEventMouseButton and selectedTile != null:
+	if event is InputEventMouseButton and selectedTile != null and !event.is_pressed():
 		if tempBG == null and not Input.is_key_pressed(KEY_SHIFT):
 			unselectEverything()
 		# Ensures we're over a tile that doesn't have a building already
 		elif tempBG == Blank_Tile:
+			attemptToCreateBuilding()
 			# Shift key allows multiple constructions at once
 			if not Input.is_key_pressed(KEY_SHIFT):
 				selectedTile = null
-				hide_highlight_border()
+				hideHighlightBorder()
+			
 			tempBG = null
 			
 	if Input.is_key_pressed(KEY_ESCAPE):
 		if tempBG != null:
 			unselectEverything()
+
+func attemptToCreateBuilding():
+	#CHECK RESOURCE COST AND THE LIKE HERE
+	if true:
+		createTile()
+
+func createTile():
+	currentTile.set("buildingName", selectedTile)
+	currentTile.startBuilding()
+	currentTile.createTile()
+	
 
 func unselectEverything():
 	selectedTile = null
@@ -88,7 +102,7 @@ func unselectEverything():
 	if tempBG != null:
 		currentTile.get_node("Background").set("texture", tempBG)
 		tempBG = null
-	hide_highlight_border()
+	hideHighlightBorder()
 
-func hide_highlight_border():
+func hideHighlightBorder():
 	get_tree().get_root().get_node("Control/UI/HiddenItems/SelectedHighlight").hide()

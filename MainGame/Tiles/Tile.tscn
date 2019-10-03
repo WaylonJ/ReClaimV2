@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://MainGame/Tiles/Tile.gd" type="Script" id=1]
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Blank.png" type="Texture" id=2]
+[ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Highlight.png" type="Texture" id=3]
 
 [node name="Tile" type="Panel"]
 margin_left = 245.185
@@ -42,5 +43,21 @@ flat = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 2 )
+
+[node name="Highlight" type="TextureRect" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 3 )
+
+[node name="BuildingProgressBar" type="ProgressBar" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -57.5
+margin_top = 5.0
+margin_right = 57.5
+margin_bottom = 14.0
+value = 50.0
 [connection signal="mouse_entered" from="Button2" to="." method="_on_Button2_mouse_entered"]
 [connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]

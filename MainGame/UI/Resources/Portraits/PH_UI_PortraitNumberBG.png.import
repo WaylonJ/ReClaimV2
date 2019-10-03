@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_UI_ManaIcon.png-a7745887e17262c7f1b245cb64c2745f.stex"
+path="res://.import/PH_UI_PortraitNumberBG.png-9fa27bda16f8b6dd1bd5763848e0a911.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/UI/Resources/PH_UI_ManaIcon.png"
-dest_files=[ "res://.import/PH_UI_ManaIcon.png-a7745887e17262c7f1b245cb64c2745f.stex" ]
+source_file="res://MainGame/UI/Resources/Portraits/PH_UI_PortraitNumberBG.png"
+dest_files=[ "res://.import/PH_UI_PortraitNumberBG.png-9fa27bda16f8b6dd1bd5763848e0a911.stex" ]
 
 [params]
 

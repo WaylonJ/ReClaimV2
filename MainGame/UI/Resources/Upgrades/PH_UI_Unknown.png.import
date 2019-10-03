@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_UI_UtilityBldgSmall.png-d3731076bd946b10f63adf5ea63a42e9.stex"
+path="res://.import/PH_UI_Unknown.png-32c276a0d19819da166eaee2f3f4ad06.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/UI/Resources/PH_UI_UtilityBldgSmall.png"
-dest_files=[ "res://.import/PH_UI_UtilityBldgSmall.png-d3731076bd946b10f63adf5ea63a42e9.stex" ]
+source_file="res://MainGame/UI/Resources/Upgrades/PH_UI_Unknown.png"
+dest_files=[ "res://.import/PH_UI_Unknown.png-32c276a0d19819da166eaee2f3f4ad06.stex" ]
 
 [params]
 

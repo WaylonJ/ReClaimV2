@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_UI_BackButtonSmall.png-9e2bd51b6368b8b7c8b99169d286ba47.stex"
+path="res://.import/PH_UI_Portrait_Military.png-605455ae04ae4383e999492dd2fccc84.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/UI/Resources/PH_UI_BackButtonSmall.png"
-dest_files=[ "res://.import/PH_UI_BackButtonSmall.png-9e2bd51b6368b8b7c8b99169d286ba47.stex" ]
+source_file="res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_Military.png"
+dest_files=[ "res://.import/PH_UI_Portrait_Military.png-605455ae04ae4383e999492dd2fccc84.stex" ]
 
 [params]
 
