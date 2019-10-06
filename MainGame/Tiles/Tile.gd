@@ -27,11 +27,17 @@ var percentBuilt = 0
 
 var outputMana = null
 var outputUnit = null
+var unitProduction = null
 var outputAdvanced = null
 var outputResearch = null
 
-var selected = false
+var row = null
+var col = null
 
+var selected = false
+var unitStationed = null
+
+var connections = []
 
 func _process(delta):
 	buildingTime -= delta
@@ -40,12 +46,24 @@ func _process(delta):
 		
 		updateGlobalValues()
 		
-		set_process(false)
+		if unitProduction == null:
+			set_process(false)
 		buildingComplete = true
 		get_node("BuildingProgressBar").hide()
 	else:
 		percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
 		get_node("BuildingProgressBar").set("value", percentBuilt)
+		
+	if unitProduction != null:
+		unitProduction -= delta
+		if unitProduction < 0:
+			createUnit()
+			unitProduction = outputUnit
+		else:
+			# Show somewhere on a bar that units are being made
+			pass
+	
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_process(false)
@@ -106,12 +124,25 @@ func updateTileInfo():
 func updateOutput(mana, unit, advanced, research):
 	outputMana = mana
 	outputUnit = unit
+	unitProduction = outputUnit
 	outputAdvanced = advanced
 	outputResearch = research
 
-#func updateGlobalProduction():
-#
+func setUnitStationed(unit):
+	unitStationed = unit
 
-func _on_Button2_pressed():
-	print("Tile Pressed!")
+func createUnit():
+	var unit = preload("../Units/Unit.tscn")
+	
+	var newUnit = unit.instance()
+	newUnit.createUnit("Goblin", 1)
+	
+	if unitStationed == null:
+		get_tree().get_root().get_node("Control/UnitHolder/UnitController").add_child(newUnit)
+		newUnit.add_to_group("Units")
+		newUnit.setTile(self)
+		newUnit.set_position(Vector2(self.get_position()[0], self.get_position()[1] - 75))
+		setUnitStationed(newUnit)
+	else:
+		unitStationed.mergeWithOtherGroup(newUnit)
 

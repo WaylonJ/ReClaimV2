@@ -1,6 +1,6 @@
 extends Camera2D
 
-var myZoom = 0.5
+var myZoom
 
 var currentZoomLevel = 1
 var _drag = false
@@ -11,6 +11,10 @@ var previousPosition: Vector2 = Vector2(0,0);
 func _ready():
 	# Prevents weird slow drag until zoom occurs
 	counterSlowDrag()
+	myZoom = get_zoom()
+	myZoom.x += 0.5
+	myZoom.y += 0.5
+	set_zoom(myZoom)
 	
 	pass # Replace with function body.
 
@@ -36,18 +40,18 @@ func _input(event):
 
 func zoomIn():
 	myZoom = get_zoom()
-	if myZoom.x > 1:
-		myZoom.x -= 0.05
-		myZoom.y -= 0.05
-		currentZoomLevel -= 0.05
+	if myZoom.x > 1.5:
+		myZoom.x -= 0.15
+		myZoom.y -= 0.15
+#		currentZoomLevel -= 0.15
 		set_zoom(myZoom)
 
 func zoomOut():
 	myZoom = get_zoom()
 	if myZoom.x < 8:
-		myZoom.x += 0.05
-		myZoom.y += 0.05
-		currentZoomLevel += 0.05
+		myZoom.x += 0.15
+		myZoom.y += 0.15
+#		currentZoomLevel += 0.15
 		set_zoom(myZoom)
 		
 func counterSlowDrag():

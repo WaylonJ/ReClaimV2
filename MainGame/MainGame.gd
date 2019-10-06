@@ -1,7 +1,10 @@
 extends Control
 
+const BASE_ROWS = 49
+const BASE_COLS = 49
+
 var bigArr = []
-var baseArr = []
+var startingArray = []
 var length = 0
 
 var manaProduction = 0
@@ -9,14 +12,19 @@ var advancedProduction = 0
 var researchProduction = 0
 
 var manaSupply = 500
-var advancedSupply = 10
-var researchSupply = 50
+var advancedSupply = 100
+var researchSupply = 100
 
 var manaCap = 1000
 var advancedCap = 500
 var baseTile = null
 
 var myTimer = 0.02
+
+var selectedName = "e"
+
+var linkCreator = load("res://MainGame/GenerateTileLinks.gd").new()
+var unitMovement = load("res://MainGame/Units/UnitMovement.gd").new()
 
 func _ready():
 	startNewGame()
@@ -25,7 +33,11 @@ func _ready():
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
 	
+	get_node("LinkHolder").add_child(linkCreator)
+	linkCreator.createLinks(startingArray)
 	
+	get_node("UnitHolder").add_child(unitMovement)
+
 	set_process(true)
 	
 func _process(delta):
@@ -40,32 +52,43 @@ func _process(delta):
 	checkCaps()
 	updateUI()
 
+func startNewGame():
+	# Creates the starting array
+	startingArray = makeBaseArray()
+	
+	# Establishes Base tile
+	makeBaseTile()
+	
+	# Make leader unit
+	get_node("UnitHolder/UnitController").makeLeaderUnit(baseTile)
 
-
-func makeBaseArray(Tile):
+func makeBaseArray():
+	var tile = preload("Tiles/Tile.tscn")
 	var arr = []
 
-	for row in range(15):
+	for row in range(BASE_ROWS):
 		arr.append([])
-		for col in range(15):
-			var myObj = Tile.instance()
+		for col in range(BASE_COLS):
+			var myObj = tile.instance()
+			myObj.row = row
+			myObj.col = col
+			myObj.connections = [false, false, false, false]
 			myObj.add_to_group("Tiles")
-			myObj.rect_position = Vector2((-7 + row) * 175, (-7 + col) * 175)
+			myObj.rect_position = Vector2(((-1 * BASE_COLS / 2) + col) * 300, ((-1 * BASE_ROWS / 2) + row) * 300)
 			arr[row].append(myObj)
 	
 	for row in arr:
 		for item in row:
 			add_child(item)
 	return arr
-	
-func startNewGame():
+
+func makeBaseTile():
 	var BaseTilePNG = preload("res://MainGame/Tiles/Resources/PH_Tile_Base.png")
-	var Tile = preload("Tiles/Tile.tscn")
 	
-	baseArr = makeBaseArray(Tile)
-	length = len(baseArr) / 2
+	length = len(startingArray) / 2
 	
-	baseTile = baseArr[length][length]
+	
+	baseTile = startingArray[length][length]
 	baseTile.set("buildingName", "Base")
 	baseTile.startBuilding()
 	baseTile.createTile()
@@ -84,13 +107,7 @@ func updateTotalProduction(mana, advanced, research):
 	baseTile.set("outputAdvanced", advancedProduction)
 	baseTile.set("outputResearch", researchProduction)
 	get_node("UI/BottomUI/MiddleSection/TileInfo/Production/OutputBox").updateUI(baseTile)
-	
-func checkCaps():
-	if manaSupply > manaCap:
-		manaSupply = manaCap
-	if advancedSupply > advancedCap:
-		advancedSupply = advancedCap
-		
+
 func updateUI():
 	var mana = get_node("UI/BottomUI/RightSection/ResourceItems/Mana")
 	var advanced = get_node("UI/BottomUI/RightSection/ResourceItems/Advanced")
@@ -100,6 +117,12 @@ func updateUI():
 	advanced.get_node("Label").set_text(str(floor(advancedSupply)))
 	research.get_node("Label").set_text(str(floor(researchSupply)))
 	
+func checkCaps():
+	if manaSupply > manaCap:
+		manaSupply = manaCap
+	if advancedSupply > advancedCap:
+		advancedSupply = advancedCap
+
 func checkBuildable(tile):
 	match tile:
 		"ManaPool":
@@ -127,3 +150,12 @@ func checkBuildable(tile):
 			print("MainGame.gd: I've no idea how this triggered")
 	
 	return false
+	
+func checkIfSomethingSelected():
+	return selectedName
+
+func selectSomething(name):
+	selectedName = name
+	
+func unselectEverything():
+	selectedName = "e"

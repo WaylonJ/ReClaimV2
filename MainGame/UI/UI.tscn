@@ -86,7 +86,7 @@ rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
 margin_left = 190.0
-margin_right = 1290.0
+margin_right = 990.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 800, 0 )
 size_flags_horizontal = 3
@@ -247,9 +247,7 @@ alignment = 1
 
 [node name="BasicOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
 editor/display_folded = true
-visible = false
-margin_left = 31.0
-margin_right = 331.0
+margin_right = 300.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 30
@@ -275,7 +273,10 @@ custom_fonts/font = ExtResource( 13 )
 text = "Improvements"
 
 [node name="ConstructionOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
-margin_right = 300.0
+editor/display_folded = true
+visible = false
+margin_left = 150.0
+margin_right = 450.0
 margin_bottom = 180.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -512,8 +513,9 @@ margin_bottom = 180.0
 
 [node name="TileActions" type="VBoxContainer" parent="BottomUI/MiddleSection"]
 editor/display_folded = true
-margin_left = 800.0
-margin_right = 1100.0
+visible = false
+margin_left = 1100.0
+margin_right = 1400.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 0
@@ -923,14 +925,53 @@ anchor_bottom = 1.0
 texture = ExtResource( 21 )
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
-editor/display_folded = true
-margin_left = 1300.0
-margin_right = 1580.0
+margin_left = 1000.0
+margin_right = 1280.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
+[node name="ResourceBars" type="VBoxContainer" parent="BottomUI/RightSection"]
+editor/display_folded = true
+margin_right = 144.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 144, 0 )
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ManaBar" type="HBoxContainer" parent="BottomUI/RightSection/ResourceBars"]
+visible = false
+margin_top = 70.0
+margin_right = 144.0
+margin_bottom = 110.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
+visible = false
+margin_left = 4.0
+margin_right = 60.0
+margin_bottom = 31.0
+custom_fonts/font = ExtResource( 32 )
+text = "Mana"
+
+[node name="ProgressBar" type="ProgressBar" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
+margin_left = 44.0
+margin_top = 7.0
+margin_right = 144.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 25 )
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
 [node name="ResourceItems" type="VBoxContainer" parent="BottomUI/RightSection"]
-margin_right = 132.0
+editor/display_folded = true
+margin_left = 148.0
+margin_right = 280.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
 alignment = 1
@@ -1013,44 +1054,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 8 )
 expand = true
 
-[node name="ResourceBars" type="VBoxContainer" parent="BottomUI/RightSection"]
-margin_left = 136.0
-margin_right = 280.0
-margin_bottom = 180.0
-rect_min_size = Vector2( 144, 0 )
-size_flags_horizontal = 3
-alignment = 1
-
-[node name="ManaBar" type="HBoxContainer" parent="BottomUI/RightSection/ResourceBars"]
-visible = false
-margin_top = 70.0
-margin_right = 144.0
-margin_bottom = 110.0
-size_flags_horizontal = 3
-alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
-margin_right = 40.0
-margin_bottom = 40.0
-texture = ExtResource( 10 )
-
-[node name="Label" type="Label" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
-visible = false
-margin_left = 4.0
-margin_right = 60.0
-margin_bottom = 31.0
-custom_fonts/font = ExtResource( 32 )
-text = "Mana"
-
-[node name="ProgressBar" type="ProgressBar" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
-margin_left = 44.0
-margin_top = 7.0
-margin_right = 144.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 100, 25 )
-size_flags_horizontal = 3
-size_flags_vertical = 4
-
 [node name="HiddenItems" type="Control" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1076,11 +1079,11 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 35 )
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
