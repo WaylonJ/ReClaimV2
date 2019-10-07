@@ -13,6 +13,7 @@ const THREE_CONN_CHANCE = 0.9
 const FOUR_CONN_CHANCE = 1.0
 
 var arr = null
+var touched = null
 var length = 0
 
 func _ready():
@@ -176,84 +177,23 @@ func makeRandomLinks(tile, linksToBeMade):
 		numConnections += 1
 	
 func fixIslands():
-	var touched = []
 	var unTouched = []
 	
-	
+	# Generates a copy array with only false values of the same size as the mainArray
 	touched = createTouched()
 	
-	var row = len(arr) / 2
-	var col = len(arr) / 2
+	# Start at home position of array
+	touchAllConnectedTiles(arr[len(arr) / 2][len(arr) / 2])
 	
-	var queue = []
-	var curTile = null
-	var coords = null
+	# Get a array of all tiles that are untouched
+	unTouched = checkCompletion()
+	print(len(unTouched))
 	
-	var done = false
+	# Connect all unTouched tiles with random links until they meet a touched neighbour
+	connectUntouchedTiles(unTouched)
 	
-	var test = 1
-	
-	while !done:
-		# Start at home position of array
-		queue.append([row, col])
-		
-		# Generates a copy array with only false values of the same size as the mainArray
-		touched = createTouched()
-		
-		while !queue.empty():
-			# Get next tile in queue
-			coords = queue.pop_front()
-			
-			curTile = arr[coords[0]][coords[1]]
-			
-			# Mark touched
-			touched[coords[0]][coords[1]] = true
-			
-			# For up
-			if curTile.row != 0:
-				if curTile.connections[0] == true:
-					if touched[curTile.row - 1][curTile.col] == false:
-						touched[curTile.row - 1][curTile.col] = true
-						queue.append([curTile.row - 1, curTile.col])
-						
-			# For right
-			if curTile.col != len(arr[0]) - 1:
-				if curTile.connections[1] == true:
-					if touched[curTile.row][curTile.col + 1] == false:
-						touched[curTile.row][curTile.col + 1] = true
-						queue.append([curTile.row, curTile.col + 1])
-			# For down
-			if curTile.row != len(arr) - 1:
-				if curTile.connections[2] == true:
-					if touched[curTile.row + 1][curTile.col] == false:
-						touched[curTile.row + 1][curTile.col] = true
-						queue.append([curTile.row + 1, curTile.col])
-			# For left
-			if curTile.col != 0:
-				if curTile.connections[3] == true:
-					if touched[curTile.row][curTile.col - 1] == false:
-						touched[curTile.row][curTile.col - 1] = true
-						queue.append([curTile.row, curTile.col - 1])
-						
-#		var rowIn = 0
-#		for row in touched:
-#			for item in row:
-#				if item == true:
-#					printraw("T, ")
-#				else:
-#					printraw("F, ")
-#			print("ROW NUMBER: " + str(rowIn))
-#			rowIn += 1
-
-		unTouched = checkCompletion(touched)
-		
-		if unTouched.empty():
-			done = true
-		else:
-			appendLinkToBecomeTouched(unTouched)
-		
-	
-func checkCompletion(touched):
+func checkCompletion():
+	# Untouched array keeps track of all tiles that are currently not able to be reached
 	var unTouched = []
 	
 	var rowIndex = 0
@@ -269,27 +209,41 @@ func checkCompletion(touched):
 	
 	return unTouched
 	
-func appendLinkToBecomeTouched(unTouched):
-	var index = 0
+func connectUntouchedTiles(unTouched):
+	var removalCounter = 0
+	var newLinksMade = null
 	
-	for tile in unTouched:
-		index = 0
-		for connection in tile.connections:
-			if connection == false:
-				match index:
-					0:
-						makeLink(tile, "up")
-					1:
-						makeLink(tile, "right")
-					2:
-						makeLink(tile, "down")
-					3:
-						makeLink(tile, "left")
-#				tile.connections[index] = true
-				break
-			index += 1
+	while !unTouched.empty():
+		# Generates randomly determines links for 10% of the unTouched tiles so long as the link is going to
+		# a tile that is touched already
+		newLinksMade = makeNewLinks(unTouched)
+		
+		# Actually make the link and touch all newly connected tiles
+		for direction in newLinksMade:
+			match newLinksMade[direction]:
+				"up":
+					makeLink(direction, "up")
+					touchAllConnectedTiles(direction)
+				"right":
+					makeLink(direction, "right")
+					touchAllConnectedTiles(direction)
+				"left":
+					makeLink(direction, "left")
+					touchAllConnectedTiles(direction)
+				"down":
+					makeLink(direction, "down")
+					touchAllConnectedTiles(direction)
+				_:
+					print("GenerateTileLinks.gd: Unmatched direction, ")
+		
+		# Loops through unTouched and removes all touched tiles
+		removalCounter = 0
+		for tile in unTouched:
+			if touched[tile.row][tile.col] == true:
+				unTouched.remove(removalCounter)
 	
 func createTouched():
+	# Creates an array that will keep track of all tiles that are accessible from center
 	var touched = []
 	var index = 0
 	
@@ -303,10 +257,75 @@ func createTouched():
 		
 	return touched
 	
+func searchForTouched(tile):
+	# Searches all neighbouring tiles and returns the first that is accessible from center
+	if tile.row != 0 and touched[tile.row - 1][tile.col] == true:
+		return "up"
+	if tile.row != len(arr) - 1 and touched[tile.row + 1][tile.col] == true:
+		return "down"
+	if tile.col != 0 and touched[tile.row][tile.col - 1] == true:
+		return "left"
+	if tile.col != len(arr[0]) - 1 and touched[tile.row][tile.col + 1] == true:
+		return "right"
+	else:
+		return "none"
 	
+func touchAllConnectedTiles(tile):
+	var curTile = null
+	var coords = null
+	var queue = []
+	queue.append([tile.row, tile.col])
+
+	while !queue.empty():
+		# Get next tile in queue
+		coords = queue.pop_front()
+		
+		curTile = arr[coords[0]][coords[1]]
+		
+		# Mark touched
+		touched[coords[0]][coords[1]] = true
+		
+		# For up
+		if curTile.row != 0:
+			if curTile.connections[0] == true:
+				if touched[curTile.row - 1][curTile.col] == false:
+					touched[curTile.row - 1][curTile.col] = true
+					queue.append([curTile.row - 1, curTile.col])
+					
+		# For right
+		if curTile.col != len(arr[0]) - 1:
+			if curTile.connections[1] == true:
+				if touched[curTile.row][curTile.col + 1] == false:
+					touched[curTile.row][curTile.col + 1] = true
+					queue.append([curTile.row, curTile.col + 1])
+		# For down
+		if curTile.row != len(arr) - 1:
+			if curTile.connections[2] == true:
+				if touched[curTile.row + 1][curTile.col] == false:
+					touched[curTile.row + 1][curTile.col] = true
+					queue.append([curTile.row + 1, curTile.col])
+		# For left
+		if curTile.col != 0:
+			if curTile.connections[3] == true:
+				if touched[curTile.row][curTile.col - 1] == false:
+					touched[curTile.row][curTile.col - 1] = true
+					queue.append([curTile.row, curTile.col - 1])
+
+func makeNewLinks(unTouched):
+	# Makes new links in 10% of the unTouched tiles towards neighbours that are accessible from the center
+	var length = len(unTouched)
+	var newLinksToBeMade = 0
+	var directions = {}
 	
+	if length < 100:
+		newLinksToBeMade = length
+	else:
+		newLinksToBeMade = length / 10
 	
-	
+	for i in range(newLinksToBeMade):
+		directions[unTouched[i]] = searchForTouched(unTouched[i])
+		
+	return directions
 	
 	
 	

@@ -45,7 +45,6 @@ func _input(event):
 	if event is InputEventMouseButton and !event.is_pressed():
 		# Click onto a completed building tile
 		if mouseInTile and selectedTile.buildingComplete == true and event.button_index == 1:
-			print(BUTTON_LEFT)
 			
 			# Checks to make sure nothing else is selected, or only other tiles are.
 			globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()

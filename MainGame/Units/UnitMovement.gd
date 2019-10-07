@@ -21,12 +21,13 @@ func _mouseOutOfTile(tile):
 	
 func _input(event):
 	# Checks for a single click on the map
-	if event is InputEventMouseButton and event.button_index == 1 and !event.is_pressed():
+	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
 		# Checks to make sure a unit is selected and cursor is over a tile
 		if get_tree().get_root().get_node("Control").selectedName == "unit" and tileHovered != null:
-			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
-				path = findShortestPath(unit.hostTile, tileHovered)
-				sendUnitOnPath(unit, path)
+			print(tileHovered.buildingName)
+#			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
+#				path = findShortestPath(unit.hostTile, tileHovered)
+#				sendUnitOnPath(unit, path)
 				
 #			if Input.mouse
 
