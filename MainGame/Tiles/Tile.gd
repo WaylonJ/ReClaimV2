@@ -38,6 +38,10 @@ var selected = false
 var unitStationed = null
 
 var connections = []
+var aboveTile
+var rightTile
+var belowTile
+var leftTile
 
 func _process(delta):
 	buildingTime -= delta

@@ -33,10 +33,13 @@ func _ready():
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
 	
+	# Makes the links between each tile
 	get_node("LinkHolder").add_child(linkCreator)
 	linkCreator.createLinks(startingArray)
 	
+	# Initializes the unitMovement script
 	get_node("UnitHolder").add_child(unitMovement)
+	unitMovement.makeCostGraph(startingArray)
 
 	set_process(true)
 	

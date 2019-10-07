@@ -2,8 +2,11 @@ extends Node
 
 var tileHovered = null
 var path = null
+var costGraph = []
+var costQueue
 
 func _ready():
+	
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	
 	for tile in tiles:
@@ -20,58 +23,164 @@ func _mouseOutOfTile(tile):
 	pass
 	
 func _input(event):
-	# Checks for a single click on the map
+	# Checks for a right click
 	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
 		# Checks to make sure a unit is selected and cursor is over a tile
 		if get_tree().get_root().get_node("Control").selectedName == "unit" and tileHovered != null:
-			print(tileHovered.buildingName)
-#			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
-#				path = findShortestPath(unit.hostTile, tileHovered)
+			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
+				findShortestPath(unit.hostTile, tileHovered)
+				path = costQueue
+				if !path.empty():
+					printPath(path)
 #				sendUnitOnPath(unit, path)
 				
 #			if Input.mouse
 
+func printPath(path):
+#	print(path)
+	var home = path[0]
+	var row = home.row
+	var col = home.col
+	for tile in path:
+		printraw(" ||R: " + str(tile.col - col) + ",D: " + str(tile.row - row))
+		
+
 func findShortestPath(origin, target):
-	var costQueue = [origin]
+	var holder = [origin]
+	costQueue = [[holder, 0]]
 	var current = null
-	var index = 0
+	var done = false
+	costGraph[origin.row][origin.col] = true
 	
-	var newCost = 0
-	var newLoc = null
-	
-	while true:
+	var test = 0
+	while !done and test < 20000:
+		test += 1
 		current = costQueue.pop_front()
 		
-		index = 0
-		for connection in current.connections:
-			if connection == true:
-				#WORKING HERE
-				# When making links between tiles, give each tile a variable that holds all tiles it is connected to
-				# That way its a lot easier to look through the links between tiles rather than doing a bunch of calculations
-				# 
-				pass
-#				newCost, newLoc = findCostOfNewConnection(current.row, current.col, index, target.row, target.col)
-#				costQueue.insert(addToCostQueue(newCost, costQueue))
+		if current == null:
+			print("We ran out of costQueue somehow? Ending")
+			break
+		done = checkNeighboursAndInsertInCostQueue(current, target)
 		
-		pass
+	resetCostGraph()
+	return costQueue
+		
+func checkNeighboursAndInsertInCostQueue(item, target):
+	var connectionIndex = 0
+	var directions = []
+	var distance
+	var totalCost
 	
-func findCostOfNewConnection(curRow, curCol, direction, targetRow, targetCol):
-	match direction:
-		0:
-			curRow -= 1
-		1:
-			curCol += 1
-		2:
-			curRow += 1
-		3:
-			curCol -= 1
-	
-#	return (abs(targetRow - curRow) + abs(targetCol - curCol)), [curRow, curCol]
-	
-func addToCostQueue():
-	pass
+	var tileArr = item[0].duplicate(true)
+	var curCost = len(tileArr)
+	var tile = tileArr[curCost - 1]
 	
 	
+	for connection in tile.connections:
+		tileArr = item[0].duplicate(true)
+		if connection == true:
+			match connectionIndex:
+				0:
+					if tile.aboveTile != null:
+						# Ensures this is the first visit here
+						if costGraph[tile.row - 1][tile.col] == false:
+							costGraph[tile.row - 1][tile.col] = true
+							tileArr.append(tile.aboveTile)
+							distance = findDistance(target, tile.row - 1, tile.col)
+							if distance == 0:
+								costQueue = tileArr
+								return true
+							else:
+								totalCost = curCost + distance
+								insertIntoCostQueue([tileArr, totalCost])
+				1:
+					if tile.rightTile != null:
+						# Ensures this is the first visit here
+						if costGraph[tile.row][tile.col + 1] == false:
+							costGraph[tile.row][tile.col + 1] = true
+							tileArr.append(tile.rightTile)
+							distance = findDistance(target, tile.row, tile.col + 1)
+							if distance == 0:
+								costQueue = tileArr
+								return true
+							else:
+								totalCost = curCost + distance
+								insertIntoCostQueue([tileArr, totalCost])
+				2:
+					if tile.belowTile != null:
+						# Ensures this is the first visit here
+						if costGraph[tile.row + 1][tile.col] == false:
+							costGraph[tile.row + 1][tile.col] = true
+							tileArr.append(tile.belowTile)
+							distance = findDistance(target, tile.row + 1, tile.col)
+							if distance == 0:
+								costQueue = tileArr
+								return true
+							else:
+								totalCost = curCost + distance
+								insertIntoCostQueue([tileArr, totalCost])
+				3:
+#					print("At left tile")
+					if tile.leftTile != null:
+						# Ensures this is the first visit here
+						if costGraph[tile.row][tile.col - 1] == false:
+							costGraph[tile.row][tile.col - 1] = true
+							tileArr.append(tile.leftTile)
+							distance = findDistance(target, tile.row, tile.col - 1)
+							if distance == 0:
+								costQueue = tileArr
+								return true
+							else:
+								totalCost = curCost + distance
+								insertIntoCostQueue([tileArr, totalCost])
+							
+				_:
+					print("UnitMovement.gd: invalid match statement")
+			
+			
+		connectionIndex += 1
+	return false
+
 	
 func sendUnitOnPath(unit, path):
 	pass
+	
+func makeCostGraph(array):
+	var index = 0
+	for row in array:
+		costGraph.append([])
+		for col in row:
+			costGraph[index].append(false)
+		index += 1
+		
+func resetCostGraph():
+	var rowCounter = 0
+	var colCounter = 0
+	for row in costGraph:
+		colCounter = 0
+		for item in row:
+			costGraph[rowCounter][colCounter] = false
+			colCounter += 1
+		rowCounter += 1
+		
+func findDistance(target, row, col):
+	var distance = abs(target.row - row) + abs(target.col - col)
+	return distance
+	
+func insertIntoCostQueue(newItem):
+	var newCost = newItem[1]
+	var counter = 0
+	var itemCost
+	if costQueue.empty():
+		costQueue.append(newItem)
+	else:
+		for item in costQueue:
+			itemCost = item[1]
+			if newCost <= itemCost:
+				costQueue.insert(counter, newItem)
+				return
+			counter += 1
+		costQueue.append(newItem)
+			
+	
+	

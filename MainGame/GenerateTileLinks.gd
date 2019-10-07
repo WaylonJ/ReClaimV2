@@ -14,14 +14,11 @@ const FOUR_CONN_CHANCE = 1.0
 
 var arr = null
 var touched = null
-var length = 0
-
-func _ready():
-	pass
+var arrLength = 0
 
 func createLinks(array):
 	arr = array
-	length = len(array)
+	arrLength = len(array)
 
 	# Makes the base tile always be connected to the 4 adjacent tiles
 	setHomeConnections()
@@ -32,9 +29,8 @@ func createLinks(array):
 	# Ensure no nodes are left as 'islands' without a way to get to the homeNode
 	fixIslands()
 	
-	
 func setHomeConnections():
-	var home = arr[length / 2][length / 2]
+	var home = arr[arrLength / 2][arrLength / 2]
 	
 	home.connections = [true, true, true, true]
 	
@@ -63,6 +59,8 @@ func makeLink(tileOrigin, direction):
 			if originRow != 0:
 				tileDestination = arr[originRow - 1][originCol]
 				tileDestination.connections[2] = true
+				tileOrigin.aboveTile = tileDestination
+				tileDestination.belowTile = tileOrigin
 			
 			# Sets the position of the Link and makes it appear
 			newLink.set_position(Vector2(originPos[0] + 52, originPos[1] - 173)) 
@@ -73,6 +71,8 @@ func makeLink(tileOrigin, direction):
 			if originCol != len(arr[0]) - 1:
 				tileDestination = arr[originRow][originCol + 1]
 				tileDestination.connections[3] = true
+				tileOrigin.rightTile = tileDestination
+				tileDestination.leftTile = tileOrigin
 			
 			newLink.set_position(Vector2(originPos[0] + 127, originPos[1] + 52)) 
 			newLink.get_node("HorizontalLink").show()
@@ -82,6 +82,8 @@ func makeLink(tileOrigin, direction):
 			if originRow != len(arr) - 1:
 				tileDestination = arr[originRow + 1][originCol]
 				tileDestination.connections[0] = true
+				tileOrigin.belowTile = tileDestination
+				tileDestination.aboveTile = tileOrigin
 			
 			newLink.set_position(Vector2(originPos[0] + 52, originPos[1] + 127)) 
 			newLink.get_node("VerticalLink").show()
@@ -92,6 +94,8 @@ func makeLink(tileOrigin, direction):
 			if originCol != 0:
 				tileDestination = arr[originRow ][originCol - 1]
 				tileDestination.connections[1] = true
+				tileOrigin.leftTile = tileDestination
+				tileDestination.rightTile = tileOrigin
 
 			newLink.set_position(Vector2(originPos[0] -173, originPos[1] + 52)) 
 			newLink.get_node("HorizontalLink").show()
@@ -187,7 +191,6 @@ func fixIslands():
 	
 	# Get a array of all tiles that are untouched
 	unTouched = checkCompletion()
-	print(len(unTouched))
 	
 	# Connect all unTouched tiles with random links until they meet a touched neighbour
 	connectUntouchedTiles(unTouched)
@@ -241,6 +244,7 @@ func connectUntouchedTiles(unTouched):
 		for tile in unTouched:
 			if touched[tile.row][tile.col] == true:
 				unTouched.remove(removalCounter)
+			removalCounter += 1
 	
 func createTouched():
 	# Creates an array that will keep track of all tiles that are accessible from center
@@ -316,6 +320,8 @@ func makeNewLinks(unTouched):
 	var length = len(unTouched)
 	var newLinksToBeMade = 0
 	var directions = {}
+	var tempDirection
+	var rand
 	
 	if length < 100:
 		newLinksToBeMade = length
@@ -323,7 +329,10 @@ func makeNewLinks(unTouched):
 		newLinksToBeMade = length / 10
 	
 	for i in range(newLinksToBeMade):
-		directions[unTouched[i]] = searchForTouched(unTouched[i])
+		rand = randi() % length
+		tempDirection = searchForTouched(unTouched[rand])
+		if tempDirection != "none":
+			directions[unTouched[rand]] = tempDirection
 		
 	return directions
 	
