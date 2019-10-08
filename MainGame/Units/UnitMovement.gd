@@ -30,11 +30,13 @@ func _input(event):
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
 				findShortestPath(unit.hostTile, tileHovered)
 				path = costQueue
-				if !path.empty():
-					printPath(path)
-#				sendUnitOnPath(unit, path)
+				unit.appendPath(path)
 				
 #			if Input.mouse
+
+func sendUnitOnPath(unit, path):
+	unit.moveTo(path)
+	pass
 
 func printPath(path):
 #	print(path)
@@ -44,10 +46,14 @@ func printPath(path):
 	for tile in path:
 		printraw(" ||R: " + str(tile.col - col) + ",D: " + str(tile.row - row))
 		
-
 func findShortestPath(origin, target):
-	var holder = [origin]
-	costQueue = [[holder, 0]]
+	# In case tile selected is the one the unit is stationed at
+	if origin == target:
+		costQueue = [origin]
+		return
+		
+#	var holder = 
+	costQueue = [[[origin], 0]]
 	var current = null
 	var done = false
 	costGraph[origin.row][origin.col] = true
@@ -63,7 +69,7 @@ func findShortestPath(origin, target):
 		done = checkNeighboursAndInsertInCostQueue(current, target)
 		
 	resetCostGraph()
-	return costQueue
+	return
 		
 func checkNeighboursAndInsertInCostQueue(item, target):
 	var connectionIndex = 0
@@ -140,10 +146,6 @@ func checkNeighboursAndInsertInCostQueue(item, target):
 			
 		connectionIndex += 1
 	return false
-
-	
-func sendUnitOnPath(unit, path):
-	pass
 	
 func makeCostGraph(array):
 	var index = 0

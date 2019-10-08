@@ -1,0 +1,120 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://MainGame/UI/UI_Unit.gd" type="Script" id=1]
+[ext_resource path="res://MainGame/Units/Resources/PH_Unit_Leader.png" type="Texture" id=2]
+[ext_resource path="res://MainGame/Units/Resources/PH_Unit_Highlight.png" type="Texture" id=3]
+[ext_resource path="res://MainGame/Units/Resources/PH_Unit_NumberBG.png" type="Texture" id=4]
+
+[node name="UIUnit" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.250351
+margin_right = 0.250366
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_right = 21.0
+margin_bottom = 75.0
+custom_constants/separation = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_right = 21.0
+margin_bottom = 18.0
+size_flags_vertical = 7
+text = "1/2"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 21.0
+margin_bottom = 36.0
+size_flags_vertical = 7
+text = "1/2"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/Label2"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 21.0
+margin_bottom = 54.0
+size_flags_vertical = 7
+text = "1/2"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/Label3"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 54.0
+margin_right = 21.0
+margin_bottom = 75.0
+size_flags_vertical = 7
+text = "1/2"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/Label4"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UI_Unit" type="Button" parent="HBoxContainer"]
+margin_left = 25.0
+margin_right = 100.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 75, 75 )
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+script = ExtResource( 1 )
+
+[node name="BG" type="TextureRect" parent="HBoxContainer/UI_Unit"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 2 )
+
+[node name="Highlight" type="TextureRect" parent="HBoxContainer/UI_Unit"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 3 )
+
+[node name="NumUnits" type="Label" parent="HBoxContainer/UI_Unit"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -14.0
+margin_right = 20.0
+text = "x1"
+align = 2
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/UI_Unit/NumUnits"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 4 )
+stretch_mode = 1
