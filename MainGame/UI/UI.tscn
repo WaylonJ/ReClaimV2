@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
@@ -31,11 +31,17 @@
 [ext_resource path="res://MainGame/UI/Resources/Upgrades/PH_UI_SpeedUpgrade.png" type="Texture" id=29]
 [ext_resource path="res://MainGame/UI/Resources/Upgrades/PH_UI_UtilityUnlock.png" type="Texture" id=30]
 [ext_resource path="res://MainGame/UI/Resources/Upgrades/PH_UI_Unknown.png" type="Texture" id=31]
-[ext_resource path="res://MainGame/UI/UnitHolder.gd" type="Script" id=32]
-[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=33]
-[ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=34]
-[ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=35]
-[ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=36]
+[ext_resource path="res://MainGame/UI/UnitInformation.gd" type="Script" id=32]
+[ext_resource path="res://MainGame/UI/AllStats.gd" type="Script" id=33]
+[ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Health.png" type="Texture" id=34]
+[ext_resource path="res://MainGame/Units/Resources/PH_Unit_NumberBG.png" type="Texture" id=35]
+[ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Offense.png" type="Texture" id=36]
+[ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Defense.png" type="Texture" id=37]
+[ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Speed.png" type="Texture" id=38]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=39]
+[ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=40]
+[ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=41]
+[ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=42]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -74,7 +80,6 @@ texture = ExtResource( 3 )
 expand = true
 
 [node name="BottomUI" type="HBoxContainer" parent="."]
-editor/display_folded = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -95,7 +100,7 @@ size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
+visible = false
 margin_right = 500.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 500, 0 )
@@ -241,8 +246,8 @@ align = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
 editor/display_folded = true
-margin_left = 500.0
-margin_right = 800.0
+visible = false
+margin_right = 300.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 180 )
 custom_constants/separation = 0
@@ -927,38 +932,143 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 21 )
 
-[node name="UnitHolder" type="HBoxContainer" parent="BottomUI/MiddleSection"]
+[node name="UnitInformation" type="HBoxContainer" parent="BottomUI/MiddleSection"]
+editor/display_folded = true
 visible = false
-margin_left = 800.0
-margin_right = 1608.0
+margin_right = 808.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 32 )
 
-[node name="PaddingLeft" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitHolder"]
+[node name="AllStats" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
 margin_right = 200.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
+custom_constants/separation = 5
+script = ExtResource( 33 )
 
-[node name="RowHolder" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitHolder"]
+[node name="StatHolderHealth" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+margin_right = 200.0
+margin_bottom = 40.0
+
+[node name="Icon" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderHealth"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+texture = ExtResource( 34 )
+
+[node name="Label" type="Label" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderHealth"]
+margin_left = 44.0
+margin_top = 9.0
+margin_right = 69.0
+margin_bottom = 30.0
+custom_fonts/font = ExtResource( 6 )
+text = "1000"
+
+[node name="TextBG" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderHealth/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="StatHolderOffense" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+margin_top = 45.0
+margin_right = 200.0
+margin_bottom = 85.0
+
+[node name="Icon" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderOffense"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+texture = ExtResource( 36 )
+
+[node name="Label" type="Label" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderOffense"]
+margin_left = 44.0
+margin_top = 9.0
+margin_right = 69.0
+margin_bottom = 30.0
+custom_fonts/font = ExtResource( 6 )
+text = "1000"
+
+[node name="TextBG" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderOffense/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="StatHolderDefense" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+margin_top = 90.0
+margin_right = 200.0
+margin_bottom = 130.0
+
+[node name="Icon" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderDefense"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+texture = ExtResource( 37 )
+
+[node name="Label" type="Label" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderDefense"]
+margin_left = 44.0
+margin_top = 9.0
+margin_right = 69.0
+margin_bottom = 30.0
+custom_fonts/font = ExtResource( 6 )
+text = "1000"
+
+[node name="TextBG" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderDefense/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="StatHolderSpeed" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+margin_top = 135.0
+margin_right = 200.0
+margin_bottom = 175.0
+
+[node name="Icon" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderSpeed"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+texture = ExtResource( 38 )
+
+[node name="Label" type="Label" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderSpeed"]
+margin_left = 44.0
+margin_top = 9.0
+margin_right = 69.0
+margin_bottom = 30.0
+custom_fonts/font = ExtResource( 6 )
+text = "1000"
+
+[node name="TextBG" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/AllStats/StatHolderSpeed/Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="RowHolder" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
 margin_left = 204.0
 margin_right = 604.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 400, 0 )
 
-[node name="TopRow" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitHolder/RowHolder"]
+[node name="TopRow" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/RowHolder"]
 margin_right = 400.0
 margin_bottom = 88.0
 size_flags_vertical = 3
 
-[node name="BotRow" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitHolder/RowHolder"]
+[node name="BotRow" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/RowHolder"]
 margin_top = 92.0
 margin_right = 400.0
 margin_bottom = 180.0
 size_flags_vertical = 3
 
-[node name="PaddingRight" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitHolder"]
+[node name="PaddingRight" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
 margin_left = 608.0
 margin_right = 808.0
 margin_bottom = 180.0
@@ -997,7 +1107,7 @@ visible = false
 margin_left = 4.0
 margin_right = 60.0
 margin_bottom = 31.0
-custom_fonts/font = ExtResource( 33 )
+custom_fonts/font = ExtResource( 39 )
 text = "Mana"
 
 [node name="ProgressBar" type="ProgressBar" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
@@ -1010,7 +1120,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="ResourceItems" type="VBoxContainer" parent="BottomUI/RightSection"]
-editor/display_folded = true
 margin_left = 148.0
 margin_right = 280.0
 margin_bottom = 180.0
@@ -1110,8 +1219,8 @@ margin_top = 54.0205
 margin_right = 96.8322
 margin_bottom = 114.02
 rect_clip_content = true
-texture = ExtResource( 34 )
-script = ExtResource( 35 )
+texture = ExtResource( 40 )
+script = ExtResource( 41 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -1119,13 +1228,13 @@ __meta__ = {
 [node name="HoveringBldgImage" type="TextureRect" parent="HiddenItems"]
 margin_right = 40.0
 margin_bottom = 40.0
-script = ExtResource( 36 )
+script = ExtResource( 42 )
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

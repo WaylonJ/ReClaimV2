@@ -70,7 +70,7 @@ func _on_BackButton_pressed():
 	
 func _input(event):
 	# We have a tile selected, we've clicked a tile on the board
-	if event is InputEventMouseButton and selectedBldg != null and !event.is_pressed():
+	if event is InputEventMouseButton and selectedBldg != null and !event.is_pressed() and event.button_index == 1:
 		if tempBG == null and not Input.is_key_pressed(KEY_SHIFT):
 			unselectEverything()
 		# Ensures we're over a tile that doesn't have a building already

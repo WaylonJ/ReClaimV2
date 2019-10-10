@@ -26,10 +26,10 @@ var directionMoving
 
 
 func _ready():
-	self.connect("pressed", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_unitClicked", [self])
-	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered")
+	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseExited")
 	set_process(false)
+#	self.add_to_group("Units")
 	pass # Replace with function body.
 
 func _process(delta):
@@ -148,10 +148,15 @@ func mergeWithOtherGroup(newAddition):
 	
 	# If there is a single unit, hide tag. Otherwise show number of units.
 	showNumberOfUnitsTag()
-	
+
+	# Once a new troop moves into a tile, if that tile's troops are selected, this appends them on the UI.
+	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
+		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").displayUnitGroup(newAddition)
+		
 	# Remove old unit
 	newAddition.queue_free()
 	
+
 func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:
 		if numLeader == 0:

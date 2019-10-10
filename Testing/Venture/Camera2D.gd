@@ -3,9 +3,23 @@ extends Camera2D
 var myZoom
 
 var currentZoomLevel = 1
-var _drag = false
+var cameraDragging = false
 
 var previousPosition: Vector2 = Vector2(0,0);
+
+# Box Selection variables
+var mousePos = Vector2()
+var mousePosGlobal = Vector2()
+var start = Vector2()
+var startGlobal = Vector2()
+var end = Vector2()
+var endGlobal = Vector2()
+var boxDragging = false
+
+signal area_selected
+
+
+onready var rectd = get_node("../SelectBoxHolder/ColorRect")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,23 +29,66 @@ func _ready():
 	myZoom.x += 0.5
 	myZoom.y += 0.5
 	set_zoom(myZoom)
-	
+	draw_area(false)
+	connect("area_selected", get_node("../UnitHolder/UnitController"), "_on_AreaSelected")
+#	connect("area_selected", get_parent(), "_on_AreaSelected", [self])
+#	connect("area_selected", script, "_on_AreaSelected", [self])
+#	script._on_AreaSelected("a")
 	pass # Replace with function body.
 
 func _input(event):
-	#Controls mouse draggins
+	#Controls mouse dragging if mouse is right-clicked and moved
+	inputDragMouse(event)
+
+	#Calls Zoom function if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_UP or DOWN
+	inputZoomInOrOut(event)
+
+	#Sets mouse positions on any InputEventMouse
+	inputSetMousePositions(event)
+	
+	
+	
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 1:
+		start = mousePos
+		startGlobal = mousePosGlobal
+		boxDragging = true
+	if boxDragging:
+		end = mousePos
+		endGlobal = mousePosGlobal
+		draw_area()
+	
+	if event is InputEventMouseButton and !event.is_pressed() and event.button_index == 1:
+		if start.distance_to(mousePos) > 20:
+			get_node("../UI/BottomUI/MiddleSection/TileInfo").emptyTileGroup()
+			end = mousePos
+			endGlobal = mousePosGlobal
+			boxDragging = false
+			draw_area(false)
+			emit_signal("area_selected", [startGlobal, endGlobal])
+		else:
+			endGlobal = startGlobal
+			boxDragging = false
+			draw_area(false)
+
+func inputSetMousePositions(event):
+	if event is InputEventMouse:
+		mousePos = event.position
+		mousePosGlobal = get_global_mouse_position()
+#		print(mousePosGlobal)
+
+func inputDragMouse(event):
 	if event is InputEventMouseButton:
-		if event.is_pressed() and not Input.is_key_pressed(KEY_SHIFT):
+		if event.is_pressed() and event.button_index == 2:
 			if event.position[1] < 540:
 				previousPosition = event.position
-				_drag = true
+				cameraDragging = true
 		elif !event.is_pressed():
-			_drag = false
-	if event is InputEventMouseMotion && _drag:
+			cameraDragging = false
+	if event is InputEventMouseMotion && cameraDragging:
 		position += (previousPosition - event.position)*myZoom
 		previousPosition = event.position
 
-	#Calls Zoom function
+func inputZoomInOrOut(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_WHEEL_UP:
 			zoomIn()
@@ -57,3 +114,20 @@ func zoomOut():
 func counterSlowDrag():
 	zoomOut()
 	zoomIn()
+
+func draw_area(s = true):
+	rectd.rect_size = Vector2(abs(startGlobal.x - endGlobal.x), abs(startGlobal.y - endGlobal.y))
+#	print(rectd.rect_size)
+	
+	var pos = Vector2()
+	pos.x = min(startGlobal.x, endGlobal.x)
+	pos.y = min(startGlobal.y, endGlobal.y)
+	
+#	print("pos: " + str(pos.x) + ", " + str(pos.y))
+	
+	rectd.rect_position = pos
+	
+	rectd.rect_size *= int(s)
+	
+#	print("Rect X / Y: " + str(rectd.get_position()))
+
