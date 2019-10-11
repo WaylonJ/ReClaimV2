@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/TileGreenn.png-4b40414df949e8b4d1739fd132446c67.stex"
+path="res://.import/lightTest.png-fdc64138a491feed05c636ca9c9856a9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Tiles/Resources/TileGreenn.png"
-dest_files=[ "res://.import/TileGreenn.png-4b40414df949e8b4d1739fd132446c67.stex" ]
+source_file="res://lightTest.png"
+dest_files=[ "res://.import/lightTest.png-fdc64138a491feed05c636ca9c9856a9.stex" ]
 
 [params]
 

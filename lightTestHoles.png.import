@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tileBlue.png-89983f45b7ed37a0ccb5ae52fb627e2c.stex"
+path="res://.import/lightTestHoles.png-5ef2cbe6fa0a9e8723cc8423a559b661.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Tiles/Resources/tileBlue.png"
-dest_files=[ "res://.import/tileBlue.png-89983f45b7ed37a0ccb5ae52fb627e2c.stex" ]
+source_file="res://lightTestHoles.png"
+dest_files=[ "res://.import/lightTestHoles.png-5ef2cbe6fa0a9e8723cc8423a559b661.stex" ]
 
 [params]
 

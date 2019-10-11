@@ -33,6 +33,7 @@ func _input(event):
 		
 		# Click onto a completed building tile
 		if mouseInTile and selectedTile.buildingComplete == true:
+			print(selectedTile.unitStationed)
 			# Checks to make sure nothing else is selected, or only other tiles are.
 			
 			if globalSelected == "tile" or globalSelected == "e":
@@ -48,6 +49,8 @@ func _input(event):
 				# Append item to selectedTileGroup if group is empty or it's the same type
 				appendIfNoTilesSelectedOrSimilarTiles()
 				if doubleClick:
+					if selectedTile.buildingName == "Base":
+						return
 					for tile in get_tree().get_nodes_in_group("Tiles"):
 						appendIfSameTypeOfTile(tile)
 					doubleClick = false
@@ -82,13 +85,13 @@ func appendIfSameTypeOfTile(tile):
 	if tile.get("buildingName") == selectedTile.get("buildingName") and selectedTile.get("buildingName") == selectedTileGroup[0].get("buildingName"):
 		if not tile in selectedTileGroup:
 			selectedTileGroup.append(tile)
-			tile.get_node("Highlight").show()
+			tile.get_node("TileHolder/Highlight").show()
 			tile.set("selected", true)
 			updateUI(tile)
 
 func selectTile():
 	selectedTileGroup.append(selectedTile)
-	selectedTile.get_node("Highlight").show()
+	selectedTile.get_node("TileHolder/Highlight").show()
 	selectedTile.set("selected", true)
 
 func appendIfNoTilesSelectedOrSimilarTiles():
@@ -131,7 +134,6 @@ func openTileOptions(tile):
 		get_node("../NoSelection/ConstructionOptions").hide()
 		get_node("../UpgradeMenu").hide()
 		get_node("../../../HiddenItems/HoveringBldgImage").unselectEverything()
-		print("here")
 		if !(globalSelected == "unit"):
 			get_node("../NoSelection/BasicOptions").show()
 			get_node("../NoSelection").show()
@@ -145,9 +147,8 @@ func openTileOptions(tile):
 		
 	
 func emptyTileGroup():
-	print("Hiding: " + str(selectedTileGroup))
 	for item in selectedTileGroup:
-		item.get_node("Highlight").hide()
+		item.get_node("TileHolder/Highlight").hide()
 		item.set("selected", false)
 	selectedTileGroup = []
 	updateUI(baseTile)

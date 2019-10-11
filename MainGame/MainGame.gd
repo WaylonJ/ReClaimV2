@@ -33,9 +33,7 @@ func _ready():
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
 	
-	# Makes the links between each tile
-	get_node("LinkHolder").add_child(linkCreator)
-	linkCreator.createLinks(startingArray)
+
 	
 	# Initializes the unitMovement script
 	get_node("UnitHolder").add_child(unitMovement)
@@ -58,6 +56,10 @@ func _process(delta):
 func startNewGame():
 	# Creates the starting array
 	startingArray = makeBaseArray()
+	
+	# Makes the links between each tile
+	get_node("LinkHolder").add_child(linkCreator)
+	linkCreator.createLinks(startingArray)
 	
 	# Establishes Base tile
 	makeBaseTile()
@@ -95,7 +97,10 @@ func makeBaseTile():
 	baseTile.set("buildingName", "Base")
 	baseTile.startBuilding()
 	baseTile.createTile()
-	baseTile.get_node("Background").set("texture", BaseTilePNG)
+	baseTile.get_node("TileHolder/Background").set("texture", BaseTilePNG)
+#	baseTile.get_node("TileHolder").set_z_index(-1)
+#	baseTile.get_node("MapBackground").set_z_index(-1)
+#	baseTile.hide()
 	
 func updateTotalProduction(mana, advanced, research):
 	if mana != null:

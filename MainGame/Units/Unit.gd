@@ -15,6 +15,7 @@ var defense = 0
 var speed = 0
 
 var hostTile = null
+var prevTile = null
 
 var pathToMove = []
 var currentPath = []
@@ -23,6 +24,8 @@ var distanceTotal
 var distanceLeft
 var distanceMovedSinceLastTick = 0
 var directionMoving
+
+var vision = 0
 
 
 func _ready():
@@ -45,6 +48,8 @@ func _process(delta):
 	if distanceLeft < 0:
 		set_process(false)
 		hostTile = currentPath[0]
+		removeSelfFromInSightOf()
+		hostTile.updateInSightOf(vision, self, true)
 		updatePath()
 
 func appendPath(newPath):
@@ -55,10 +60,10 @@ func appendPath(newPath):
 
 func updatePath():
 	if len(currentPath) > 1:
-		var prevTile = currentPath.pop_front()
+		prevTile = currentPath.pop_front()
 		prevTile.unitStationed = null
 		set_process(true)
-		findDirection(prevTile, currentPath[0])
+		findDirection(currentPath[0])
 		placeAtStartOfPath(prevTile)
 		calcDistances()
 
@@ -68,12 +73,16 @@ func updatePath():
 		directionMoving = "up"
 		placeAtStartOfPath(hostTile)
 
+func removeSelfFromInSightOf():
+	prevTile.updateInSightOf(vision, self, false)
+
 func updateHostTile():
 	hostTile = currentPath.pop_front()
 	if hostTile.unitStationed != null and hostTile.unitStationed != self:
 		hostTile.unitStationed.mergeWithOtherGroup(self)
 	else:
 		hostTile.unitStationed = self
+#		hostTile.updateInSightOf(vision, self, true)
 
 func calcDistances():
 	distanceTotal = 10 * numUnits
@@ -101,7 +110,7 @@ func placeAtStartOfPath(tile):
 		"left":
 			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1]))
 
-func findDirection(prevTile, nextTile):
+func findDirection(nextTile):
 	if prevTile.row < nextTile.row:
 		directionMoving = "down"
 	elif prevTile.row > nextTile.row:
@@ -140,6 +149,29 @@ func createUnit(unitName, amount):
 	numUnits = amount
 	if numUnits < 2:
 		get_node("NumUnits").hide()
+	checkHighestVision()
+	
+func checkHighestVision():
+	for item in unitTypes:
+		match item:
+			"Leader":
+				setVision(2)
+			"Goblin":
+				setVision(1)
+	
+func setVision(newVision):
+	var updateVision = false
+	
+	if vision < newVision:
+		vision = newVision
+		updateVision = true
+	
+	if updateVision:
+		updateTilesVision()
+
+func updateTilesVision():
+	hostTile.updateInSightOf(vision, self, true)
+	
 
 func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
@@ -155,7 +187,7 @@ func mergeWithOtherGroup(newAddition):
 		
 	# Remove old unit
 	newAddition.queue_free()
-	
+	checkHighestVision()
 
 func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:

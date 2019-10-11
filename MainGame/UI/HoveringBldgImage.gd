@@ -35,7 +35,7 @@ func getAllTiles():
 func _on_mouse_entered_highlight(tile):
 	if selectedBldg != null:
 		# Save the tile's current BG here
-		tempBG = tile.get_node("Background").get("texture")
+		tempBG = tile.get_node("TileHolder/Background").get("texture")
 		
 		if tempBG == Blank_Tile:
 #			var emptyPrompt = tile.emptyPrompt
@@ -45,20 +45,20 @@ func _on_mouse_entered_highlight(tile):
 			# Set the tile's BG to be the BG of whatever is selected.
 			match selectedBldg:
 				"ResourceBldg":
-					tile.get_node("Background").set("texture", Resource_Tile)
+					tile.get_node("TileHolder/Background").set("texture", Resource_Tile)
 				"MilitaryBldg":
-					tile.get_node("Background").set("texture", Military_Tile)
+					tile.get_node("TileHolder/Background").set("texture", Military_Tile)
 				"UtilityBldg":
-					tile.get_node("Background").set("texture", Utility_Tile)
+					tile.get_node("TileHolder/Background").set("texture", Utility_Tile)
 				"ManaPool":
-					tile.get_node("Background").set("texture", Mana_Tile)
+					tile.get_node("TileHolder/Background").set("texture", Mana_Tile)
 				_:
 					pass
 				
 	
 func _on_mouse_exited_highlight(tile):
 	if tempBG != null:
-		tile.get_node("Background").set("texture", tempBG)
+		tile.get_node("TileHolder/Background").set("texture", tempBG)
 		tempBG = null
 #	currentTile = null
 
@@ -105,7 +105,7 @@ func unselectEverything():
 	selectedBldg = null
 	
 	if tempBG != null:
-		currentTile.get_node("Background").set("texture", tempBG)
+		currentTile.get_node("TileHolder/Background").set("texture", tempBG)
 		tempBG = null
 	hideHighlightBorder()
 

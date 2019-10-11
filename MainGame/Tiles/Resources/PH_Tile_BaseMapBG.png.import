@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/TileRed.png-af0b7eaf40098caa08c02784fcb9434a.stex"
+path="res://.import/PH_Tile_BaseMapBG.png-ff10d99d58d51119e53e078b4be77de7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Tiles/Resources/TileRed.png"
-dest_files=[ "res://.import/TileRed.png-af0b7eaf40098caa08c02784fcb9434a.stex" ]
+source_file="res://MainGame/Tiles/Resources/PH_Tile_BaseMapBG.png"
+dest_files=[ "res://.import/PH_Tile_BaseMapBG.png-ff10d99d58d51119e53e078b4be77de7.stex" ]
 
 [params]
 

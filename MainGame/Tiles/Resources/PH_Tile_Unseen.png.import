@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tileGreen.png-b41fbe51f853fdf7c3f6c1825986339e.stex"
+path="res://.import/PH_Tile_Unseen.png-51f2ea22c0fe526d04c975e0f9f64aa9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Tiles/Resources/tileGreen.png"
-dest_files=[ "res://.import/tileGreen.png-b41fbe51f853fdf7c3f6c1825986339e.stex" ]
+source_file="res://MainGame/Tiles/Resources/PH_Tile_Unseen.png"
+dest_files=[ "res://.import/PH_Tile_Unseen.png-51f2ea22c0fe526d04c975e0f9f64aa9.stex" ]
 
 [params]
 

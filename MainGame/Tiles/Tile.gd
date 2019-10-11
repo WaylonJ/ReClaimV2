@@ -43,6 +43,11 @@ var rightTile
 var belowTile
 var leftTile
 
+var vision = 0
+var inSightOf = []
+var currentlySeen = false
+var seenOnce = false
+
 func _process(delta):
 	buildingTime -= delta
 	if buildingTime <= 0:
@@ -53,10 +58,10 @@ func _process(delta):
 		if unitProduction == null:
 			set_process(false)
 		buildingComplete = true
-		get_node("BuildingProgressBar").hide()
+		get_node("TileHolder/BuildingProgressBar").hide()
 	else:
 		percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
-		get_node("BuildingProgressBar").set("value", percentBuilt)
+		get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
 		
 	if unitProduction != null:
 		unitProduction -= delta
@@ -67,10 +72,9 @@ func _process(delta):
 			# Show somewhere on a bar that units are being made
 			pass
 	
-	
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	set_process(false)
+	checkIfSeen()
 	pass # Replace with function body.
 
 func startBuilding():
@@ -80,10 +84,9 @@ func createTile():
 	# Updates Portrait, desc, output
 	updateTileInfo()
 	
-
 	# Handles the time aspect to building a building.
 	buildingTimeMax = buildingTime
-	get_node("BuildingProgressBar").show()
+	get_node("TileHolder/BuildingProgressBar").show()
 	set_process(true)
 	
 func updateGlobalValues():
@@ -97,33 +100,76 @@ func updateTileInfo():
 			portrait = BASE_PORTRAIT
 			buildingTime = 0
 			updateOutput(10, null, 0, 3)
+			vision = 2
+			
 
 		"ManaPool":
 			description = MANAPOOL_DESCRIPTION
 			portrait = MANA_PORTRAIT
 			buildingTime = 0.5
 			updateOutput(5, null, null, null)
+			vision = 1
 
 		"ResourceBldg":
 			description = RESOURCE_DESCRIPTION
 			portrait = RESOURCE_PORTRAIT
 			buildingTime = 0.5
 			updateOutput(-2, null, 1, null)
+			vision = 1
 
 		"MilitaryBldg":
 			description = MILITARY_DESCRIPTION
 			portrait = MILITARY_PORTRAIT
 			buildingTime = 1
 			updateOutput(null, 3, null, 0)
+			vision = 2
 
 		"UtilityBldg":
 			description = UTILITY_DESCRIPTION
 			portrait = UTILITY_PORTRAIT
 			buildingTime = 15
 			updateOutput(null, null, null, 5)
+			vision = 3
 
 		_:
 			print("Tile.gd: No name match, given -" + buildingName)
+	print(vision)
+	print(connections)
+	updateInSightOf(vision, self, true)
+	
+func updateInSightOf(toCheck, objectGivingSight, adding):
+	var index = 0
+	
+	# Calls this function in each connected tile with 1 less range
+	if toCheck != 0:
+		if connections[0] == true:
+			aboveTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+		if connections[1] == true:
+			rightTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+		if connections[2] == true:
+			belowTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+		if connections[3] == true:
+			leftTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+	if adding:
+		inSightOf.append(objectGivingSight)
+	else:
+		for item in inSightOf:
+			if item == objectGivingSight:
+				inSightOf.remove(index)
+			index += 1
+	
+	checkIfSeen()
+
+func checkIfSeen():
+	if inSightOf.empty():
+		get_node("TileHolder/Unseen").show()
+		get_node("MapBackground").hide()
+		currentlySeen = false
+	else:
+		get_node("TileHolder/Unseen").hide()
+		get_node("MapBackground").show()
+		currentlySeen = true
+		seenOnce = true
 	
 func updateOutput(mana, unit, advanced, research):
 	outputMana = mana
@@ -139,6 +185,7 @@ func createUnit():
 	var unit = preload("../Units/Unit.tscn")
 	
 	var newUnit = unit.instance()
+	newUnit.hostTile = self
 	newUnit.createUnit("Goblin", 1)
 	
 	if unitStationed == null:

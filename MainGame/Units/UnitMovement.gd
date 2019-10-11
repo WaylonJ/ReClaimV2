@@ -25,8 +25,6 @@ func _mouseOutOfTile(tile):
 func _input(event):
 	# Checks for a right click
 	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
-		print("movement")
-		print(get_tree().get_root().get_node("Control").selectedName)
 		# Checks to make sure a unit is selected and cursor is over a tile
 		if get_tree().get_root().get_node("Control").selectedName == "unit" and tileHovered != null:
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
