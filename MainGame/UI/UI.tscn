@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
@@ -38,10 +38,12 @@
 [ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Offense.png" type="Texture" id=36]
 [ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Defense.png" type="Texture" id=37]
 [ext_resource path="res://MainGame/UI/Resources/StatIcons/PH_UI_Stat_Speed.png" type="Texture" id=38]
-[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=39]
-[ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=40]
-[ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=41]
-[ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=42]
+[ext_resource path="res://MainGame/UI/Formation.gd" type="Script" id=39]
+[ext_resource path="res://MainGame/UI/UnitFormation.gd" type="Script" id=40]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=41]
+[ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=42]
+[ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=43]
+[ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=44]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -83,7 +85,9 @@ expand = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.10803
 margin_top = -180.0
+margin_right = 9.10803
 custom_constants/separation = 10
 
 [node name="TimeStop" type="Button" parent="BottomUI"]
@@ -93,13 +97,14 @@ rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
 margin_left = 190.0
-margin_right = 990.0
+margin_right = 998.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 800, 0 )
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection"]
+editor/display_folded = true
 visible = false
 margin_right = 500.0
 margin_bottom = 180.0
@@ -933,8 +938,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 21 )
 
 [node name="UnitInformation" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
-visible = false
 margin_right = 808.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
@@ -942,6 +945,7 @@ size_flags_vertical = 3
 script = ExtResource( 32 )
 
 [node name="AllStats" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
+editor/display_folded = true
 margin_right = 200.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
@@ -949,6 +953,7 @@ custom_constants/separation = 5
 script = ExtResource( 33 )
 
 [node name="StatHolderHealth" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+editor/display_folded = true
 margin_right = 200.0
 margin_bottom = 40.0
 
@@ -974,6 +979,7 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="StatHolderOffense" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+editor/display_folded = true
 margin_top = 45.0
 margin_right = 200.0
 margin_bottom = 85.0
@@ -1000,6 +1006,7 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="StatHolderDefense" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+editor/display_folded = true
 margin_top = 90.0
 margin_right = 200.0
 margin_bottom = 130.0
@@ -1026,6 +1033,7 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="StatHolderSpeed" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
+editor/display_folded = true
 margin_top = 135.0
 margin_right = 200.0
 margin_bottom = 175.0
@@ -1068,16 +1076,213 @@ margin_right = 400.0
 margin_bottom = 180.0
 size_flags_vertical = 3
 
-[node name="PaddingRight" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
+[node name="Formation" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
 margin_left = 608.0
 margin_right = 808.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
+custom_constants/separation = 0
+script = ExtResource( 39 )
+
+[node name="Left" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation"]
+margin_right = 66.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="FillerTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left"]
+margin_right = 66.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="PosTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left"]
+margin_top = 20.0
+margin_right = 66.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left/PosTop"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left/PosTop/CenterContainer"]
+margin_left = 33.0
+margin_top = 35.0
+margin_right = 33.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 6
+script = ExtResource( 40 )
+
+[node name="PosBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left"]
+margin_top = 90.0
+margin_right = 66.0
+margin_bottom = 160.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left/PosBot"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left/PosBot/CenterContainer"]
+margin_left = 33.0
+margin_top = 35.0
+margin_right = 33.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 6
+script = ExtResource( 40 )
+
+[node name="FillerBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left"]
+margin_top = 160.0
+margin_right = 66.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="Mid" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation"]
+margin_left = 66.0
+margin_right = 132.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="FillerTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
+margin_right = 66.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="PosTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
+margin_top = 20.0
+margin_right = 66.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid/PosTop"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid/PosTop/CenterContainer"]
+margin_left = 33.0
+margin_top = 35.0
+margin_right = 33.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 6
+script = ExtResource( 40 )
+
+[node name="PosBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
+margin_top = 90.0
+margin_right = 66.0
+margin_bottom = 160.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid/PosBot"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid/PosBot/CenterContainer"]
+margin_left = 33.0
+margin_top = 35.0
+margin_right = 33.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 6
+script = ExtResource( 40 )
+
+[node name="FillerBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
+margin_top = 160.0
+margin_right = 66.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="Right" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation"]
+margin_left = 132.0
+margin_right = 200.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="FillerTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
+margin_right = 68.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="PosTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
+margin_top = 20.0
+margin_right = 68.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right/PosTop"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right/PosTop/CenterContainer"]
+margin_left = 34.0
+margin_top = 35.0
+margin_right = 34.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 6
+script = ExtResource( 40 )
+
+[node name="PosBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
+margin_top = 90.0
+margin_right = 68.0
+margin_bottom = 160.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 35 )
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right/PosBot"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -3.59344
+margin_top = -0.513306
+margin_right = -3.59344
+margin_bottom = -0.513306
+
+[node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right/PosBot/CenterContainer"]
+margin_left = 34.0
+margin_top = 35.0
+margin_right = 34.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 6
+script = ExtResource( 40 )
+
+[node name="FillerBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
+margin_top = 160.0
+margin_right = 68.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 0, 20 )
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
 editor/display_folded = true
-margin_left = 1000.0
-margin_right = 1280.0
+margin_left = 1008.0
+margin_right = 1288.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
@@ -1107,7 +1312,7 @@ visible = false
 margin_left = 4.0
 margin_right = 60.0
 margin_bottom = 31.0
-custom_fonts/font = ExtResource( 39 )
+custom_fonts/font = ExtResource( 41 )
 text = "Mana"
 
 [node name="ProgressBar" type="ProgressBar" parent="BottomUI/RightSection/ResourceBars/ManaBar"]
@@ -1219,8 +1424,8 @@ margin_top = 54.0205
 margin_right = 96.8322
 margin_bottom = 114.02
 rect_clip_content = true
-texture = ExtResource( 40 )
-script = ExtResource( 41 )
+texture = ExtResource( 42 )
+script = ExtResource( 43 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -1228,12 +1433,17 @@ __meta__ = {
 [node name="HoveringBldgImage" type="TextureRect" parent="HiddenItems"]
 margin_right = 40.0
 margin_bottom = 40.0
-script = ExtResource( 42 )
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
+script = ExtResource( 44 )
+
+[node name="CursorImage" type="TextureRect" parent="HiddenItems"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]

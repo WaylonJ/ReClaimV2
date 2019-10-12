@@ -33,8 +33,6 @@ func _ready():
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
 	
-
-	
 	# Initializes the unitMovement script
 	get_node("UnitHolder").add_child(unitMovement)
 	unitMovement.makeCostGraph(startingArray)

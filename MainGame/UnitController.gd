@@ -6,16 +6,18 @@ var overUnit = false
 var currentUnit = null
 var globalSelected = ""
 
+var inArea = false
+
 
 func _ready():
 	pass # Replace with function body.
 
 func _input(event):
 	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
-	if event is InputEventMouseButton and !event.is_pressed():
+	if event is InputEventMouseButton and !event.is_pressed() and event.position[1] < 540 and inArea:
+		inArea = false
 		if overUnit and Input.is_key_pressed(KEY_SHIFT) and (globalSelected == "e" or globalSelected == "unit"):
 			# Hides con
-			print("Here")
 			get_node("../../UI/BottomUI/MiddleSection/TileInfo").emptyTileGroup()
 			if !(currentUnit in selectedUnits):
 				unitClicked(currentUnit)
@@ -29,6 +31,8 @@ func _input(event):
 		# Click onto something that was not a unit
 		if !overUnit and !selectedUnits.empty() and !Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
 			_unhighlightAll()
+	elif event is InputEventMouseButton and event.is_pressed() and event.position[1] < 540:
+		inArea = true
 
 func makeLeaderUnit(baseTile):
 	var baseTilePosition = baseTile.get_position()
@@ -45,9 +49,6 @@ func setGlobalSelected():
 	get_tree().get_root().get_node("Control").selectSomething("unit")
 	
 func unitClicked(unit):
-#	if Input.mo
-#	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
-#	if globalSelected == "e" or globalSelected == "unit":
 	setGlobalSelected()
 	unit.get_node("Highlight").show()
 	if !checkIfUnitAlreadySelected(unit):
@@ -58,7 +59,9 @@ func _unhighlightAll():
 	get_tree().get_root().get_node("Control").unselectEverything()
 	if !selectedUnits.empty():
 		for unit in selectedUnits:
-			unit.get_node("Highlight").hide()
+			# Ensures the unit wasn't queue'd for deletion
+			if is_instance_valid(unit):
+				unit.get_node("Highlight").hide()
 		selectedUnits = []
 		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").unselectAll()
 

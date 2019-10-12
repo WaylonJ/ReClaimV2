@@ -116,6 +116,8 @@ mouse_filter = 2
 color = Color( 0.360784, 0.72549, 0.92549, 0.156863 )
 
 [node name="BattleScreen" type="Sprite" parent="."]
+editor/display_folded = true
+visible = false
 z_index = 8
 
 [node name="Panel" type="Panel" parent="BattleScreen"]
@@ -134,7 +136,7 @@ custom_constants/separation = 0
 
 [node name="UnitInfoAndSkills" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer"]
 margin_right = 400.0
-margin_bottom = 712.0
+margin_bottom = 700.0
 rect_min_size = Vector2( 400, 0 )
 custom_constants/separation = 0
 
@@ -164,28 +166,28 @@ align = 1
 [node name="LeftUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
 margin_top = 100.0
 margin_right = 400.0
-margin_bottom = 304.0
+margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MidUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
-margin_top = 304.0
+margin_top = 300.0
 margin_right = 400.0
-margin_bottom = 508.0
+margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="RightUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
-margin_top = 508.0
+margin_top = 500.0
 margin_right = 400.0
-margin_bottom = 712.0
+margin_bottom = 700.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="BattleHolder" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer"]
 margin_left = 400.0
 margin_right = 1200.0
-margin_bottom = 712.0
+margin_bottom = 700.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 

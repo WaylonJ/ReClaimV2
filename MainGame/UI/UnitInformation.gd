@@ -24,6 +24,7 @@ func displayUnitGroup(unitGroup):
 		if !checkIfUnitTypeAlreadyHere(newUnit):
 			get_node("RowHolder/TopRow").add_child(newUnit)
 			newUnit.set_position(Vector2(get_parent().get_position()[0], get_parent().get_position()[1]))
+	get_node("Formation").initialize(unitGroup)
 
 func unselectAll():
 	for child in get_node("RowHolder/TopRow").get_children():
@@ -42,7 +43,6 @@ func unselectAll():
 
 func HideOtherUIAndShowSelf():
 	for child in get_parent().get_children():
-		print(child.name)
 		child.hide()
 	show()
 

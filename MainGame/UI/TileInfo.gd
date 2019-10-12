@@ -24,45 +24,45 @@ func _ready():
 
 	
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.doubleclick:
-			doubleClick = true
+	if event is InputEventMouseButton and event.position[1] < 540:
+		if event is InputEventMouseButton:
+			if event.doubleclick:
+				doubleClick = true
 			
-	if event is InputEventMouseButton and !event.is_pressed() and event.button_index == 1:
-		globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
-		
-		# Click onto a completed building tile
-		if mouseInTile and selectedTile.buildingComplete == true:
-			print(selectedTile.unitStationed)
-			# Checks to make sure nothing else is selected, or only other tiles are.
+		if !event.is_pressed() and event.button_index == 1:
+			globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 			
-			if globalSelected == "tile" or globalSelected == "e":
-				setGlobalSelected()
+			# Click onto a completed building tile
+			if mouseInTile and selectedTile.buildingComplete == true:
+				# Checks to make sure nothing else is selected, or only other tiles are.
 				
-				# Single click, Shift not pressed
-				if not Input.is_key_pressed(KEY_SHIFT):
-					emptyTileGroup()
+				if globalSelected == "tile" or globalSelected == "e":
+					setGlobalSelected()
 					
-				# Checks to see if a building to construct is currently selected and prevents shiftClicks from doing anything
-				if checkIfBuildingSelected():
-					return
-				# Append item to selectedTileGroup if group is empty or it's the same type
-				appendIfNoTilesSelectedOrSimilarTiles()
-				if doubleClick:
-					if selectedTile.buildingName == "Base":
+					# Single click, Shift not pressed
+					if not Input.is_key_pressed(KEY_SHIFT):
+						emptyTileGroup()
+						
+					# Checks to see if a building to construct is currently selected and prevents shiftClicks from doing anything
+					if checkIfBuildingSelected():
 						return
-					for tile in get_tree().get_nodes_in_group("Tiles"):
-						appendIfSameTypeOfTile(tile)
-					doubleClick = false
-			
-		# Click on the map, but not in a tile. Shift key is NOT held down
-		elif event.position[1] < 540 and not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
-			doubleClick = false
-			if globalSelected == "tile":
-				get_tree().get_root().get_node("Control").unselectEverything()
-			emptyTileGroup()
-		else:
-			doubleClick = false
+					# Append item to selectedTileGroup if group is empty or it's the same type
+					appendIfNoTilesSelectedOrSimilarTiles()
+					if doubleClick:
+						if selectedTile.buildingName == "Base":
+							return
+						for tile in get_tree().get_nodes_in_group("Tiles"):
+							appendIfSameTypeOfTile(tile)
+						doubleClick = false
+				
+			# Click on the map, but not in a tile. Shift key is NOT held down
+			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
+				doubleClick = false
+				if globalSelected == "tile":
+					get_tree().get_root().get_node("Control").unselectEverything()
+				emptyTileGroup()
+			else:
+				doubleClick = false
 	if Input.is_key_pressed(KEY_ESCAPE):
 #		get_tree().get_root().get_node("Control").unselectEverything()
 		emptyTileGroup()

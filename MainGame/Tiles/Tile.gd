@@ -133,8 +133,6 @@ func updateTileInfo():
 
 		_:
 			print("Tile.gd: No name match, given -" + buildingName)
-	print(vision)
-	print(connections)
 	updateInSightOf(vision, self, true)
 	
 func updateInSightOf(toCheck, objectGivingSight, adding):

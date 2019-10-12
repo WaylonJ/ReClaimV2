@@ -48,7 +48,7 @@ func _input(event):
 	
 	
 	
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 1:
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 1 and event.position[1] < 540:
 		start = mousePos
 		startGlobal = mousePosGlobal
 		boxDragging = true
@@ -57,7 +57,7 @@ func _input(event):
 		endGlobal = mousePosGlobal
 		draw_area()
 	
-	if event is InputEventMouseButton and !event.is_pressed() and event.button_index == 1:
+	if event is InputEventMouseButton and !event.is_pressed() and event.button_index == 1 and boxDragging:
 		if start.distance_to(mousePos) > 20:
 			get_node("../UI/BottomUI/MiddleSection/TileInfo").emptyTileGroup()
 			end = mousePos
