@@ -190,9 +190,19 @@ func updateOutput(mana, unit, advanced, research):
 
 func setUnitStationed(unit):
 	unitStationed = unit
+	if enemyStationed != null:
+		inBattle = true
+		showBattleButton()
 
 func setEnemyStationed(unit):
 	enemyStationed = unit
+	if unitStationed != null:
+		inBattle = true
+		showBattleButton()
+
+func showBattleButton():
+	print("Showing battle Button")
+	get_node("TileHolder/ShowBattleButton").getReady()
 
 func createUnit():
 	var unit = preload("../Units/Unit.tscn")

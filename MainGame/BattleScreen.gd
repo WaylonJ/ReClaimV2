@@ -13,8 +13,8 @@ func _ready():
 func addBattle(ally, enemy, tile):
 	battles.append([ally, enemy, tile])
 	
-	
 func openBattleScreen(tile):
+	show()
 	for item in battles:
 		if item[2] == tile:
 			showBattle(item)

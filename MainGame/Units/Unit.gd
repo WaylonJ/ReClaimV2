@@ -83,9 +83,9 @@ func updateHostTile():
 	if hostTile.unitStationed != null and hostTile.unitStationed != self:
 		hostTile.unitStationed.mergeWithOtherGroup(self)
 	else:
-		hostTile.unitStationed = self
+		hostTile.setUnitStationed(self)
 	
-	hostTile.checkBattle()
+#	hostTile.checkBattle()
 #		hostTile.updateInSightOf(vision, self, true)
 
 func calcDistances():

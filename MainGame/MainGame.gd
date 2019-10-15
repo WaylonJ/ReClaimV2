@@ -1,7 +1,7 @@
 extends Control
 
-const BASE_ROWS = 49
-const BASE_COLS = 49
+const BASE_ROWS = 50
+const BASE_COLS = 50
 
 var bigArr = []
 var startingArray = []
@@ -27,12 +27,13 @@ var linkCreator = load("res://MainGame/GenerateTileLinks.gd").new()
 var unitMovement = load("res://MainGame/Units/UnitMovement.gd").new()
 
 func _ready():
+	print("Started!")
 	startNewGame()
 	print("Finished creating TileSet")
 	
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
-	
+
 	# Initializes the unitMovement script
 	get_node("UnitHolder").add_child(unitMovement)
 	unitMovement.makeCostGraph(startingArray)
@@ -58,13 +59,13 @@ func startNewGame():
 	# Makes the links between each tile
 	get_node("LinkHolder").add_child(linkCreator)
 	linkCreator.createLinks(startingArray)
-	
+
 	# Establishes Base tile
 	makeBaseTile()
-	
+
 	# Make leader unit
 	get_node("UnitHolder/UnitController").makeLeaderUnit(baseTile)
-	
+
 	# Make test enemy unit
 	var testEnemyTile = startingArray[length][length - 1]
 	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)

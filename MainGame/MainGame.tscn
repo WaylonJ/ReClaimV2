@@ -133,6 +133,8 @@ mouse_filter = 2
 color = Color( 0.360784, 0.72549, 0.92549, 0.156863 )
 
 [node name="BattleScreen" type="Sprite" parent="."]
+editor/display_folded = true
+visible = false
 z_index = 8
 script = ExtResource( 11 )
 
