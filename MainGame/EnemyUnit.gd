@@ -3,7 +3,7 @@ extends Button
 var portrait
 
 var numLeader = 0
-var numGoblin = 0
+var numBaseEnemy = 0
 var numUnits = 0
 
 var unitTypes = []
@@ -29,10 +29,9 @@ var vision = 0
 
 var formation = {}
 
-
 func _ready():
-	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered", [self])
-	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseExited")
+	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseEntered", [self])
+	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseExited")
 	set_process(false)
 #	self.add_to_group("Units")
 	pass # Replace with function body.
@@ -84,8 +83,6 @@ func updateHostTile():
 		hostTile.unitStationed.mergeWithOtherGroup(self)
 	else:
 		hostTile.unitStationed = self
-	
-	hostTile.checkBattle()
 #		hostTile.updateInSightOf(vision, self, true)
 
 func calcDistances():
@@ -140,17 +137,17 @@ func createUnit(unitName, amount):
 			maxHealth = amount * 100
 			unitTypes.append("Leader")
 			setFormation("Leader")
-		"Goblin":
-			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Goblin.png")
+		"baseEnemy":
+			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_BasicEnemy.png")
 			get_node("BG").set("texture", portrait)
-			numGoblin += amount
-			offense = amount * 5
-			defense = amount * 5
-			speed = amount * 10
-			currentHealth = amount * 20
-			maxHealth = amount * 20
-			unitTypes.append("Goblin")
-			setFormation("Goblin")
+			numBaseEnemy += amount
+			offense = amount * 7
+			defense = amount * 7
+			speed = amount * 12
+			currentHealth = amount * 29
+			maxHealth = amount * 29
+			unitTypes.append("baseEnemy")
+			setFormation("baseEnemy")
 	
 	numUnits = amount
 	if numUnits < 2:
@@ -200,11 +197,6 @@ func mergeUnits(newAddition):
 			unitTypes.append("Leader")
 			setFormation("Leader")
 		numLeader += newAddition.numLeader
-	if newAddition.numGoblin !=0:
-		if numGoblin == 0:
-			unitTypes.append("Goblin")
-			setFormation("Goblin")
-		numGoblin += newAddition.numGoblin
 	numUnits += newAddition.numUnits
 
 func mergeStats(newAddition):
@@ -227,8 +219,8 @@ func setFormation(unit):
 		match unit:
 			"Leader":
 				setFormationClosestTo(1, unit)
-			"Goblin":
-				setFormationClosestTo(0, unit)
+			"baseEnemy":
+				setFormationClosestTo(1, unit)
 			_:
 				print("Unit.gd: we got a mis-match")
 			
@@ -268,8 +260,3 @@ func setFormationClosestTo(pos, unit):
 		
 func placeInExtraFormation(unit):
 	print("Unit.gd: All formation positions filled, placing in extra (does nothing right now)")
-
-
-
-
-

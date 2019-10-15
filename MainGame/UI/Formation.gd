@@ -1,7 +1,7 @@
 extends HBoxContainer
 
-const LEADER_ICON = preload("res://MainGame/UI/Resources/UnitsSmall/PH_Unit_Leader_Small.png")
-const GOBLIN_ICON = preload("res://MainGame/UI/Resources/UnitsSmall/PH_Unit_Goblin_Small.png")
+const LEADER_ICON = preload("res://MainGame/Units/Resources/SmallIcons/PH_Unit_Leader_Small.png")
+const GOBLIN_ICON = preload("res://MainGame/Units/Resources/SmallIcons/PH_Unit_Goblin_Small.png")
 
 var unitGroup = null
 

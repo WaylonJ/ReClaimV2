@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://MainGame/Camera2D.tscn" type="PackedScene" id=2]
@@ -7,8 +7,16 @@
 [ext_resource path="res://MainGame/Tiles/Tile.tscn" type="PackedScene" id=5]
 [ext_resource path="res://MainGame/UnitController.gd" type="Script" id=6]
 [ext_resource path="res://MainGame/Units/Unit.tscn" type="PackedScene" id=7]
-[ext_resource path="res://MainGame/Links/Link.tscn" type="PackedScene" id=8]
-[ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Base.png" type="Texture" id=9]
+[ext_resource path="res://MainGame/EnemyController.gd" type="Script" id=8]
+[ext_resource path="res://MainGame/Units/EnemyUnit.tscn" type="PackedScene" id=9]
+[ext_resource path="res://MainGame/Links/Link.tscn" type="PackedScene" id=10]
+[ext_resource path="res://MainGame/BattleScreen.gd" type="Script" id=11]
+[ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=12]
+[ext_resource path="res://MainGame/UnitSkillsArea.gd" type="Script" id=13]
+[ext_resource path="res://MainGame/Units/Resources/Skills/Blank.png" type="Texture" id=14]
+[ext_resource path="res://MainGame/Units/Resources/SmallIcons/small_Unit_Blank.png" type="Texture" id=15]
+[ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Base.png" type="Texture" id=16]
+[ext_resource path="res://MainGame/UI/Resources/Portraits/PH_UI_PortraitNumberBG.png" type="Texture" id=17]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -101,10 +109,19 @@ script = ExtResource( 6 )
 [node name="Unit" parent="UnitHolder/UnitController" instance=ExtResource( 7 )]
 visible = false
 
-[node name="Link" parent="." instance=ExtResource( 8 )]
+[node name="EnemyController" type="Control" parent="UnitHolder"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 8 )
+
+[node name="EnemyUnit" parent="UnitHolder/EnemyController" instance=ExtResource( 9 )]
+visible = false
+
+[node name="Link" parent="." instance=ExtResource( 10 )]
 z_index = 0
 
 [node name="SelectBoxHolder" type="Sprite" parent="."]
+editor/display_folded = true
 z_index = 2
 
 [node name="ColorRect" type="ColorRect" parent="SelectBoxHolder"]
@@ -116,9 +133,8 @@ mouse_filter = 2
 color = Color( 0.360784, 0.72549, 0.92549, 0.156863 )
 
 [node name="BattleScreen" type="Sprite" parent="."]
-editor/display_folded = true
-visible = false
 z_index = 8
+script = ExtResource( 11 )
 
 [node name="Panel" type="Panel" parent="BattleScreen"]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -130,11 +146,11 @@ margin_bottom = 435.0
 [node name="HBoxContainer" type="HBoxContainer" parent="BattleScreen/Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="UnitInfoAndSkills" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer"]
+editor/display_folded = true
 margin_right = 400.0
 margin_bottom = 700.0
 rect_min_size = Vector2( 400, 0 )
@@ -147,19 +163,21 @@ rect_min_size = Vector2( 0, 100 )
 size_flags_horizontal = 3
 
 [node name="Back" type="Label" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/TopLabels"]
-margin_top = 43.0
+margin_top = 34.0
 margin_right = 198.0
-margin_bottom = 57.0
+margin_bottom = 65.0
 size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 12 )
 text = "Back Line"
 align = 1
 
 [node name="Front" type="Label" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/TopLabels"]
 margin_left = 202.0
-margin_top = 43.0
+margin_top = 34.0
 margin_right = 400.0
-margin_bottom = 57.0
+margin_bottom = 65.0
 size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 12 )
 text = "Front Line"
 align = 1
 
@@ -170,6 +188,145 @@ margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="BackUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits"]
+editor/display_folded = true
+margin_right = 198.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 13 )
+
+[node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit"]
+margin_right = 198.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Skills"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 65.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Skills/SkillOne"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Skills"]
+margin_left = 69.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Skills/SkillTwo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Skills"]
+margin_left = 133.0
+margin_top = 5.0
+margin_right = 193.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Skills/SkillThree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit"]
+margin_top = 140.0
+margin_right = 198.0
+margin_bottom = 200.0
+alignment = 1
+
+[node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/BackUnit/Unit"]
+margin_left = 69.0
+margin_right = 129.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 15 )
+
+[node name="FrontUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits"]
+editor/display_folded = true
+margin_left = 202.0
+margin_right = 400.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 13 )
+
+[node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit"]
+margin_right = 198.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Skills"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 65.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Skills/SkillOne"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Skills"]
+margin_left = 69.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Skills/SkillTwo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Skills"]
+margin_left = 133.0
+margin_top = 5.0
+margin_right = 193.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Skills/SkillThree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit"]
+margin_top = 140.0
+margin_right = 198.0
+margin_bottom = 200.0
+alignment = 1
+
+[node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit/Unit"]
+margin_left = 69.0
+margin_right = 129.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 15 )
+
 [node name="MidUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
 margin_top = 300.0
 margin_right = 400.0
@@ -177,12 +334,290 @@ margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="BackUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits"]
+editor/display_folded = true
+margin_right = 198.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 13 )
+
+[node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit"]
+margin_right = 198.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 65.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills/SkillOne"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills"]
+margin_left = 69.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills/SkillTwo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills"]
+margin_left = 133.0
+margin_top = 5.0
+margin_right = 193.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills/SkillThree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit"]
+margin_top = 140.0
+margin_right = 198.0
+margin_bottom = 200.0
+alignment = 1
+
+[node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Unit"]
+margin_left = 69.0
+margin_right = 129.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 15 )
+
+[node name="FrontUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits"]
+editor/display_folded = true
+margin_left = 202.0
+margin_right = 400.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 13 )
+
+[node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit"]
+margin_right = 198.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 65.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills/SkillOne"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills"]
+margin_left = 69.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills/SkillTwo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills"]
+margin_left = 133.0
+margin_top = 5.0
+margin_right = 193.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills/SkillThree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit"]
+margin_top = 140.0
+margin_right = 198.0
+margin_bottom = 200.0
+alignment = 1
+
+[node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Unit"]
+margin_left = 69.0
+margin_right = 129.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 15 )
+
 [node name="RightUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
 margin_top = 500.0
 margin_right = 400.0
 margin_bottom = 700.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="BackUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits"]
+editor/display_folded = true
+margin_right = 198.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 13 )
+
+[node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit"]
+margin_right = 198.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Skills"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 65.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Skills/SkillOne"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Skills"]
+margin_left = 69.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Skills/SkillTwo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Skills"]
+margin_left = 133.0
+margin_top = 5.0
+margin_right = 193.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Skills/SkillThree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit"]
+margin_top = 140.0
+margin_right = 198.0
+margin_bottom = 200.0
+alignment = 1
+
+[node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Unit"]
+margin_left = 69.0
+margin_right = 129.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 15 )
+
+[node name="FrontUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits"]
+editor/display_folded = true
+margin_left = 202.0
+margin_right = 400.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 13 )
+
+[node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit"]
+margin_right = 198.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Skills"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 65.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Skills/SkillOne"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Skills"]
+margin_left = 69.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Skills/SkillTwo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Skills"]
+margin_left = 133.0
+margin_top = 5.0
+margin_right = 193.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 60, 125 )
+size_flags_vertical = 4
+flat = true
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Skills/SkillThree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+
+[node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit"]
+margin_top = 140.0
+margin_right = 198.0
+margin_bottom = 200.0
+alignment = 1
+
+[node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Unit"]
+margin_left = 69.0
+margin_right = 129.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 15 )
 
 [node name="BattleHolder" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer"]
 margin_left = 400.0
@@ -201,7 +636,7 @@ margin_right = 266.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel2" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row1"]
@@ -210,7 +645,7 @@ margin_right = 532.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel3" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row1"]
@@ -219,7 +654,7 @@ margin_right = 800.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Row2" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/BattleHolder"]
@@ -233,7 +668,7 @@ margin_right = 266.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel2" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row2"]
@@ -242,7 +677,7 @@ margin_right = 532.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel3" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row2"]
@@ -251,7 +686,7 @@ margin_right = 800.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Row3" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/BattleHolder"]
@@ -265,7 +700,7 @@ margin_right = 266.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel2" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row3"]
@@ -274,7 +709,7 @@ margin_right = 532.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel3" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row3"]
@@ -283,7 +718,7 @@ margin_right = 800.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Row4" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/BattleHolder"]
@@ -297,7 +732,7 @@ margin_right = 266.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel2" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row4"]
@@ -306,7 +741,7 @@ margin_right = 532.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
 
 [node name="Panel3" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/BattleHolder/Row4"]
@@ -315,5 +750,15 @@ margin_right = 800.0
 margin_bottom = 175.0
 rect_min_size = Vector2( 0, 175 )
 size_flags_horizontal = 3
-texture = ExtResource( 9 )
+texture = ExtResource( 16 )
 stretch_mode = 1
+
+[node name="BG" type="TextureRect" parent="BattleScreen/Panel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 17 )
+stretch_mode = 1
+__meta__ = {
+"_edit_lock_": true
+}

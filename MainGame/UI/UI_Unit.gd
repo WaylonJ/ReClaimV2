@@ -1,7 +1,7 @@
 extends Button
 
-var goblinPng = preload("res://MainGame/Units/Resources/PH_Unit_Goblin.png")
-var leaderPng = preload("res://MainGame/Units/Resources/PH_Unit_Leader.png")
+var goblinPng = preload("res://MainGame/Units/Resources/TileIcons/PH_Unit_Goblin.png")
+var leaderPng = preload("res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png")
 
 var portrait
 var unitType = "A"

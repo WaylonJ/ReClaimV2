@@ -64,6 +64,11 @@ func startNewGame():
 	
 	# Make leader unit
 	get_node("UnitHolder/UnitController").makeLeaderUnit(baseTile)
+	
+	# Make test enemy unit
+	var testEnemyTile = startingArray[length][length - 1]
+	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+	
 
 func makeBaseArray():
 	var tile = preload("Tiles/Tile.tscn")

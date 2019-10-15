@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_Unit_Goblin.png-3bcccc4a8e34a1619d5e94ae45923b33.stex"
+path="res://.import/small_Unit_Blank.png-9c14d775bab4977ccdec60257a3d4369.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Units/Resources/PH_Unit_Goblin.png"
-dest_files=[ "res://.import/PH_Unit_Goblin.png-3bcccc4a8e34a1619d5e94ae45923b33.stex" ]
+source_file="res://MainGame/Units/Resources/SmallIcons/small_Unit_Blank.png"
+dest_files=[ "res://.import/small_Unit_Blank.png-9c14d775bab4977ccdec60257a3d4369.stex" ]
 
 [params]
 

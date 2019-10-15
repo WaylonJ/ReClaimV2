@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_Unit_Leader.png-29250a6b1a9b2ad2f314658321914f1d.stex"
+path="res://.import/PH_Unit_NumberBG.png-c823e8e01cd4fe8207c98b15b1d88fc1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Units/Resources/PH_Unit_Leader.png"
-dest_files=[ "res://.import/PH_Unit_Leader.png-29250a6b1a9b2ad2f314658321914f1d.stex" ]
+source_file="res://MainGame/Units/Resources/TileIcons/PH_Unit_NumberBG.png"
+dest_files=[ "res://.import/PH_Unit_NumberBG.png-c823e8e01cd4fe8207c98b15b1d88fc1.stex" ]
 
 [params]
 

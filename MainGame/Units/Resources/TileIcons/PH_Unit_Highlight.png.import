@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PH_Unit_BasicEnemy.png-d182a58ee91f4246c95cd48bc946bdea.stex"
+path="res://.import/PH_Unit_Highlight.png-f1ae9d853a971218fb82123ac2fb8ab3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MainGame/Units/Resources/PH_Unit_BasicEnemy.png"
-dest_files=[ "res://.import/PH_Unit_BasicEnemy.png-d182a58ee91f4246c95cd48bc946bdea.stex" ]
+source_file="res://MainGame/Units/Resources/TileIcons/PH_Unit_Highlight.png"
+dest_files=[ "res://.import/PH_Unit_Highlight.png-f1ae9d853a971218fb82123ac2fb8ab3.stex" ]
 
 [params]
 
