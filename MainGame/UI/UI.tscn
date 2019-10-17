@@ -48,6 +48,7 @@
 [node name="UI" type="CanvasLayer"]
 
 [node name="MiddlePanel" type="Panel" parent="."]
+editor/display_folded = true
 visible = false
 anchor_left = 0.5
 anchor_top = 1.0
@@ -70,18 +71,14 @@ breakpoint_gutter = true
 wrap_enabled = true
 
 [node name="BottomUI_BG" type="TextureRect" parent="."]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -640.0
-margin_top = -180.0
-margin_right = 640.0
-rect_min_size = Vector2( 0, 180 )
+margin_top = 540.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 1280, 180 )
 texture = ExtResource( 3 )
 expand = true
 
 [node name="BottomUI" type="HBoxContainer" parent="."]
+editor/display_folded = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -97,10 +94,10 @@ rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
 margin_left = 190.0
-margin_right = 998.0
+margin_right = 990.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 800, 0 )
-size_flags_horizontal = 3
+size_flags_horizontal = 5
 custom_constants/separation = 0
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection"]
@@ -938,10 +935,12 @@ anchor_bottom = 1.0
 texture = ExtResource( 21 )
 
 [node name="UnitInformation" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-margin_right = 808.0
+editor/display_folded = true
+margin_right = 800.0
 margin_bottom = 180.0
-size_flags_horizontal = 3
+size_flags_horizontal = 5
 size_flags_vertical = 3
+custom_constants/separation = 0
 script = ExtResource( 32 )
 
 [node name="AllStats" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
@@ -1061,8 +1060,8 @@ stretch_mode = 1
 
 [node name="RowHolder" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
 editor/display_folded = true
-margin_left = 204.0
-margin_right = 604.0
+margin_left = 200.0
+margin_right = 600.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 400, 0 )
 
@@ -1079,8 +1078,8 @@ size_flags_vertical = 3
 
 [node name="Formation" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
 editor/display_folded = true
-margin_left = 608.0
-margin_right = 808.0
+margin_left = 600.0
+margin_right = 800.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 0
@@ -1282,17 +1281,16 @@ margin_bottom = 180.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
-editor/display_folded = true
-margin_left = 1008.0
-margin_right = 1288.0
+margin_left = 1000.0
+margin_right = 1280.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
 [node name="ResourceBars" type="VBoxContainer" parent="BottomUI/RightSection"]
 editor/display_folded = true
-margin_right = 144.0
+margin_right = 140.0
 margin_bottom = 180.0
-rect_min_size = Vector2( 144, 0 )
+rect_min_size = Vector2( 140, 0 )
 size_flags_horizontal = 3
 alignment = 1
 
@@ -1327,7 +1325,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="ResourceItems" type="VBoxContainer" parent="BottomUI/RightSection"]
-margin_left = 148.0
+margin_left = 144.0
 margin_right = 280.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
@@ -1335,7 +1333,7 @@ alignment = 1
 
 [node name="Mana" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
 margin_top = 26.0
-margin_right = 132.0
+margin_right = 136.0
 margin_bottom = 66.0
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Mana"]
@@ -1361,7 +1359,7 @@ expand = true
 
 [node name="Advanced" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
 margin_top = 70.0
-margin_right = 132.0
+margin_right = 136.0
 margin_bottom = 110.0
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Advanced"]
@@ -1387,7 +1385,7 @@ expand = true
 
 [node name="Research" type="HBoxContainer" parent="BottomUI/RightSection/ResourceItems"]
 margin_top = 114.0
-margin_right = 132.0
+margin_right = 136.0
 margin_bottom = 154.0
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/RightSection/ResourceItems/Research"]
@@ -1412,6 +1410,7 @@ texture = ExtResource( 8 )
 expand = true
 
 [node name="HiddenItems" type="Control" parent="."]
+editor/display_folded = true
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
@@ -1441,11 +1440,11 @@ script = ExtResource( 44 )
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]

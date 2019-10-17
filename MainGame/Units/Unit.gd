@@ -85,8 +85,7 @@ func updateHostTile():
 	else:
 		hostTile.setUnitStationed(self)
 	
-#	hostTile.checkBattle()
-#		hostTile.updateInSightOf(vision, self, true)
+	hostTile.updateInSightOf(vision, self, true)
 
 func calcDistances():
 	distanceTotal = 10 * numUnits

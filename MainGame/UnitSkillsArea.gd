@@ -41,9 +41,3 @@ func setUnitPortrait(image):
 
 
 
-
-
-
-
-
-

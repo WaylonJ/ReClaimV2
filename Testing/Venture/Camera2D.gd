@@ -18,6 +18,7 @@ var boxDragging = false
 
 signal area_selected
 
+var globalSelected = "e"
 
 onready var rectd = get_node("../SelectBoxHolder/ColorRect")
 
@@ -37,6 +38,10 @@ func _ready():
 	pass # Replace with function body.
 
 func _input(event):
+	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
+	if globalSelected == "Battle":
+		return
+	
 	#Controls mouse dragging if mouse is right-clicked and moved
 	inputDragMouse(event)
 
@@ -74,6 +79,8 @@ func inputSetMousePositions(event):
 	if event is InputEventMouse:
 		mousePos = event.position
 		mousePosGlobal = get_global_mouse_position()
+#		print(mousePos)
+#		print(mousePosGlobal)
 #		print(mousePosGlobal)
 
 func inputDragMouse(event):

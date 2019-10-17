@@ -161,15 +161,6 @@ func updateInSightOf(toCheck, objectGivingSight, adding):
 	
 	checkIfSeen()
 
-func checkBattle():
-	# If this is true, battleScreen is already available, nothing else to do. 
-	# May need to include merging reinforcements, but that'll be taken care of later
-	if inBattle == true:
-		return
-		
-	if unitStationed != null and enemyStationed != null:
-		get_tree().get_root().get_node("Control/BattleScreen").addBattle(unitStationed, enemyStationed, self)
-
 func checkIfSeen():
 	if inSightOf.empty():
 		get_node("TileHolder/Unseen").show()
@@ -201,7 +192,7 @@ func setEnemyStationed(unit):
 		showBattleButton()
 
 func showBattleButton():
-	print("Showing battle Button")
+	get_tree().get_root().get_node("Control/BattleScreen").addBattle(unitStationed, enemyStationed, self)
 	get_node("TileHolder/ShowBattleButton").getReady()
 
 func createUnit():
