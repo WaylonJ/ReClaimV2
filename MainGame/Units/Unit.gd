@@ -6,13 +6,20 @@ var numLeader = 0
 var numGoblin = 0
 var numUnits = 0
 
+var leaderScript = load("res://MainGame/Units/UnitTypes/Leader.gd")
+var goblinScript = load("res://MainGame/Units/UnitTypes/Goblin.gd")
+
+var unitRefs = {}
+var leaderRef
+var goblinRef
+
 var unitTypes = []
 
-var currentHealth = 0
-var maxHealth = 0
-var offense = 0
-var defense = 0
-var speed = 0
+var totalCurrentHealth = 0
+var totalMaxHealth = 0
+var totalOffense = 0
+var totalDefense = 0
+var totalSpeed = 0
 
 var hostTile = null
 var prevTile = null
@@ -34,12 +41,16 @@ func _ready():
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseExited")
 	set_process(false)
-#	self.add_to_group("Units")
+	
+	
 	pass # Replace with function body.
 
+func _init():
+	generateUnitRefs()
+
 func _process(delta):
-	distanceLeft -= delta * speed
-	distanceMovedSinceLastTick += (delta * speed) / numUnits
+	distanceLeft -= delta * totalSpeed
+	distanceMovedSinceLastTick += (delta * totalSpeed) / numUnits
 	
 	# Progress unit towards next tile visually
 	if distanceMovedSinceLastTick >= 1:
@@ -53,6 +64,13 @@ func _process(delta):
 		removeSelfFromInSightOf()
 		hostTile.updateInSightOf(vision, self, true)
 		updatePath()
+
+func generateUnitRefs():
+	leaderRef = leaderScript.new()
+	add_child(leaderRef)
+	
+	goblinRef = goblinScript.new()
+	add_child(goblinRef)
 
 func appendPath(newPath):
 	pathToMove.append(newPath)
@@ -129,32 +147,50 @@ func setTile(tile):
 func createUnit(unitName, amount):
 	match unitName:
 		"Leader":
+			unitTypes.append("Leader")
+			unitRefs["Leader"] = leaderRef
+			leaderRef.addFreshUnit(amount)
+			numLeader += amount
+			updateTotalStats()
+			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png")
 			get_node("BG").set("texture", portrait)
-			numLeader += amount
-			offense = amount * 20
-			defense = amount * 20
-			speed = amount * 10
-			currentHealth = amount * 100
-			maxHealth = amount * 100
-			unitTypes.append("Leader")
 			setFormation("Leader")
 		"Goblin":
+			unitTypes.append("Goblin")
+			unitRefs["Goblin"] = goblinRef
+			goblinRef.addFreshUnit(amount)
+			numGoblin += amount
+			updateTotalStats()
+			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Goblin.png")
 			get_node("BG").set("texture", portrait)
-			numGoblin += amount
-			offense = amount * 5
-			defense = amount * 5
-			speed = amount * 10
-			currentHealth = amount * 20
-			maxHealth = amount * 20
-			unitTypes.append("Goblin")
 			setFormation("Goblin")
-	
 	numUnits = amount
 	if numUnits < 2:
 		get_node("NumUnits").hide()
 	checkHighestVision()
+	
+func updateTotalStats():
+	var tempCurHP = 0
+	var tempMaxHP = 0
+	var tempOffense = 0
+	var tempDefense = 0
+	var tempSpeed = 0
+	
+	for ref in unitRefs:
+		tempCurHP += unitRefs[ref].currentHP
+		tempMaxHP += unitRefs[ref].maxHP
+		tempOffense += unitRefs[ref].offense
+		tempDefense += unitRefs[ref].defense
+		tempSpeed += unitRefs[ref].speed
+	
+	totalCurrentHealth = tempCurHP
+	totalMaxHealth = tempMaxHP
+	totalOffense = tempOffense
+	totalDefense = tempDefense
+	totalSpeed = tempSpeed
+	print(totalCurrentHealth)
 	
 func checkHighestVision():
 	for item in unitTypes:
@@ -197,21 +233,28 @@ func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:
 		if numLeader == 0:
 			unitTypes.append("Leader")
+			unitRefs["Leader"] = leaderRef
 			setFormation("Leader")
 		numLeader += newAddition.numLeader
+		leaderRef.mergeUnit(newAddition.leaderRef)
 	if newAddition.numGoblin !=0:
 		if numGoblin == 0:
 			unitTypes.append("Goblin")
+			unitRefs["Goblin"] = goblinRef
 			setFormation("Goblin")
+			
 		numGoblin += newAddition.numGoblin
+		goblinRef.mergeUnit(newAddition.goblinRef)
 	numUnits += newAddition.numUnits
+	updateTotalStats()
 
 func mergeStats(newAddition):
-	offense += newAddition.offense
-	defense += newAddition.defense
-	speed += newAddition.speed
-	currentHealth += newAddition.currentHealth
-	maxHealth += newAddition.maxHealth
+	pass
+#	offense += newAddition.offense
+#	defense += newAddition.defense
+#	speed += newAddition.speed
+#	currentHealth += newAddition.currentHealth
+#	maxHealth += newAddition.maxHealth
 	
 func showNumberOfUnitsTag():
 	if numUnits > 1:

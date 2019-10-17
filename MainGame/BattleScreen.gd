@@ -105,9 +105,9 @@ func initializeBattleArea(unitGroup, isAlly):
 				print("BattleScreen.gd: Invalid match found")
 				
 		if isAlly:
-			battleHolder.setUnitToPosition(unitGroup, image, position)
+			battleHolder.setUnitToPosition(unitGroup.unitRefs[unit], image, position)
 		else:
-			battleHolder.setEnemyToPosition(unitGroup, image, position)
+			battleHolder.setEnemyToPosition(unitGroup.unitRefs[unit], image, position)
 	
 func initializeSkillsArea(ally):
 	var position

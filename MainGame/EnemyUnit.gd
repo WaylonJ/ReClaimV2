@@ -6,13 +6,20 @@ var numLeader = 0
 var numBaseEnemy = 0
 var numUnits = 0
 
+var leaderScript = load("res://MainGame/Units/UnitTypes/Leader.gd")
+var baseEnemyScript = load("res://MainGame/Units/UnitTypes/BaseEnemy.gd")
+
+var unitRefs = {}
+var leaderRef
+var baseEnemyRef
+
 var unitTypes = []
 
-var currentHealth = 0
-var maxHealth = 0
-var offense = 0
-var defense = 0
-var speed = 0
+var totalCurrentHealth = 0
+var totalMaxHealth = 0
+var totalOffense = 0
+var totalDefense = 0
+var totalSpeed = 0
 
 var hostTile = null
 var prevTile = null
@@ -29,6 +36,9 @@ var vision = 0
 
 var formation = {}
 
+func _init():
+	generateUnitRefs()
+
 func _ready():
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseExited")
@@ -37,8 +47,8 @@ func _ready():
 	pass # Replace with function body.
 
 func _process(delta):
-	distanceLeft -= delta * speed
-	distanceMovedSinceLastTick += (delta * speed) / numUnits
+	distanceLeft -= delta * totalSpeed
+	distanceMovedSinceLastTick += (delta * totalSpeed) / numUnits
 	
 	# Progress unit towards next tile visually
 	if distanceMovedSinceLastTick >= 1:
@@ -52,6 +62,13 @@ func _process(delta):
 		removeSelfFromInSightOf()
 		hostTile.updateInSightOf(vision, self, true)
 		updatePath()
+
+func generateUnitRefs():
+	leaderRef = leaderScript.new()
+	add_child(leaderRef)
+	
+	baseEnemyRef = baseEnemyScript.new()
+	add_child(baseEnemyRef)
 
 func appendPath(newPath):
 	pathToMove.append(newPath)
@@ -127,26 +144,25 @@ func setTile(tile):
 func createUnit(unitName, amount):
 	match unitName:
 		"Leader":
+			unitTypes.append("Leader")
+			unitRefs["Leader"] = leaderRef
+			leaderRef.addFreshUnit(amount)
+			numLeader += amount
+			updateTotalStats()
+			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png")
 			get_node("BG").set("texture", portrait)
-			numLeader += amount
-			offense = amount * 20
-			defense = amount * 20
-			speed = amount * 10
-			currentHealth = amount * 100
-			maxHealth = amount * 100
-			unitTypes.append("Leader")
 			setFormation("Leader")
+			
 		"baseEnemy":
+			unitTypes.append("baseEnemy")
+			unitRefs["baseEnemy"] = baseEnemyRef
+			baseEnemyRef.addFreshUnit(amount)
+			numBaseEnemy += amount
+			updateTotalStats()
+			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_BasicEnemy.png")
 			get_node("BG").set("texture", portrait)
-			numBaseEnemy += amount
-			offense = amount * 7
-			defense = amount * 7
-			speed = amount * 12
-			currentHealth = amount * 29
-			maxHealth = amount * 29
-			unitTypes.append("baseEnemy")
 			setFormation("baseEnemy")
 	
 	numUnits = amount
@@ -159,7 +175,7 @@ func checkHighestVision():
 		match item:
 			"Leader":
 				setVision(2)
-			"Goblin":
+			"baseEnemy":
 				setVision(1)
 	
 func setVision(newVision):
@@ -195,16 +211,35 @@ func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:
 		if numLeader == 0:
 			unitTypes.append("Leader")
+			unitRefs["Leader"] = leaderRef
+			setFormation("Leader")
+		numLeader += newAddition.numLeader
+		leaderRef.mergeUnit(newAddition.leaderRef)
+	if newAddition.numBaseEnemy !=0:
+		if numBaseEnemy == 0:
+			unitTypes.append("baseEnemy")
+			unitRefs["baseEnemy"] = baseEnemyRef
+			setFormation("baseEnemy")
+			
+		numBaseEnemy += newAddition.numBaseEnemy
+		baseEnemyRef.mergeUnit(newAddition.baseEnemyRef)
+	numUnits += newAddition.numUnits
+	updateTotalStats()
+
+	if newAddition.numLeader !=0:
+		if numLeader == 0:
+			unitTypes.append("Leader")
 			setFormation("Leader")
 		numLeader += newAddition.numLeader
 	numUnits += newAddition.numUnits
 
 func mergeStats(newAddition):
-	offense += newAddition.offense
-	defense += newAddition.defense
-	speed += newAddition.speed
-	currentHealth += newAddition.currentHealth
-	maxHealth += newAddition.maxHealth
+	pass
+#	offense += newAddition.offense
+#	defense += newAddition.defense
+#	speed += newAddition.speed
+#	currentHealth += newAddition.currentHealth
+#	maxHealth += newAddition.maxHealth
 	
 func showNumberOfUnitsTag():
 	if numUnits > 1:
@@ -260,3 +295,24 @@ func setFormationClosestTo(pos, unit):
 		
 func placeInExtraFormation(unit):
 	print("Unit.gd: All formation positions filled, placing in extra (does nothing right now)")
+
+func updateTotalStats():
+	var tempCurHP = 0
+	var tempMaxHP = 0
+	var tempOffense = 0
+	var tempDefense = 0
+	var tempSpeed = 0
+	
+	for ref in unitRefs:
+		tempCurHP += unitRefs[ref].currentHP
+		tempMaxHP += unitRefs[ref].maxHP
+		tempOffense += unitRefs[ref].offense
+		tempDefense += unitRefs[ref].defense
+		tempSpeed += unitRefs[ref].speed
+	
+	totalCurrentHealth = tempCurHP
+	totalMaxHealth = tempMaxHP
+	totalOffense = tempOffense
+	totalDefense = tempDefense
+	totalSpeed = tempSpeed
+	print(totalCurrentHealth)

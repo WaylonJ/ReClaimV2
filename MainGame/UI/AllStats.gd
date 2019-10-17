@@ -10,11 +10,11 @@ func _ready():
 	pass # Replace with function body.
 
 func updateStats(unit):
-	curHP += unit.currentHealth
-	maxHP += unit.maxHealth
-	offense += unit.offense
-	defense += unit.defense
-	speed += unit.speed
+	curHP += unit.totalCurrentHealth
+	maxHP += unit.totalMaxHealth
+	offense += unit.totalOffense
+	defense += unit.totalDefense
+	speed += unit.totalSpeed
 	
 	get_node("StatHolderHealth/Label").set_text(str(curHP) + " / " + str(maxHP))
 	get_node("StatHolderOffense/Label").set_text(str(offense))

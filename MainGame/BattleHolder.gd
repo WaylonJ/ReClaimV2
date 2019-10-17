@@ -15,7 +15,7 @@ func attachAllTilesToArray():
 			tempHolder.append(child)
 		tiles.append(tempHolder)
 
-func setUnitToPosition(unit, image, position):
+func setUnitToPosition(unitRef, image, position):
 	var unitImage
 	var tile
 	match position:
@@ -35,13 +35,13 @@ func setUnitToPosition(unit, image, position):
 	unitImage.set("texture", image)
 	unitImage.show()
 	
-	setHealthBar(unit, tile)
+	setHealthBar(unitRef, tile)
 	
 func setHealthBar(unit, tile):
 	var bar = tile.get_node("Health")
 	bar.show()
-	bar.max_value = unit.maxHealth
-	bar.value = unit.currentHealth
+	bar.max_value = unit.maxHP
+	bar.value = unit.currentHP
 	
 func setEnemyToPosition(unit, image, position):
 	var tile
