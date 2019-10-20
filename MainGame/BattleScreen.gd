@@ -25,7 +25,7 @@ func _input(event):
 
 func addBattle(ally, enemy, tile):
 	battles.append([ally, enemy, tile])
-	battleController.addBattle(ally, enemy, battleHolder.tiles)
+	battleController.addBattle(ally, enemy, tile)
 	
 func openBattleScreen(tile):
 	show()
@@ -35,10 +35,11 @@ func openBattleScreen(tile):
 			showBattle(item)
 
 func hideBattleScreen():
-	hide()
-	get_node("/root/Control").unselectEverything()
-	showOrHideUI("show")
-	get_node("/root/Control/Camera2D").set_zoom(oldZoom)
+	if self.visible:
+		hide()
+		get_node("/root/Control").unselectEverything()
+		showOrHideUI("show")
+		get_node("/root/Control/Camera2D").set_zoom(oldZoom)
 	
 
 func showBattle(battle):
@@ -126,22 +127,6 @@ func initializeSkillsArea(ally):
 				print("BattleScreen.gd: Invalid match found")
 		
 		setSkillsBasedOnUnit(unitName, skillUnitPositions[position])
-		
-		
-		match position:
-			0:
-				pass
-			1:
-				pass
-			2:
-				pass
-			3:
-				pass
-			4:
-				pass
-			5:
-				pass
-	pass
 	
 func setSkillsBasedOnUnit(name, unitNode):
 	match name:
@@ -180,3 +165,14 @@ func setUnitToPositionInSkillsArea(unit, position):
 			print("Nothing matched")
 	pass
 		
+func removeBattle(tile):
+	var index = 0
+	for item in battles:
+		if item[2] == tile:
+			battles.remove(index)
+		index += 1
+	
+	if battles.empty():
+		hideBattleScreen()
+		tile.hideBattleButton()
+	

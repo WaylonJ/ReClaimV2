@@ -1,5 +1,7 @@
 extends Button
 
+const DIST_CONSTANT = 10
+
 var portrait
 
 var numLeader = 0
@@ -13,6 +15,7 @@ var unitRefs = {}
 var leaderRef
 var goblinRef
 
+var isAlly = true
 var unitTypes = []
 
 var totalCurrentHealth = 0
@@ -72,11 +75,31 @@ func generateUnitRefs():
 	goblinRef = goblinScript.new()
 	add_child(goblinRef)
 
-func appendPath(newPath):
+func appendPath(newPath, replacing):
 	pathToMove.append(newPath)
 	if currentPath.empty():
 		currentPath = pathToMove.pop_front()
 		updatePath()
+	# Righ click for movement, with no shift
+	elif replacing:
+		returnUnitToHostTile()
+		
+func returnUnitToHostTile():
+	directionMoving = setOppositeDirection()
+	distanceLeft = (DIST_CONSTANT * numUnits) - distanceLeft
+	
+	
+
+func setOppositeDirection():
+	match directionMoving:
+		"up":
+			return "down"
+		"down":
+			return "up"
+		"left":
+			return "right"
+		"right":
+			return "left"
 
 func updatePath():
 	if len(currentPath) > 1:
@@ -106,7 +129,7 @@ func updateHostTile():
 	hostTile.updateInSightOf(vision, self, true)
 
 func calcDistances():
-	distanceTotal = 10 * numUnits
+	distanceTotal = DIST_CONSTANT * numUnits
 	distanceLeft = distanceTotal
 
 func moveUnitAlongPath(distanceMoved):
@@ -175,22 +198,19 @@ func updateTotalStats():
 	var tempCurHP = 0
 	var tempMaxHP = 0
 	var tempOffense = 0
-	var tempDefense = 0
 	var tempSpeed = 0
 	
 	for ref in unitRefs:
 		tempCurHP += unitRefs[ref].currentHP
 		tempMaxHP += unitRefs[ref].maxHP
 		tempOffense += unitRefs[ref].offense
-		tempDefense += unitRefs[ref].defense
 		tempSpeed += unitRefs[ref].speed
 	
 	totalCurrentHealth = tempCurHP
 	totalMaxHealth = tempMaxHP
 	totalOffense = tempOffense
-	totalDefense = tempDefense
 	totalSpeed = tempSpeed
-	print(totalCurrentHealth)
+
 	
 func checkHighestVision():
 	for item in unitTypes:
@@ -216,7 +236,6 @@ func updateTilesVision():
 func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
 	mergeUnits(newAddition)
-	mergeStats(newAddition)
 	
 	# If there is a single unit, hide tag. Otherwise show number of units.
 	showNumberOfUnitsTag()
@@ -247,14 +266,6 @@ func mergeUnits(newAddition):
 		goblinRef.mergeUnit(newAddition.goblinRef)
 	numUnits += newAddition.numUnits
 	updateTotalStats()
-
-func mergeStats(newAddition):
-	pass
-#	offense += newAddition.offense
-#	defense += newAddition.defense
-#	speed += newAddition.speed
-#	currentHealth += newAddition.currentHealth
-#	maxHealth += newAddition.maxHealth
 	
 func showNumberOfUnitsTag():
 	if numUnits > 1:
@@ -311,7 +322,12 @@ func setFormationClosestTo(pos, unit):
 func placeInExtraFormation(unit):
 	print("Unit.gd: All formation positions filled, placing in extra (does nothing right now)")
 
-
+func getRef(unitName):
+	match unitName:
+		"Leader":
+			return leaderRef
+		"Goblin":
+			return goblinRef
 
 
 

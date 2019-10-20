@@ -13,6 +13,7 @@ var unitRefs = {}
 var leaderRef
 var baseEnemyRef
 
+var isAlly = false
 var unitTypes = []
 
 var totalCurrentHealth = 0
@@ -300,19 +301,25 @@ func updateTotalStats():
 	var tempCurHP = 0
 	var tempMaxHP = 0
 	var tempOffense = 0
-	var tempDefense = 0
 	var tempSpeed = 0
 	
 	for ref in unitRefs:
 		tempCurHP += unitRefs[ref].currentHP
 		tempMaxHP += unitRefs[ref].maxHP
 		tempOffense += unitRefs[ref].offense
-		tempDefense += unitRefs[ref].defense
 		tempSpeed += unitRefs[ref].speed
 	
 	totalCurrentHealth = tempCurHP
 	totalMaxHealth = tempMaxHP
 	totalOffense = tempOffense
-	totalDefense = tempDefense
 	totalSpeed = tempSpeed
 	print(totalCurrentHealth)
+	
+func getRef(unitName):
+	match unitName:
+		"Leader":
+			return leaderRef
+		"baseEnemy":
+			return baseEnemyRef
+
+

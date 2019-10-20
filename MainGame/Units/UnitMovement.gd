@@ -30,7 +30,7 @@ func _input(event):
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
 				findShortestPath(unit.hostTile, tileHovered)
 				path = costQueue
-				unit.appendPath(path)
+				unit.appendPath(path, true)
 				
 #			if Input.mouse
 

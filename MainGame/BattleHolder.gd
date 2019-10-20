@@ -42,7 +42,7 @@ func setHealthBar(unit, tile):
 	bar.show()
 	bar.max_value = unit.maxHP
 	bar.value = unit.currentHP
-	
+
 func setEnemyToPosition(unit, image, position):
 	var tile
 	var unitImage

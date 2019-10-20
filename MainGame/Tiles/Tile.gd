@@ -193,7 +193,10 @@ func setEnemyStationed(unit):
 
 func showBattleButton():
 	get_tree().get_root().get_node("Control/BattleScreen").addBattle(unitStationed, enemyStationed, self)
-	get_node("TileHolder/ShowBattleButton").getReady()
+	get_node("TileHolder/ShowBattleButton").show()
+
+func hideBattleButton():
+	get_node("TileHolder/ShowBattleButton").hide()
 
 func createUnit():
 	var unit = preload("../Units/Unit.tscn")
