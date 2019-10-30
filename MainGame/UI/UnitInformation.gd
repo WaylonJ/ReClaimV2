@@ -6,16 +6,12 @@ var unitGroupArray = []
 var globalSelected
 
 func displayUnitGroup(unitGroup):
-#	print("here")
 	HideOtherUIAndShowSelf()
-	
-
 	updateStatsOnUI(unitGroup)
 	unitGroupArray.append(unitGroup)
 	var uiUnit = preload("res://MainGame/UI/UI_Unit.tscn")
-
+	
 	numUniqueUnits = len(unitGroup.unitTypes)
-
 	for typeOfUnit in unitGroup.unitTypes:
 		var newUnit = uiUnit.instance()
 		newUnit.get_node("HBoxContainer/UI_Unit").copyUnit(typeOfUnit, unitGroup)

@@ -1,12 +1,19 @@
 extends Control
 
+# Constants 
 const BASE_ROWS = 50
 const BASE_COLS = 50
 
+# Other variables
 var bigArr = []
 var startingArray = []
 var length = 0
 
+var baseTile = null
+
+var myTimer = 0.02
+
+# Variables that control player resources
 var manaProduction = 0
 var advancedProduction = 0
 var researchProduction = 0
@@ -17,20 +24,19 @@ var researchSupply = 100
 
 var manaCap = 1000
 var advancedCap = 500
-var baseTile = null
 
-var myTimer = 0.02
-
+# Global Variable to keep track of which component is selected by the player
 var selectedName = "e"
 
+# Variables to hold scripts from other places
 var linkCreator = load("res://MainGame/GenerateTileLinks.gd").new()
 var unitMovement = load("res://MainGame/Units/UnitMovement.gd").new()
 
 func _ready():
 	print("Started!")
 	startNewGame()
-	print("Finished creating TileSet")
 	
+	# Calls functions in other scripts here to ensure nodes they use are already initialized
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
 
@@ -83,6 +89,7 @@ func makeBaseArray():
 			myObj.col = col
 			myObj.connections = [false, false, false, false]
 			myObj.add_to_group("Tiles")
+			# Constants here decide the spacing between each  tile
 			myObj.rect_position = Vector2(((-1 * BASE_COLS / 2) + col) * 300, ((-1 * BASE_ROWS / 2) + row) * 300)
 			arr[row].append(myObj)
 	
@@ -93,18 +100,13 @@ func makeBaseArray():
 
 func makeBaseTile():
 	var BaseTilePNG = preload("res://MainGame/Tiles/Resources/PH_Tile_Base.png")
-	
 	length = len(startingArray) / 2
-	
 	
 	baseTile = startingArray[length][length]
 	baseTile.set("buildingName", "Base")
 	baseTile.startBuilding()
 	baseTile.createTile()
 	baseTile.get_node("TileHolder/Background").set("texture", BaseTilePNG)
-#	baseTile.get_node("TileHolder").set_z_index(-1)
-#	baseTile.get_node("MapBackground").set_z_index(-1)
-#	baseTile.hide()
 	
 func updateTotalProduction(mana, advanced, research):
 	if mana != null:

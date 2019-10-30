@@ -1,5 +1,5 @@
 extends HBoxContainer
-	
+
 var selectedTile = null
 var selectedTileGroup = []
 var previousTile = null
@@ -10,18 +10,12 @@ var Base_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_Base.png")
 var globalSelected = ""
 var doubleClick = false
 
-
 func _ready():
 	show()
 	set_process(true)
 	get_node("../TileActions").hide()
 	get_node("../NoSelection/ConstructionOptions").hide()
 	get_node("../NoSelection").show()
-	pass
-
-
-
-
 	
 func _input(event):
 	if event is InputEventMouseButton and event.position[1] < 540:
@@ -35,7 +29,6 @@ func _input(event):
 			# Click onto a completed building tile
 			if mouseInTile and selectedTile.buildingComplete == true:
 				# Checks to make sure nothing else is selected, or only other tiles are.
-				
 				if globalSelected == "tile" or globalSelected == "e":
 					setGlobalSelected()
 					
@@ -46,6 +39,7 @@ func _input(event):
 					# Checks to see if a building to construct is currently selected and prevents shiftClicks from doing anything
 					if checkIfBuildingSelected():
 						return
+					
 					# Append item to selectedTileGroup if group is empty or it's the same type
 					appendIfNoTilesSelectedOrSimilarTiles()
 					if doubleClick:
@@ -54,7 +48,7 @@ func _input(event):
 						for tile in get_tree().get_nodes_in_group("Tiles"):
 							appendIfSameTypeOfTile(tile)
 						doubleClick = false
-				
+			
 			# Click on the map, but not in a tile. Shift key is NOT held down
 			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
 				doubleClick = false
@@ -64,7 +58,6 @@ func _input(event):
 			else:
 				doubleClick = false
 	if Input.is_key_pressed(KEY_ESCAPE):
-#		get_tree().get_root().get_node("Control").unselectEverything()
 		emptyTileGroup()
 		previousTile = null
 
@@ -99,7 +92,7 @@ func appendIfNoTilesSelectedOrSimilarTiles():
 		# Ensures it isn't already selected and also not the baseTile
 		if not selectedTile.get("selected") and selectedTile != baseTile:
 			selectTile()
-			
+		
 		#Calls UI update / sets previousTile
 		updateUI(selectedTile)
 
@@ -143,8 +136,7 @@ func openTileOptions(tile):
 	else:
 		get_node("../NoSelection").hide()
 		get_node("../TileActions").show()
-#		get_node("../UpgradeMenu").hide()
-		
+	
 	
 func emptyTileGroup():
 	for item in selectedTileGroup:

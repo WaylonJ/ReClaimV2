@@ -1,32 +1,36 @@
 extends Button
 
+# Constants
 const DIST_CONSTANT = 10
 
-var portrait
+# Unit type scripts
+var leaderScript = load("res://MainGame/Units/UnitTypes/Leader.gd")
+var goblinScript = load("res://MainGame/Units/UnitTypes/Goblin.gd")
+
+# References to the Unit types and num of Units
+var unitRefs = {}
+var leaderRef
+var goblinRef
 
 var numLeader = 0
 var numGoblin = 0
 var numUnits = 0
 
-var leaderScript = load("res://MainGame/Units/UnitTypes/Leader.gd")
-var goblinScript = load("res://MainGame/Units/UnitTypes/Goblin.gd")
-
-var unitRefs = {}
-var leaderRef
-var goblinRef
-
+# Misc. variables
 var isAlly = true
 var unitTypes = []
+var portrait
 
+# Unit stat variables
 var totalCurrentHealth = 0
 var totalMaxHealth = 0
 var totalOffense = 0
 var totalDefense = 0
 var totalSpeed = 0
+var vision = 0
+var formation = {}
 
-var hostTile = null
-var prevTile = null
-
+# Movement vars
 var pathToMove = []
 var currentPath = []
 
@@ -35,18 +39,13 @@ var distanceLeft
 var distanceMovedSinceLastTick = 0
 var directionMoving
 
-var vision = 0
-
-var formation = {}
-
+var hostTile = null
+var prevTile = null
 
 func _ready():
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseExited")
 	set_process(false)
-	
-	
-	pass # Replace with function body.
 
 func _init():
 	generateUnitRefs()
@@ -87,8 +86,6 @@ func appendPath(newPath, replacing):
 func returnUnitToHostTile():
 	directionMoving = setOppositeDirection()
 	distanceLeft = (DIST_CONSTANT * numUnits) - distanceLeft
-	
-	
 
 func setOppositeDirection():
 	match directionMoving:

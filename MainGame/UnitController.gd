@@ -8,10 +8,6 @@ var globalSelected = ""
 
 var inArea = false
 
-
-func _ready():
-	pass # Replace with function body.
-
 func _input(event):
 	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 	if event is InputEventMouseButton and !event.is_pressed() and event.position[1] < 540 and inArea:
@@ -88,10 +84,10 @@ func _on_AreaSelected(positions):
 	var units = get_tree().get_nodes_in_group("Units")
 	var unitsInArea = []
 	
+	# Adds each unit in the boxSelect to list
 	for unit in units:
 		if checkEachCorner(unit, startX, startY, endX, endY):
 			unitsInArea.append(unit)
-#		print(unit.get_position())
 	
 	# If shift isnt held, unhighlight all before selecting units.
 	if !Input.is_key_pressed(KEY_SHIFT):
@@ -104,10 +100,13 @@ func _on_AreaSelected(positions):
 			unitClicked(unit)
 func checkEachCorner(unit, startX, startY, endX, endY):
 	var topLeft = unit.get_position()
+	
 	var topRight = topLeft
 	topRight.x = topRight.x + 75
+	
 	var botLeft = topLeft
 	botLeft.y = botLeft.y + 75
+	
 	var botRight = topLeft
 	botRight.x = botRight.x + 75
 	botRight.y = botRight.y + 75

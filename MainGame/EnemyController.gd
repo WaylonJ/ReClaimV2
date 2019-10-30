@@ -9,9 +9,6 @@ var globalSelected = ""
 var inArea = false
 
 
-func _ready():
-	pass # Replace with function body.
-
 func _input(event):
 #	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 #	if event is InputEventMouseButton and !event.is_pressed() and event.position[1] < 540 and inArea:

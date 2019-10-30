@@ -6,7 +6,6 @@ var costGraph = []
 var costQueue
 
 func _ready():
-	
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	
 	for tile in tiles:
@@ -16,12 +15,10 @@ func _ready():
 
 func _mouseInTile(tile):
 	tileHovered = tile
-	pass
 
 func _mouseOutOfTile(tile):
 	tileHovered = null
-	pass
-	
+
 func _input(event):
 	# Checks for a right click
 	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
@@ -31,15 +28,12 @@ func _input(event):
 				findShortestPath(unit.hostTile, tileHovered)
 				path = costQueue
 				unit.appendPath(path, true)
-				
-#			if Input.mouse
 
 func sendUnitOnPath(unit, path):
 	unit.moveTo(path)
 	pass
 
 func printPath(path):
-#	print(path)
 	var home = path[0]
 	var row = home.row
 	var col = home.col
@@ -52,20 +46,14 @@ func findShortestPath(origin, target):
 		costQueue = [origin]
 		return
 		
-#	var holder = 
-	costQueue = [[[origin], 0]]
 	var current = null
 	var done = false
+	
+	costQueue = [[[origin], 0]]
 	costGraph[origin.row][origin.col] = true
 	
-	var test = 0
-	while !done and test < 20000:
-		test += 1
+	while !done:
 		current = costQueue.pop_front()
-		
-		if current == null:
-			print("We ran out of costQueue somehow? Ending")
-			break
 		done = checkNeighboursAndInsertInCostQueue(current, target)
 		
 	resetCostGraph()
@@ -76,11 +64,9 @@ func checkNeighboursAndInsertInCostQueue(item, target):
 	var directions = []
 	var distance
 	var totalCost
-	
 	var tileArr = item[0].duplicate(true)
 	var curCost = len(tileArr)
 	var tile = tileArr[curCost - 1]
-	
 	
 	for connection in tile.connections:
 		tileArr = item[0].duplicate(true)
@@ -126,7 +112,6 @@ func checkNeighboursAndInsertInCostQueue(item, target):
 								totalCost = curCost + distance
 								insertIntoCostQueue([tileArr, totalCost])
 				3:
-#					print("At left tile")
 					if tile.leftTile != null:
 						# Ensures this is the first visit here
 						if costGraph[tile.row][tile.col - 1] == false:

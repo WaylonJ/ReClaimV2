@@ -25,6 +25,7 @@ var buildingTimeMax = 69
 var buildingComplete = false
 var percentBuilt = 0
 
+# Build production variables
 var outputMana = null
 var outputUnit = null
 var unitProduction = null
@@ -34,16 +35,19 @@ var outputResearch = null
 var row = null
 var col = null
 
+# Unit selection / stationed variables
 var selected = false
 var unitStationed = null
 var enemyStationed = null
 
+# Connections to other tiles variables
 var connections = []
 var aboveTile
 var rightTile
 var belowTile
 var leftTile
 
+# Vision variables
 var vision = 0
 var inSightOf = []
 var currentlySeen = false
@@ -78,9 +82,10 @@ func _process(delta):
 func _ready():
 	set_process(false)
 	checkIfSeen()
-	pass # Replace with function body.
-
+	
 func startBuilding():
+	# Need to add functions that will trigger when a buildin begins to build
+	# Things such as a building bar, locking uses until its done, etc.
 	pass
 
 func createTile():
@@ -143,13 +148,13 @@ func updateInSightOf(toCheck, objectGivingSight, adding):
 	
 	# Calls this function in each connected tile with 1 less range
 	if toCheck != 0:
-		if connections[0] == true:
+		if connections[0] == true and aboveTile != null:
 			aboveTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
-		if connections[1] == true:
+		if connections[1] == true and rightTile != null:
 			rightTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
-		if connections[2] == true:
+		if connections[2] == true and belowTile != null:
 			belowTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
-		if connections[3] == true:
+		if connections[3] == true and leftTile != null:
 			leftTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
 	if adding:
 		inSightOf.append(objectGivingSight)
@@ -213,4 +218,3 @@ func createUnit():
 		setUnitStationed(newUnit)
 	else:
 		unitStationed.mergeWithOtherGroup(newUnit)
-

@@ -143,7 +143,6 @@ func setSkillsBasedOnUnit(name, unitNode):
 			var skillOneImage = load("res://MainGame/Units/Resources/Skills/PH_Skills_Goblin_Flurry.png")
 			unitNode.setSkill(1, skillOneImage)
 	
-	
 func initializeSkillAndTileUnitPositions():
 	skillUnitPositions.append(get_node("Panel/HBoxContainer/UnitInfoAndSkills/LeftUnits/FrontUnit"))
 	skillUnitPositions.append(get_node("Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit"))
@@ -152,18 +151,14 @@ func initializeSkillAndTileUnitPositions():
 	skillUnitPositions.append(get_node("Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit"))
 	skillUnitPositions.append(get_node("Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit"))
 	
-	
 func addAlliesToSkillsArea(allyGroup):
 	for unit in allyGroup.unitTypes:
 		setUnitToPositionInSkillsArea(unit, allyGroup.formations[unit])
 
 func setUnitToPositionInSkillsArea(unit, position):
-	
-	
 	match position:
 		_:
 			print("Nothing matched")
-	pass
 		
 func removeBattle(tile):
 	var index = 0
