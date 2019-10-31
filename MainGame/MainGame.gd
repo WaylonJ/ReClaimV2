@@ -72,10 +72,26 @@ func startNewGame():
 	# Make leader unit
 	get_node("UnitHolder/UnitController").makeLeaderUnit(baseTile)
 
+	populateBoard()
 	# Make test enemy unit
-	var testEnemyTile = startingArray[length][length - 1]
-	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+#	var testEnemyTile = startingArray[length][length - 1]
+#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
+
+func populateBoard():
+	makeEnemyPositions()
+
+
+# This should probably all be in a new script
+func makeEnemyPositions():
+	# Will attempt to create tiles / 5 locations to be enemy Fortification locations.
+	# Requirements: Not within 4 tiles of another enemy. Not within 3 tiles of the Player Base
+	var remainingEnemies = BASE_COLS * BASE_ROWS / 5
+	var tile
+	while remainingEnemies != 0:
+		tile = selectRandomTiles()
+		attemptToCreateEnemyLocation(tile)
+		remainingEnemies -= 1
 
 func makeBaseArray():
 	var tile = preload("Tiles/Tile.tscn")
