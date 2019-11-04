@@ -86,12 +86,50 @@ func populateBoard():
 func makeEnemyPositions():
 	# Will attempt to create tiles / 5 locations to be enemy Fortification locations.
 	# Requirements: Not within 4 tiles of another enemy. Not within 3 tiles of the Player Base
-	var remainingEnemies = BASE_COLS * BASE_ROWS / 5
+	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
 	var tile
-	while remainingEnemies != 0:
+	while createEnemyAttempts != 0:
 		tile = selectRandomTiles()
-		attemptToCreateEnemyLocation(tile)
-		remainingEnemies -= 1
+		if checkForAllyOrEnemyTilesNearby(tile, 3, true):
+			makeEnemyBase(tile)
+		createEnemyAttempts -= 1
+
+func selectRandomTiles():
+	# Gets a random row and column. Returns the tile found at that location.
+	randomize()
+	var randTileRow = randi() % BASE_ROWS
+	var randTileCol = randi() % BASE_COLS
+	
+	return startingArray[randTileRow][randTileCol]
+	
+func checkForAllyOrEnemyTilesNearby(tile, toCheck, nothingFound):
+	# This function goes up to 'toCheck' distance away from the original tile searching for
+	# ally or enemy tiles. If it finds them, it'll return false, telling the parent that there 
+	# already exists a created building nearby. Causing the parent's while loop to continue.
+	if tile.get("buildingAlliance") != "neutral" or nothingFound == false:
+		# This new placement is too close to an existing ally or enemy building. 
+		return false
+	
+	# Need to make sure no enemy bases or ally tiles are within 3 tiles
+	if toCheck != 0:
+		if tile.connections[0] == true and tile.aboveTile != null:
+			nothingFound = checkForAllyOrEnemyTilesNearby(tile.aboveTile, toCheck - 1, nothingFound)
+		if tile.connections[1] == true and tile.rightTile != null:
+			nothingFound = checkForAllyOrEnemyTilesNearby(tile.rightTile, toCheck - 1, nothingFound)
+		if tile.connections[2] == true and tile.belowTile != null:
+			nothingFound = checkForAllyOrEnemyTilesNearby(tile.belowTile, toCheck - 1, nothingFound)
+		if tile.connections[3] == true and tile.leftTile != null:
+			nothingFound = checkForAllyOrEnemyTilesNearby(tile.leftTile, toCheck - 1, nothingFound)
+			
+	return nothingFound
+	
+func makeEnemyBase(tile):
+	var enemyTilePNG = preload("res://MainGame/Tiles/Resources/PH_Tile_EnemyBase.png")
+	tile.set("buildingName", "EnemyTest")
+	tile.startBuilding()
+	tile.createTile()
+	tile.get_node("TileHolder/Background").set("texture", enemyTilePNG)
+	
 
 func makeBaseArray():
 	var tile = preload("Tiles/Tile.tscn")

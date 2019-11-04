@@ -5,6 +5,7 @@ const MANA_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portr
 const MILITARY_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_Military.png")
 const RESOURCE_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_Resource.png")
 const UTILITY_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_Utility.png")
+const ENEMY_TEST_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_EnemyTest.png")
 
 const BASE_DESCRIPTION = "    The Center of Control for your operations. Provides basic resources along with " + \
 	"access towards various upgrades."
@@ -15,6 +16,8 @@ const MILITARY_DESCRIPTION = "    This building creates troops for your army. It
 const UTILITY_DESCRIPTION = "    This does something, Utility is rather vague and can be a lot of things lmao"
 const RESOURCE_DESCRIPTION = "    This building creates some arbitrary resource. Maybe it also consumes other " + \
 	"resources to do so. idk"
+const ENEMY_TEST = "    This building creates basic enemy troops, similar to the current Military bldg " + \
+	"They will be constantly stationed and idk if this will ever be seen."
 	
 var description = "TILE DESCRIPTION: NEEDS TO BE CHANGED"
 var portrait = "Blank portrait??"
@@ -24,6 +27,7 @@ var buildingTime = 69
 var buildingTimeMax = 69
 var buildingComplete = false
 var percentBuilt = 0
+var buildingAlliance = "neutral"
 
 # Build production variables
 var outputMana = null
@@ -109,39 +113,50 @@ func updateTileInfo():
 			buildingTime = 0
 			updateOutput(10, null, 0, 3)
 			vision = 2
+			buildingAlliance = "ally"
 			
-
 		"ManaPool":
 			description = MANAPOOL_DESCRIPTION
 			portrait = MANA_PORTRAIT
 			buildingTime = 0.5
 			updateOutput(5, null, null, null)
 			vision = 1
-
+			buildingAlliance = "ally"
+			
 		"ResourceBldg":
 			description = RESOURCE_DESCRIPTION
 			portrait = RESOURCE_PORTRAIT
 			buildingTime = 0.5
 			updateOutput(-2, null, 1, null)
 			vision = 1
-
+			buildingAlliance = "ally"
+			
 		"MilitaryBldg":
 			description = MILITARY_DESCRIPTION
 			portrait = MILITARY_PORTRAIT
 			buildingTime = 1
 			updateOutput(null, 3, null, 0)
 			vision = 2
-
+			buildingAlliance = "ally"
+			
 		"UtilityBldg":
 			description = UTILITY_DESCRIPTION
 			portrait = UTILITY_PORTRAIT
 			buildingTime = 15
 			updateOutput(null, null, null, 5)
 			vision = 3
-
+			buildingAlliance = "ally"
+			
+		"EnemyTest":
+			description = ENEMY_TEST
+			portrait = ENEMY_TEST_PORTRAIT
+			buildingTime = 30
+			buildingAlliance = "enemy"
+			vision = 2
 		_:
 			print("Tile.gd: No name match, given -" + buildingName)
-	updateInSightOf(vision, self, true)
+	if buildingAlliance != "enemy":
+		updateInSightOf(vision, self, true)
 	
 func updateInSightOf(toCheck, objectGivingSight, adding):
 	var index = 0

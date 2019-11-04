@@ -64,7 +64,7 @@ func _process(delta):
 		set_process(false)
 		hostTile = currentPath[0]
 		removeSelfFromInSightOf()
-		hostTile.updateInSightOf(vision, self, true)
+		hostTile.updateInSightOf(vision + 1, self, true)
 		updatePath()
 
 func generateUnitRefs():
