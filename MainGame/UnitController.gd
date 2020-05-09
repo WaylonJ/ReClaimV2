@@ -5,6 +5,7 @@ var selectedUnits = []
 var overUnit = false
 var currentUnit = null
 var globalSelected = ""
+var allyUnit = true
 
 var inArea = false
 
@@ -12,12 +13,12 @@ func _input(event):
 	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 	if event is InputEventMouseButton and !event.is_pressed() and event.position[1] < 540 and inArea:
 		inArea = false
-		if overUnit and Input.is_key_pressed(KEY_SHIFT) and (globalSelected == "e" or globalSelected == "unit"):
+		if overUnit and Input.is_key_pressed(KEY_SHIFT) and (globalSelected == "e" or globalSelected == "allyUnit"):
 			# Hides con
 			get_node("../../UI/BottomUI/MiddleSection/TileInfo").emptyTileGroup()
 			if !(currentUnit in selectedUnits):
 				unitClicked(currentUnit)
-		elif overUnit and !Input.is_key_pressed(KEY_SHIFT):
+		elif overUnit and !Input.is_key_pressed(KEY_SHIFT) and allyUnit == true:
 			if selectedUnits.empty():
 				unitClicked(currentUnit)
 			else:
@@ -42,7 +43,7 @@ func makeLeaderUnit(baseTile):
 	add_child(leader)
 	
 func setGlobalSelected():
-	get_tree().get_root().get_node("Control").selectSomething("unit")
+	get_tree().get_root().get_node("Control").selectSomething("allyUnit")
 	
 func unitClicked(unit):
 	setGlobalSelected()

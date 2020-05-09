@@ -22,7 +22,7 @@ func _input(event):
 	# Checks for a right click
 	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
 		# Checks to make sure a unit is selected and cursor is over a tile
-		if get_tree().get_root().get_node("Control").selectedName == "unit" and tileHovered != null:
+		if get_tree().get_root().get_node("Control").selectedName == "allyUnit" and tileHovered != null:
 #			print("Unit Movement, selected units: " + str(get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits))
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
 				findShortestPath(unit.hostTile, tileHovered)

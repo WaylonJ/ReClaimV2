@@ -127,7 +127,7 @@ func openTileOptions(tile):
 		get_node("../NoSelection/ConstructionOptions").hide()
 		get_node("../UpgradeMenu").hide()
 		get_node("../../../HiddenItems/HoveringBldgImage").unselectEverything()
-		if !(globalSelected == "unit"):
+		if !(globalSelected == "allyUnit"):
 			get_node("../NoSelection/BasicOptions").show()
 			get_node("../NoSelection").show()
 

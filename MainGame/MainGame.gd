@@ -74,8 +74,8 @@ func startNewGame():
 
 	populateBoard()
 	# Make test enemy unit
-#	var testEnemyTile = startingArray[length][length - 1]
-#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+	var testEnemyTile = startingArray[length][length - 1]
+	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
 
 func populateBoard():
