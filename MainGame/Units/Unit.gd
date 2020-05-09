@@ -42,6 +42,8 @@ var directionMoving
 var hostTile = null
 var prevTile = null
 
+var snared = false
+
 func _ready():
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseExited")
@@ -56,7 +58,6 @@ func _process(delta):
 	
 	# Progress unit towards next tile visually
 	if distanceMovedSinceLastTick >= 1:
-#		print("Unit.gd: " + str(distanceLeft))
 		moveUnitAlongPath(distanceMovedSinceLastTick * 10)
 		distanceMovedSinceLastTick -= 1
 	
@@ -64,14 +65,11 @@ func _process(delta):
 	if distanceLeft < 0:
 		set_process(false)
 		
-#		print("here?")
 		hostTile.updateInSightOf(vision, self, false)
 		hostTile = currentPath[0]
 #		removeSelfFromInSightOf()
 		hostTile.updateInSightOf(vision, self, true)
-		print("Unit.gd: " + str(hostTile.inSightOf))
 		updatePath()
-#		print("Unit.gd: Setting host tile: " + str(hostTile))
 
 func generateUnitRefs():
 	leaderRef = leaderScript.new()
@@ -108,7 +106,6 @@ func updatePath():
 	if len(currentPath) > 1:
 		prevTile = currentPath.pop_front()
 		prevTile.unitStationed = null
-#		print("here")
 		set_process(true)
 		findDirection(currentPath[0])
 		placeAtStartOfPath(prevTile)
@@ -203,7 +200,6 @@ func updateTotalStats():
 	var tempSpeed = 0
 	
 	for ref in unitRefs:
-#		print(str(ref))
 		tempCurHP += unitRefs[ref].currentHP
 		tempMaxHP += unitRefs[ref].maxHP
 		tempOffense += unitRefs[ref].offense
@@ -252,7 +248,6 @@ func mergeWithOtherGroup(newAddition):
 			
 	#If Host is not selected, but moving unit is:
 	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
-		print("Unit.gd: Host unit NOT SELECTED")
 		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
 		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
 	

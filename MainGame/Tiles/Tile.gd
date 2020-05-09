@@ -25,7 +25,7 @@ var portrait = "Blank portrait??"
 var buildingName = "Blank"
 var buildingTime = 69
 var buildingTimeMax = 69
-var buildingComplete = false
+var buildingComplete = true
 var percentBuilt = 0
 var buildingAlliance = "neutral"
 
@@ -33,6 +33,9 @@ var buildingAlliance = "neutral"
 var outputMana = null
 var outputUnit = null
 var unitProduction = null
+var unitProductionName = null
+var unitProductionIsAlly
+
 var outputAdvanced = null
 var outputResearch = null
 
@@ -61,18 +64,20 @@ var inBattle = false
 
 func _process(delta):
 	buildingTime -= delta
-	if buildingTime <= 0:
-		buildingTime = 0
+	if !buildingComplete:
+		if buildingTime <= 0:
+			buildingComplete = true
+			buildingTime = 0
+			
+			updateGlobalValues()
+			
+			if unitProduction == null:
+				set_process(false)
+			get_node("TileHolder/BuildingProgressBar").hide()
 		
-		updateGlobalValues()
-		
-		if unitProduction == null:
-			set_process(false)
-		buildingComplete = true
-		get_node("TileHolder/BuildingProgressBar").hide()
-	else:
-		percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
-		get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
+		else:
+			percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
+			get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
 		
 	if unitProduction != null:
 		unitProduction -= delta
@@ -98,7 +103,10 @@ func createTile():
 	
 	# Handles the time aspect to building a building.
 	buildingTimeMax = buildingTime
-	get_node("TileHolder/BuildingProgressBar").show()
+	if currentlySeen:
+		get_node("TileHolder/BuildingProgressBar").show()
+	
+	buildingComplete = false
 	set_process(true)
 	
 func updateGlobalValues():
@@ -136,6 +144,7 @@ func updateTileInfo():
 			portrait = MILITARY_PORTRAIT
 			buildingTime = 1
 			updateOutput(null, 3, null, 0)
+			setUnitCreationInfo("Goblin", true)
 			vision = 2
 			buildingAlliance = "ally"
 			
@@ -150,7 +159,9 @@ func updateTileInfo():
 		"EnemyTest":
 			description = ENEMY_TEST
 			portrait = ENEMY_TEST_PORTRAIT
-			buildingTime = 30
+			buildingTime = 5
+			updateOutput(null, 3, null, 0)
+			setUnitCreationInfo("baseEnemy", false)
 			buildingAlliance = "enemy"
 			vision = 2
 		_:
@@ -158,6 +169,10 @@ func updateTileInfo():
 	if buildingAlliance != "enemy":
 		updateInSightOf(vision, self, true)
 	
+func setUnitCreationInfo(unitName, isAlly):
+	unitProductionName = unitName
+	unitProductionIsAlly = isAlly
+
 func updateInSightOf(toCheck, objectGivingSight, adding):
 #	print("Tile.gd: Setting sight to be: " + str(adding))
 	var index = 0
@@ -186,10 +201,13 @@ func checkIfSeen():
 	if inSightOf.empty():
 		get_node("TileHolder/Unseen").show()
 		get_node("MapBackground").hide()
+		get_node("TileHolder/BuildingProgressBar").hide()
 		currentlySeen = false
 	else:
 		get_node("TileHolder/Unseen").hide()
 		get_node("MapBackground").show()
+		if !(buildingComplete):
+			get_node("TileHolder/BuildingProgressBar").show()
 		currentlySeen = true
 		seenOnce = true
 	
@@ -204,13 +222,19 @@ func setUnitStationed(unit):
 	unitStationed = unit
 	if enemyStationed != null:
 		inBattle = true
+		snareBothUnits()
 		showBattleButton()
 
 func setEnemyStationed(unit):
 	enemyStationed = unit
 	if unitStationed != null:
 		inBattle = true
+		snareBothUnits()
 		showBattleButton()
+
+func snareBothUnits():
+	enemyStationed.snared = true
+	unitStationed.snared = true
 
 func showBattleButton():
 	get_tree().get_root().get_node("Control/BattleScreen").addBattle(unitStationed, enemyStationed, self)
@@ -220,18 +244,36 @@ func hideBattleButton():
 	get_node("TileHolder/ShowBattleButton").hide()
 
 func createUnit():
-	var unit = preload("../Units/Unit.tscn")
+	var unit = null
+	var newUnit = null
 	
-	var newUnit = unit.instance()
-	newUnit.hostTile = self
-	newUnit.createUnit("Goblin", 1)
-	
-	if unitStationed == null:
-		get_tree().get_root().get_node("Control/UnitHolder/UnitController").add_child(newUnit)
-		newUnit.add_to_group("Units")
-		newUnit.setTile(self)
-		newUnit.set_position(Vector2(self.get_position()[0], self.get_position()[1] - 75))
-		setUnitStationed(newUnit)
+	if unitProductionIsAlly:
+		unit = preload("../Units/Unit.tscn")
+		newUnit = unit.instance()
 	else:
-		unitStationed.mergeWithOtherGroup(newUnit)
+		unit = preload("../Units/EnemyUnit.tscn")
+		newUnit = unit.instance()
+		
+	newUnit.hostTile = self
+	newUnit.createUnit(unitProductionName, 1)
+	
+	
+	if unitProductionIsAlly:
+		if unitStationed == null:
+			get_tree().get_root().get_node("Control/UnitHolder/UnitController").add_child(newUnit)
+			newUnit.add_to_group("Units")
+			newUnit.setTile(self)
+			newUnit.set_position(Vector2(self.get_position()[0], self.get_position()[1] - 75))
+			setUnitStationed(newUnit)
+		else:
+			unitStationed.mergeWithOtherGroup(newUnit)
+	else:
+		if enemyStationed == null:
+			get_tree().get_root().get_node("Control/UnitHolder/EnemyController").add_child(newUnit)
+			newUnit.add_to_group("Enemies")
+			newUnit.setTile(self)
+			newUnit.set_position(Vector2(self.get_position()[0] + 65, self.get_position()[1] - 75))
+			setEnemyStationed(newUnit)
+		else:
+			enemyStationed.mergeWithOtherGroup(newUnit)
 

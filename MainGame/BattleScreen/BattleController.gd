@@ -173,10 +173,12 @@ func battleEnd(allyWin):
 	
 	if allyWin:
 		print("allies won")
+		allyUnits.snared = false
 		enemyUnits.queue_free()
 		tile.enemyStationed = null
 	else:
 		print("enemies won")
+		enemyUnits.snared = false
 		allyUnits.queue_free()
 		tile.unitStationed = null
 		

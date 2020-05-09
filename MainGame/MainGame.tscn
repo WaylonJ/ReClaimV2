@@ -114,6 +114,9 @@ margin_top = 1.50732
 margin_right = 1.94977
 margin_bottom = 1.50732
 script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Unit" parent="UnitHolder/UnitController" instance=ExtResource( 7 )]
 visible = false
@@ -151,6 +154,9 @@ margin_right = 698.0
 margin_bottom = 435.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BattleScreen/Panel"]
 anchor_right = 1.0
@@ -1123,6 +1129,28 @@ stretch_mode = 1
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="TextureRect" type="TextureRect" parent="BattleScreen/Panel/BG"]
+modulate = Color( 1, 1, 1, 0.564706 )
+show_behind_parent = true
+margin_left = -500.0
+margin_top = -500.0
+margin_right = -439.0
+margin_bottom = -436.0
+rect_scale = Vector2( 40, 40 )
+texture = ExtResource( 17 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="BattleScreen/Panel"]
+visible = false
+modulate = Color( 1, 1, 1, 0.470588 )
+show_behind_parent = true
+position = Vector2( 602, 265 )
+scale = Vector2( 40, 40 )
+z_index = 5
+texture = ExtResource( 17 )
 
 [node name="SelectBoxHolder" type="Sprite" parent="."]
 z_index = 2

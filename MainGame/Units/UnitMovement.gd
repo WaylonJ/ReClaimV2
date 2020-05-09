@@ -25,9 +25,10 @@ func _input(event):
 		if get_tree().get_root().get_node("Control").selectedName == "allyUnit" and tileHovered != null:
 #			print("Unit Movement, selected units: " + str(get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits))
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
-				findShortestPath(unit.hostTile, tileHovered)
-				path = costQueue
-				unit.appendPath(path, true)
+				if !(unit.snared):
+					findShortestPath(unit.hostTile, tileHovered)
+					path = costQueue
+					unit.appendPath(path, true)
 
 func sendUnitOnPath(unit, path):
 	unit.moveTo(path)
