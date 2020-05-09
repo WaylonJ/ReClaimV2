@@ -71,20 +71,42 @@ wrap_enabled = true
 
 [node name="BottomUI_BG" type="TextureRect" parent="."]
 visible = false
-margin_top = 540.0
-margin_bottom = 720.0
+margin_left = 3.01471
+margin_top = 326.0
+margin_right = 1283.01
+margin_bottom = 506.0
 rect_min_size = Vector2( 1280, 180 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = ExtResource( 3 )
 expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+modulate = Color( 0.705882, 1, 0.890196, 1 )
+margin_left = -0.610008
+margin_top = 529.0
+margin_right = 1293.39
+margin_bottom = 723.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="BottomUI" type="HBoxContainer" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 1.10803
-margin_top = -180.0
-margin_right = 9.10803
+margin_left = 1.38999
+margin_top = 536.0
+margin_right = 1820.33
+margin_bottom = 716.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TimeStop" type="Button" parent="BottomUI"]
 margin_right = 180.0
@@ -100,8 +122,6 @@ size_flags_horizontal = 5
 custom_constants/separation = 0
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
-visible = false
 margin_right = 500.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 500, 0 )
@@ -152,7 +172,6 @@ custom_fonts/font = ExtResource( 6 )
 autowrap = true
 
 [node name="Production" type="Panel" parent="BottomUI/MiddleSection/TileInfo"]
-editor/display_folded = true
 margin_left = 400.0
 margin_right = 500.0
 margin_bottom = 180.0
@@ -246,16 +265,14 @@ text = "+5"
 align = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
-visible = false
-margin_right = 300.0
+margin_left = 500.0
+margin_right = 800.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 180 )
 custom_constants/separation = 0
 alignment = 1
 
 [node name="BasicOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
-editor/display_folded = true
 margin_right = 300.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
@@ -282,7 +299,6 @@ custom_fonts/font = ExtResource( 13 )
 text = "Improvements"
 
 [node name="ConstructionOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
-editor/display_folded = true
 visible = false
 margin_left = 150.0
 margin_right = 450.0
@@ -374,7 +390,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="MiddleRow" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions"]
-editor/display_folded = true
 margin_top = 60.0
 margin_right = 300.0
 margin_bottom = 120.0
@@ -405,7 +420,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="Empty4" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 15 )]
-editor/display_folded = true
 margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
@@ -418,7 +432,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="Empty5" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 15 )]
-editor/display_folded = true
 margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
@@ -431,7 +444,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="Empty6" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow" instance=ExtResource( 15 )]
-editor/display_folded = true
 margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
@@ -444,7 +456,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="BotRow" type="HBoxContainer" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions"]
-editor/display_folded = true
 margin_top = 120.0
 margin_right = 300.0
 margin_bottom = 180.0
@@ -452,7 +463,6 @@ size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="Empty6" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 15 )]
-editor/display_folded = true
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
@@ -477,7 +487,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="Empty8" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 15 )]
-editor/display_folded = true
 margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
@@ -490,7 +499,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="Empty9" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow" instance=ExtResource( 15 )]
-editor/display_folded = true
 margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
@@ -521,10 +529,9 @@ margin_right = 300.0
 margin_bottom = 180.0
 
 [node name="TileActions" type="VBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
 visible = false
-margin_left = 1100.0
-margin_right = 1400.0
+margin_left = 800.0
+margin_right = 1100.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 0
@@ -725,7 +732,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 20 )
 
 [node name="UpgradeMenu" type="VBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
 visible = false
 margin_left = 800.0
 margin_right = 1100.0
@@ -799,7 +805,6 @@ margin_right = 0.463318
 texture = ExtResource( 31 )
 
 [node name="MiddleRow" type="HBoxContainer" parent="BottomUI/MiddleSection/UpgradeMenu"]
-editor/display_folded = true
 margin_top = 60.0
 margin_right = 300.0
 margin_bottom = 120.0
@@ -934,8 +939,9 @@ anchor_bottom = 1.0
 texture = ExtResource( 21 )
 
 [node name="UnitInformation" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-editor/display_folded = true
-margin_right = 800.0
+visible = false
+margin_left = 800.0
+margin_right = 1600.0
 margin_bottom = 180.0
 size_flags_horizontal = 5
 size_flags_vertical = 3
@@ -943,7 +949,6 @@ custom_constants/separation = 0
 script = ExtResource( 32 )
 
 [node name="AllStats" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-editor/display_folded = true
 margin_right = 200.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
@@ -951,7 +956,6 @@ custom_constants/separation = 5
 script = ExtResource( 33 )
 
 [node name="StatHolderHealth" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
-editor/display_folded = true
 margin_right = 200.0
 margin_bottom = 40.0
 
@@ -977,7 +981,6 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="StatHolderOffense" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
-editor/display_folded = true
 margin_top = 45.0
 margin_right = 200.0
 margin_bottom = 85.0
@@ -1004,7 +1007,6 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="StatHolderDefense" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
-editor/display_folded = true
 margin_top = 90.0
 margin_right = 200.0
 margin_bottom = 130.0
@@ -1031,7 +1033,6 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="StatHolderSpeed" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/AllStats"]
-editor/display_folded = true
 margin_top = 135.0
 margin_right = 200.0
 margin_bottom = 175.0
@@ -1058,7 +1059,6 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="RowHolder" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-editor/display_folded = true
 margin_left = 200.0
 margin_right = 600.0
 margin_bottom = 180.0
@@ -1076,7 +1076,6 @@ margin_bottom = 180.0
 size_flags_vertical = 3
 
 [node name="Formation" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-editor/display_folded = true
 margin_left = 600.0
 margin_right = 800.0
 margin_bottom = 180.0
@@ -1286,7 +1285,6 @@ margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
 [node name="ResourceBars" type="VBoxContainer" parent="BottomUI/RightSection"]
-editor/display_folded = true
 margin_right = 140.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 140, 0 )
@@ -1409,7 +1407,6 @@ texture = ExtResource( 8 )
 expand = true
 
 [node name="HiddenItems" type="Control" parent="."]
-editor/display_folded = true
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {

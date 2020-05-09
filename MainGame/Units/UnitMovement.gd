@@ -11,7 +11,6 @@ func _ready():
 	for tile in tiles:
 		tile.connect("mouse_entered", self, "_mouseInTile", [tile])
 		tile.connect("mouse_exited", self, "_mouseOutOfTile", [tile])
-		
 
 func _mouseInTile(tile):
 	tileHovered = tile
@@ -24,6 +23,7 @@ func _input(event):
 	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
 		# Checks to make sure a unit is selected and cursor is over a tile
 		if get_tree().get_root().get_node("Control").selectedName == "unit" and tileHovered != null:
+#			print("Unit Movement, selected units: " + str(get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits))
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
 				findShortestPath(unit.hostTile, tileHovered)
 				path = costQueue
@@ -51,11 +51,13 @@ func findShortestPath(origin, target):
 	
 	costQueue = [[[origin], 0]]
 	costGraph[origin.row][origin.col] = true
+
 	
 	while !done:
 		current = costQueue.pop_front()
 		done = checkNeighboursAndInsertInCostQueue(current, target)
 		
+#	print("Unit movement: " + str(costQueue))
 	resetCostGraph()
 	return
 		

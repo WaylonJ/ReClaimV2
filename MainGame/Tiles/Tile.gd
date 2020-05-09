@@ -159,6 +159,7 @@ func updateTileInfo():
 		updateInSightOf(vision, self, true)
 	
 func updateInSightOf(toCheck, objectGivingSight, adding):
+#	print("Tile.gd: Setting sight to be: " + str(adding))
 	var index = 0
 	
 	# Calls this function in each connected tile with 1 less range
@@ -233,3 +234,4 @@ func createUnit():
 		setUnitStationed(newUnit)
 	else:
 		unitStationed.mergeWithOtherGroup(newUnit)
+

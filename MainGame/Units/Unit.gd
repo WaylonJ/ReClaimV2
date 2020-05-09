@@ -56,16 +56,22 @@ func _process(delta):
 	
 	# Progress unit towards next tile visually
 	if distanceMovedSinceLastTick >= 1:
-		moveUnitAlongPath(2)
+#		print("Unit.gd: " + str(distanceLeft))
+		moveUnitAlongPath(distanceMovedSinceLastTick * 10)
 		distanceMovedSinceLastTick -= 1
 	
 	# Units has reached its destination
 	if distanceLeft < 0:
 		set_process(false)
+		
+#		print("here?")
+		hostTile.updateInSightOf(vision, self, false)
 		hostTile = currentPath[0]
-		removeSelfFromInSightOf()
-		hostTile.updateInSightOf(vision + 1, self, true)
+#		removeSelfFromInSightOf()
+		hostTile.updateInSightOf(vision, self, true)
+		print("Unit.gd: " + str(hostTile.inSightOf))
 		updatePath()
+#		print("Unit.gd: Setting host tile: " + str(hostTile))
 
 func generateUnitRefs():
 	leaderRef = leaderScript.new()
@@ -102,6 +108,7 @@ func updatePath():
 	if len(currentPath) > 1:
 		prevTile = currentPath.pop_front()
 		prevTile.unitStationed = null
+#		print("here")
 		set_process(true)
 		findDirection(currentPath[0])
 		placeAtStartOfPath(prevTile)
@@ -122,8 +129,6 @@ func updateHostTile():
 		hostTile.unitStationed.mergeWithOtherGroup(self)
 	else:
 		hostTile.setUnitStationed(self)
-	
-	hostTile.updateInSightOf(vision, self, true)
 
 func calcDistances():
 	distanceTotal = DIST_CONSTANT * numUnits
@@ -198,6 +203,7 @@ func updateTotalStats():
 	var tempSpeed = 0
 	
 	for ref in unitRefs:
+#		print(str(ref))
 		tempCurHP += unitRefs[ref].currentHP
 		tempMaxHP += unitRefs[ref].maxHP
 		tempOffense += unitRefs[ref].offense
@@ -237,12 +243,26 @@ func mergeWithOtherGroup(newAddition):
 	# If there is a single unit, hide tag. Otherwise show number of units.
 	showNumberOfUnitsTag()
 
-	# Once a new troop moves into a tile, if that tile's troops are selected, this appends them on the UI.
+	# If Host is selected,
 	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
-		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").displayUnitGroup(newAddition)
-		
-	# Remove old unit
+		#If new addition is NOT already selected
+		if !get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
+			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(self)
+			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
+			
+	#If Host is not selected, but moving unit is:
+	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
+		print("Unit.gd: Host unit NOT SELECTED")
+		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
+		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
+	
+	#Removes sight of old unit
+	hostTile.updateInSightOf(vision, newAddition, false)
+	
+	#Removes old unit.
 	newAddition.queue_free()
+	
+	# Updates vision
 	checkHighestVision()
 
 func mergeUnits(newAddition):
@@ -263,6 +283,7 @@ func mergeUnits(newAddition):
 		goblinRef.mergeUnit(newAddition.goblinRef)
 	numUnits += newAddition.numUnits
 	updateTotalStats()
+	
 	
 func showNumberOfUnitsTag():
 	if numUnits > 1:

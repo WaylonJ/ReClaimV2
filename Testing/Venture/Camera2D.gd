@@ -22,7 +22,6 @@ var globalSelected = "e"
 
 onready var rectd = get_node("../SelectBoxHolder/ColorRect")
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	# Prevents weird slow drag until zoom occurs
 	counterSlowDrag()

@@ -36,6 +36,14 @@ func unselectAll():
 	get_parent().get_node("TileInfo").show()
 	get_parent().get_node("NoSelection").show()
 	
+func unselectUnit(unit):
+	get_node("RowHolder/TopRow").get_child(unit).free()
+	
+
+func printSelected():
+#	print("here")
+	for child in get_node("RowHolder/TopRow").get_children():
+		print("unitInfo: " + str(child))
 
 func HideOtherUIAndShowSelf():
 	for child in get_parent().get_children():

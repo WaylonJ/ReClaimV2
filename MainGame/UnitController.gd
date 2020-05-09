@@ -58,8 +58,20 @@ func _unhighlightAll():
 			# Ensures the unit wasn't queue'd for deletion
 			if is_instance_valid(unit):
 				unit.get_node("Highlight").hide()
+			else:
+				print("UnitController.gd: Invalid unit?")
 		selectedUnits = []
 		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").unselectAll()
+
+func unselectUnit(unit):
+	var index = selectedUnits.find(unit)
+	if index != -1 and !selectedUnits.empty():
+		selectedUnits.remove(index)
+		if is_instance_valid(unit):
+			unit.get_node("Highlight").hide()
+#		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").printSelected()
+			get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").unselectAll()
+#		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").printSelected()
 
 func _mouseExited():
 	currentUnit = null
@@ -91,13 +103,15 @@ func _on_AreaSelected(positions):
 	
 	# If shift isnt held, unhighlight all before selecting units.
 	if !Input.is_key_pressed(KEY_SHIFT):
-		if !(selectedUnits.empty()):
-			_unhighlightAll()
+		_unhighlightAll()
 	
 	# Select all units in box
 	for unit in unitsInArea:
 		if !(unit in selectedUnits):
 			unitClicked(unit)
+	
+
+#			print(unit)
 func checkEachCorner(unit, startX, startY, endX, endY):
 	var topLeft = unit.get_position()
 	

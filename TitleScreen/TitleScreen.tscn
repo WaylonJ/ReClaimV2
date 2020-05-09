@@ -14,6 +14,9 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextureRect" type="TextureRect" parent="."]
 show_behind_parent = true
@@ -76,6 +79,7 @@ visible = false
 color = Color( 0, 0, 0, 0 )
 
 [node name="EscPopup" parent="." instance=ExtResource( 9 )]
+visible = false
 margin_left = 0.0793458
 margin_right = 1273.08
 [connection signal="pressed" from="Menu/CenterRow/Buttons/NewGameButton" to="." method="_on_NewGameButton_pressed"]

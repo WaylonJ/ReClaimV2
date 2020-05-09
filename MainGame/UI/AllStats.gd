@@ -20,6 +20,7 @@ func updateStats(unit):
 	get_node("StatHolderOffense/Label").set_text(str(offense))
 	get_node("StatHolderDefense/Label").set_text(str(defense))
 	get_node("StatHolderSpeed/Label").set_text(str(speed))
+#	print("AllStats.gd: " + str(offense))
 	
 func resetStats():
 	curHP = 0
