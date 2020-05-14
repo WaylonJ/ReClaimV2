@@ -300,8 +300,8 @@ text = "Improvements"
 
 [node name="ConstructionOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
 visible = false
-margin_left = 150.0
-margin_right = 450.0
+margin_left = 300.0
+margin_right = 600.0
 margin_bottom = 180.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -1431,6 +1431,9 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 44 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CursorImage" type="TextureRect" parent="HiddenItems"]
 margin_right = 40.0
@@ -1441,7 +1444,7 @@ mouse_filter = 2
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

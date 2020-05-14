@@ -79,7 +79,7 @@ func _process(delta):
 			percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
 			get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
 		
-	if unitProduction != null:
+	if unitProduction != null and buildingComplete:
 		unitProduction -= delta
 		if unitProduction < 0:
 			createUnit()
@@ -100,6 +100,7 @@ func startBuilding():
 func createTile():
 	# Updates Portrait, desc, output
 	updateTileInfo()
+#	print("Tile: Backgrouns is: " + str())
 	
 	# Handles the time aspect to building a building.
 	buildingTimeMax = buildingTime
@@ -108,6 +109,7 @@ func createTile():
 	
 	buildingComplete = false
 	set_process(true)
+#	get_node("../../BottomUI/MiddleSection/TileInfo").updateUI()
 	
 func updateGlobalValues():
 	# Handles updating global production values
@@ -143,7 +145,7 @@ func updateTileInfo():
 			description = MILITARY_DESCRIPTION
 			portrait = MILITARY_PORTRAIT
 			buildingTime = 1
-			updateOutput(null, 3, null, 0)
+			updateOutput(null, 0.5, null, 0)
 			setUnitCreationInfo("Goblin", true)
 			vision = 2
 			buildingAlliance = "ally"
@@ -198,11 +200,16 @@ func updateInSightOf(toCheck, objectGivingSight, adding):
 	checkIfSeen()
 
 func checkIfSeen():
+	# Hidden
 	if inSightOf.empty():
 		get_node("TileHolder/Unseen").show()
 		get_node("MapBackground").hide()
 		get_node("TileHolder/BuildingProgressBar").hide()
 		currentlySeen = false
+		if enemyStationed != null:
+			enemyStationed.hide()
+	
+	#Seen
 	else:
 		get_node("TileHolder/Unseen").hide()
 		get_node("MapBackground").show()
@@ -210,6 +217,8 @@ func checkIfSeen():
 			get_node("TileHolder/BuildingProgressBar").show()
 		currentlySeen = true
 		seenOnce = true
+		if enemyStationed != null:
+			enemyStationed.show()
 	
 func updateOutput(mana, unit, advanced, research):
 	outputMana = mana

@@ -230,7 +230,8 @@ func setVision(newVision):
 		updateTilesVision()
 
 func updateTilesVision():
-	hostTile.updateInSightOf(vision, self, true)
+	if isAlly:
+		hostTile.updateInSightOf(vision, self, true)
 
 func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together

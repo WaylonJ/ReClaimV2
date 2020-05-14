@@ -6,6 +6,8 @@ var previousTile = null
 var mouseInTile = false
 var baseTile = null
 var Base_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_Base.png")
+var infoOnlyTiles = ["EnemyTest"]
+var unselectableTiles = ["Blank"]
 
 var globalSelected = ""
 var doubleClick = false
@@ -80,7 +82,7 @@ func appendIfSameTypeOfTile(tile):
 			selectedTileGroup.append(tile)
 			tile.get_node("TileHolder/Highlight").show()
 			tile.set("selected", true)
-			updateUI(tile)
+			updateUI()
 
 func selectTile():
 	selectedTileGroup.append(selectedTile)
@@ -89,22 +91,43 @@ func selectTile():
 
 func appendIfNoTilesSelectedOrSimilarTiles():
 	if len(selectedTileGroup) == 0 or selectedTile.get("buildingName") == selectedTileGroup[0].get("buildingName"):
+		# If clicks on empty tile, acts as if on map.
+		for tile in unselectableTiles:
+			if selectedTile.buildingName == tile:
+				selectedTile = baseTile
+		
 		# Ensures it isn't already selected and also not the baseTile
-		if not selectedTile.get("selected") and selectedTile != baseTile:
+		if !(selectedTile.get("selected")) and selectedTile != baseTile:
 			selectTile()
 		
 		#Calls UI update / sets previousTile
-		updateUI(selectedTile)
+		updateUI()
 
-func updateUI(tile):
+func checkIfInfoOnly():
+	for invalidName in infoOnlyTiles:
+		if invalidName == selectedTile.buildingName:
+			return true
+	return false
+
+func updateUI():
 	previousTile = selectedTile
-	get_node("Description").set("text", tile.get("description"))
-	get_node("Portrait").set("texture", tile.get("portrait"))
-	get_node("Production/OutputBox").updateUI(tile)
+	if selectedTile != null:
+		print("herenot NULL")
+		print(selectedTile.buildingName)
+	if selectedTile == null:
+		selectedTile = baseTile
+	get_node("Description").set("text", selectedTile.get("description"))
+	get_node("Portrait").set("texture", selectedTile.get("portrait"))
+	get_node("Production/OutputBox").updateUI(selectedTile)
 	
 	# Set the counter to number of selected tiles
 	get_node("Portrait/NumSelected").setCounter(len(selectedTileGroup))
-	openTileOptions(tile)
+	if not Input.is_key_pressed(KEY_SHIFT):
+		openTileOptions()
+	
+func selectBaseTile():
+	selectedTile = null
+	updateUI()
 	
 func getAllTiles():
 	var tiles = get_tree().get_nodes_in_group("Tiles")
@@ -121,26 +144,33 @@ func getAllTiles():
 func setGlobalSelected():
 	get_tree().get_root().get_node("Control").selectSomething("tile")
 	
-func openTileOptions(tile):
-	if tile == baseTile:
-		get_node("../TileActions").hide()
-		get_node("../NoSelection/ConstructionOptions").hide()
-		get_node("../UpgradeMenu").hide()
-		get_node("../../../HiddenItems/HoveringBldgImage").unselectEverything()
+func openTileOptions():
+	resetUI()
+	if selectedTile == baseTile:
+#		resetUI()
 		if !(globalSelected == "allyUnit"):
 			get_node("../NoSelection/BasicOptions").show()
 			get_node("../NoSelection").show()
-
+	elif checkIfInfoOnly():
+		get_node("../NoSelection").hide()
+#		print("here?")
+		pass
 	elif get_node("../UpgradeMenu").is_visible():
 		pass
 	else:
 		get_node("../NoSelection").hide()
 		get_node("../TileActions").show()
+#	print("Tile: " + str(selectedTile.buildingName))
 	
-	
+func resetUI():
+	get_node("../TileActions").hide()
+	get_node("../UpgradeMenu").hide()
+	get_node("../NoSelection/ConstructionOptions").hide()
+#	get_node("../../../HiddenItems/HoveringBldgImage").unselectEverything()
+
 func emptyTileGroup():
 	for item in selectedTileGroup:
 		item.get_node("TileHolder/Highlight").hide()
 		item.set("selected", false)
 	selectedTileGroup = []
-	updateUI(baseTile)
+	updateUI()

@@ -12,7 +12,10 @@ var Military_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_MilitaryBldg
 var Resource_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_ResourceBldg.png")
 var Utility_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_UtilityBldg.png")
 
+onready var tileInfoRef = get_node("../../BottomUI/MiddleSection/TileInfo")
+
 func _ready():
+#	print(self.get_path())
 	pass
 
 func getAllTiles():
@@ -55,6 +58,8 @@ func _on_mouse_entered_highlight(tile):
 				_:
 					pass
 				
+	else:
+		print("Selected bldg null")
 	
 func _on_mouse_exited_highlight(tile):
 	if tempBG != null:
@@ -64,6 +69,7 @@ func _on_mouse_exited_highlight(tile):
 
 func _on_thisButton_pressed(button):
 	selectedBldg = button.get_name()
+#	print("Selected bldg is now: " + str(selectedBldg))
 
 func _on_BackButton_pressed():
 	unselectEverything()
@@ -81,6 +87,7 @@ func _input(event):
 					selectedBldg = null
 					hideHighlightBorder()
 				
+				print("NULLING")
 				tempBG = null
 			
 	if Input.is_key_pressed(KEY_ESCAPE):
@@ -91,6 +98,7 @@ func attemptToCreateBuilding(bldg):
 	#CHECK RESOURCE COST AND THE LIKE HERE
 	if get_tree().get_root().get_node("Control").checkBuildable(bldg):
 		createTile()
+		
 		return true
 #	if true:
 #		createTile()
@@ -100,6 +108,11 @@ func createTile():
 	currentTile.set("buildingName", selectedBldg)
 	currentTile.startBuilding()
 	currentTile.createTile()
+	tempBG = null
+	
+	tileInfoRef.selectBaseTile()
+#	tileInfoRef.updateUI()
+	
 	
 func unselectEverything():
 	selectedBldg = null

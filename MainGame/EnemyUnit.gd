@@ -8,10 +8,10 @@ var baseEnemyRef
 
 
 func _init():
+	isAlly = false
 	generateUnitRefs()
 
 func _ready():
-	isAlly = false
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseExited")
 	set_process(false)
