@@ -29,18 +29,22 @@ func _input(event):
 			globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 			
 			# Click onto a completed building tile
-			if mouseInTile and selectedTile.buildingComplete == true:
+			if mouseInTile and selectedTile.buildingName != "Blank":
+				print("here???asdasd")
+				
 				# Checks to make sure nothing else is selected, or only other tiles are.
 				if globalSelected == "tile" or globalSelected == "e":
 					setGlobalSelected()
 					
+					# Checks to see if a building to construct is currently selected and prevents shiftClicks from doing anything
+					if checkIfBuildingSelected():
+						print("returning")
+						selectBaseTile()
+						return
+						
 					# Single click, Shift not pressed
 					if not Input.is_key_pressed(KEY_SHIFT):
 						emptyTileGroup()
-						
-					# Checks to see if a building to construct is currently selected and prevents shiftClicks from doing anything
-					if checkIfBuildingSelected():
-						return
 					
 					# Append item to selectedTileGroup if group is empty or it's the same type
 					appendIfNoTilesSelectedOrSimilarTiles()
@@ -52,11 +56,15 @@ func _input(event):
 						doubleClick = false
 			
 			# Click on the map, but not in a tile. Shift key is NOT held down
-			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
+			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1 and not mouseInTile:
+#				print("here???")
 				doubleClick = false
 				if globalSelected == "tile":
 					get_tree().get_root().get_node("Control").unselectEverything()
 				emptyTileGroup()
+			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1 and mouseInTile:
+				
+				print("here???")
 			else:
 				doubleClick = false
 	if Input.is_key_pressed(KEY_ESCAPE):
@@ -72,8 +80,12 @@ func _mouseOutOfTile(tile):
 	selectedTile = null
 
 func checkIfBuildingSelected():
-	if get_node("../../../HiddenItems/HoveringBldgImage").selectedBldg != null:
+	print("checking selected")
+#	if get_node("../../../HiddenItems/HoveringBldgImage").selectedBldg != null:
+	if get_node("../NoSelection/ConstructionOptions").is_visible():
+		print("RETURNING TRUE")
 		return true
+#	print("selected bldgh: " + str(get_node("../../../HiddenItems/HoveringBldgImage").selectedBldg))
 	return false
 
 func appendIfSameTypeOfTile(tile):
@@ -82,6 +94,7 @@ func appendIfSameTypeOfTile(tile):
 			selectedTileGroup.append(tile)
 			tile.get_node("TileHolder/Highlight").show()
 			tile.set("selected", true)
+			print("update ui 1")
 			updateUI()
 
 func selectTile():
@@ -95,12 +108,13 @@ func appendIfNoTilesSelectedOrSimilarTiles():
 		for tile in unselectableTiles:
 			if selectedTile.buildingName == tile:
 				selectedTile = baseTile
-		
 		# Ensures it isn't already selected and also not the baseTile
 		if !(selectedTile.get("selected")) and selectedTile != baseTile:
+#			print("Selecting")
 			selectTile()
 		
 		#Calls UI update / sets previousTile
+		print("update ui 2")
 		updateUI()
 
 func checkIfInfoOnly():
@@ -111,22 +125,22 @@ func checkIfInfoOnly():
 
 func updateUI():
 	previousTile = selectedTile
-	if selectedTile != null:
-		print("herenot NULL")
-		print(selectedTile.buildingName)
 	if selectedTile == null:
 		selectedTile = baseTile
 	get_node("Description").set("text", selectedTile.get("description"))
 	get_node("Portrait").set("texture", selectedTile.get("portrait"))
-	get_node("Production/OutputBox").updateUI(selectedTile)
+	get_node("Production/OutputBox").updateUI(selectedTileGroup)
 	
 	# Set the counter to number of selected tiles
 	get_node("Portrait/NumSelected").setCounter(len(selectedTileGroup))
-	if not Input.is_key_pressed(KEY_SHIFT):
-		openTileOptions()
+	#if not Input.is_key_pressed(KEY_SHIFT):
+	openTileOptions()
+	
+
 	
 func selectBaseTile():
 	selectedTile = null
+	print("update ui 3")
 	updateUI()
 	
 func getAllTiles():
@@ -147,7 +161,6 @@ func setGlobalSelected():
 func openTileOptions():
 	resetUI()
 	if selectedTile == baseTile:
-#		resetUI()
 		if !(globalSelected == "allyUnit"):
 			get_node("../NoSelection/BasicOptions").show()
 			get_node("../NoSelection").show()
@@ -163,9 +176,11 @@ func openTileOptions():
 #	print("Tile: " + str(selectedTile.buildingName))
 	
 func resetUI():
+	print("resetting ui")
 	get_node("../TileActions").hide()
 	get_node("../UpgradeMenu").hide()
 	get_node("../NoSelection/ConstructionOptions").hide()
+	get_node("../../../HiddenItems/HoveringBldgImage").hideHighlightBorder()
 #	get_node("../../../HiddenItems/HoveringBldgImage").unselectEverything()
 
 func emptyTileGroup():
@@ -173,4 +188,5 @@ func emptyTileGroup():
 		item.get_node("TileHolder/Highlight").hide()
 		item.set("selected", false)
 	selectedTileGroup = []
+	print("update ui 4")
 	updateUI()

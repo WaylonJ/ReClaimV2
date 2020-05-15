@@ -59,7 +59,8 @@ func _on_mouse_entered_highlight(tile):
 					pass
 				
 	else:
-		print("Selected bldg null")
+		pass
+#		print("Selected bldg null")
 	
 func _on_mouse_exited_highlight(tile):
 	if tempBG != null:
@@ -77,8 +78,15 @@ func _on_BackButton_pressed():
 func _input(event):
 	# We have a tile selected, we've clicked a tile on the board
 	if event is InputEventMouseButton and selectedBldg != null and !event.is_pressed() and event.button_index == 1:
+		# Click on map, not tile
 		if tempBG == null and not Input.is_key_pressed(KEY_SHIFT):
 			unselectEverything()
+			
+		# Click on non-empty tile
+		elif tempBG != Blank_Tile and not Input.is_key_pressed(KEY_SHIFT):
+			tempBG = null
+			unselectEverything()
+		
 		# Ensures we're over a tile that doesn't have a building already
 		elif tempBG == Blank_Tile:
 			if attemptToCreateBuilding(selectedBldg):
@@ -87,8 +95,10 @@ func _input(event):
 					selectedBldg = null
 					hideHighlightBorder()
 				
-				print("NULLING")
+#				print("NULLING")
 				tempBG = null
+			else:
+				print("HoveringBldgImage: Building attempt failed")
 			
 	if Input.is_key_pressed(KEY_ESCAPE):
 		if tempBG != null:
@@ -110,7 +120,9 @@ func createTile():
 	currentTile.createTile()
 	tempBG = null
 	
-	tileInfoRef.selectBaseTile()
+	# If shift not held down, revert to base tile. Otherwise don't change ui
+	if not Input.is_key_pressed(KEY_SHIFT):
+		tileInfoRef.selectBaseTile()
 #	tileInfoRef.updateUI()
 	
 	
