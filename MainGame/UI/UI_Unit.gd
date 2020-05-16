@@ -20,7 +20,7 @@ func copyUnit(unit, unitGroup):
 			portrait = goblinPng
 			unitType = "Goblin"
 		_:
-			print("here???")
+			print("UI UNIT: copy unit fail?")
 			
 	get_node("BG").set("texture", portrait)
 	updateInfo()

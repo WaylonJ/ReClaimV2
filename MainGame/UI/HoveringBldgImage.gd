@@ -15,7 +15,6 @@ var Utility_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_UtilityBldg.p
 onready var tileInfoRef = get_node("../../BottomUI/MiddleSection/TileInfo")
 
 func _ready():
-#	print(self.get_path())
 	pass
 
 func getAllTiles():
@@ -60,13 +59,11 @@ func _on_mouse_entered_highlight(tile):
 				
 	else:
 		pass
-#		print("Selected bldg null")
 	
 func _on_mouse_exited_highlight(tile):
 	if tempBG != null:
 		tile.get_node("TileHolder/Background").set("texture", tempBG)
 		tempBG = null
-#	currentTile = null
 
 func _on_thisButton_pressed(button):
 	selectedBldg = button.get_name()
@@ -92,10 +89,10 @@ func _input(event):
 			if attemptToCreateBuilding(selectedBldg):
 				# Shift key allows multiple constructions at once
 				if not Input.is_key_pressed(KEY_SHIFT):
+#					unselectEverything()
 					selectedBldg = null
 					hideHighlightBorder()
 				
-#				print("NULLING")
 				tempBG = null
 			else:
 				print("HoveringBldgImage: Building attempt failed")
@@ -122,7 +119,8 @@ func createTile():
 	
 	# If shift not held down, revert to base tile. Otherwise don't change ui
 	if not Input.is_key_pressed(KEY_SHIFT):
-		tileInfoRef.selectBaseTile()
+		pass
+#		tileInfoRef.selectBaseTile()
 #	tileInfoRef.updateUI()
 	
 	

@@ -15,6 +15,5 @@ func _ready():
 
 func _pressed():
 #	rect_size = Vector2(100, 100)
-	print("he")
 	print(get_parent().get_constant("separation"))
 	

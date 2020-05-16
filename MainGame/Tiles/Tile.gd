@@ -100,7 +100,6 @@ func startBuilding():
 func createTile():
 	# Updates Portrait, desc, output
 	updateTileInfo()
-#	print("Tile: Backgrouns is: " + str())
 	
 	# Handles the time aspect to building a building.
 	buildingTimeMax = buildingTime
@@ -176,7 +175,6 @@ func setUnitCreationInfo(unitName, isAlly):
 	unitProductionIsAlly = isAlly
 
 func updateInSightOf(toCheck, objectGivingSight, adding):
-#	print("Tile.gd: Setting sight to be: " + str(adding))
 	var index = 0
 	
 	# Calls this function in each connected tile with 1 less range

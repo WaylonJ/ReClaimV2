@@ -41,7 +41,6 @@ func unselectUnit(unit):
 	
 
 func printSelected():
-#	print("here")
 	for child in get_node("RowHolder/TopRow").get_children():
 		print("unitInfo: " + str(child))
 

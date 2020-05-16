@@ -20,6 +20,7 @@ signal area_selected
 
 var globalSelected = "e"
 
+onready var hoverBldgRef = get_node("../UI/HiddenItems/HoveringBldgImage")
 onready var rectd = get_node("../SelectBoxHolder/ColorRect")
 
 func _ready():
@@ -48,10 +49,8 @@ func _input(event):
 	inputSetMousePositions(event)
 	
 	# Checking mouse position ensures the click wasn't done while over the UI
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 1 and event.position[1] < 540:
-		start = mousePos
-		startGlobal = mousePosGlobal
-		boxDragging = true
+	checkNotOverUI(event)
+
 	if boxDragging:
 		end = mousePos
 		endGlobal = mousePosGlobal
@@ -130,4 +129,16 @@ func draw_area(s = true):
 	# If true, will be 1 and shown. If false, will be 0 and not shown
 	rectd.rect_size *= int(s)
 	
+func checkNotOverUI(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 1 and event.position[1] < 540:
+		start = mousePos
+		startGlobal = mousePosGlobal
+		
+		# Checks to see if a building is currently selected to be built.
+		if !checkBldgSelected():
+			boxDragging = true
 
+func checkBldgSelected():
+	if hoverBldgRef.selectedBldg != null:
+		return true
+	return false
