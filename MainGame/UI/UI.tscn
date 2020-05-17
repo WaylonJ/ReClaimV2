@@ -48,26 +48,98 @@
 [node name="UI" type="CanvasLayer"]
 
 [node name="MiddlePanel" type="Panel" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -172.99
-margin_top = -423.772
-margin_right = 227.01
-margin_bottom = -173.772
-rect_min_size = Vector2( 400, 250 )
+margin_left = -170.657
+margin_top = -540.101
+margin_right = 229.343
+margin_bottom = -190.101
+rect_min_size = Vector2( 400, 350 )
 size_flags_horizontal = 4
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="PanelText" type="TextEdit" parent="MiddlePanel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="PanelContainer" type="VBoxContainer" parent="MiddlePanel"]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextHolder" type="HBoxContainer" parent="MiddlePanel/PanelContainer"]
+margin_right = 400.0
+margin_bottom = 300.0
+alignment = 1
+
+[node name="PanelText" type="TextEdit" parent="MiddlePanel/PanelContainer/TextHolder"]
+margin_right = 400.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 400, 300 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_fonts/font = ExtResource( 2 )
 text = "Sample Text Oh man so sexyaaaaaaa aaaaaaaaaa aaaaaa "
 breakpoint_gutter = true
 wrap_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CostHolder" type="HBoxContainer" parent="MiddlePanel/PanelContainer"]
+visible = false
+margin_top = 204.0
+margin_right = 400.0
+margin_bottom = 244.0
+
+[node name="ManaOutput" type="HBoxContainer" parent="MiddlePanel/PanelContainer/CostHolder"]
+margin_right = 198.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="TextureRect" parent="MiddlePanel/PanelContainer/CostHolder/ManaOutput"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="MiddlePanel/PanelContainer/CostHolder/ManaOutput"]
+margin_left = 44.0
+margin_top = 7.0
+margin_right = 94.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "+5"
+align = 1
+
+[node name="AdvancedOutput" type="HBoxContainer" parent="MiddlePanel/PanelContainer/CostHolder"]
+margin_left = 202.0
+margin_right = 400.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Icon" type="TextureRect" parent="MiddlePanel/PanelContainer/CostHolder/AdvancedOutput"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="MiddlePanel/PanelContainer/CostHolder/AdvancedOutput"]
+margin_left = 44.0
+margin_top = 7.0
+margin_right = 94.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "+5"
+align = 1
 
 [node name="BottomUI_BG_Old" type="TextureRect" parent="."]
 visible = false
@@ -115,7 +187,7 @@ rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
 margin_left = 190.0
-margin_right = 990.0
+margin_right = 1590.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 800, 0 )
 size_flags_horizontal = 5
@@ -184,6 +256,9 @@ margin_bottom = -8.0
 rect_min_size = Vector2( 100, 180 )
 rect_pivot_offset = Vector2( -413, -10 )
 script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ManaOutput" type="HBoxContainer" parent="BottomUI/MiddleSection/TileInfo/Production/OutputBox"]
 margin_right = 100.0
@@ -266,7 +341,7 @@ align = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
 margin_left = 500.0
-margin_right = 800.0
+margin_right = 1100.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 180 )
 custom_constants/separation = 0
@@ -299,7 +374,6 @@ custom_fonts/font = ExtResource( 13 )
 text = "Improvements"
 
 [node name="ConstructionOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
-visible = false
 margin_left = 300.0
 margin_right = 600.0
 margin_bottom = 180.0
@@ -329,6 +403,9 @@ script = ExtResource( 16 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 17 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MilitaryBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
 "ConstructionButtons",
@@ -524,14 +601,13 @@ texture = ExtResource( 21 )
 
 [node name="ResourceBuildings" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
 visible = false
-margin_left = 300.0
-margin_right = 300.0
+margin_left = 600.0
+margin_right = 600.0
 margin_bottom = 180.0
 
 [node name="TileActions" type="VBoxContainer" parent="BottomUI/MiddleSection"]
-visible = false
-margin_left = 800.0
-margin_right = 1100.0
+margin_left = 1100.0
+margin_right = 1400.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 0
@@ -1279,8 +1355,8 @@ margin_bottom = 180.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
-margin_left = 1000.0
-margin_right = 1280.0
+margin_left = 1600.0
+margin_right = 1880.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
@@ -1439,10 +1515,10 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]

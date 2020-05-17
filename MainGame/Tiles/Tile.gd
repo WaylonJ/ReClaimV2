@@ -23,6 +23,7 @@ var description = "TILE DESCRIPTION: NEEDS TO BE CHANGED"
 var portrait = "Blank portrait??"
 
 var buildingName = "Blank"
+var buildingTier = 1
 var buildingTime = 69
 var buildingTimeMax = 69
 var buildingComplete = true
@@ -61,6 +62,9 @@ var currentlySeen = false
 var seenOnce = false
 
 var inBattle = false
+
+var tileDatabase = preload("res://MainGame/Tiles/TileDatabase.gd")
+var databaseRef = tileDatabase.new()
 
 func _process(delta):
 	buildingTime -= delta
@@ -115,64 +119,29 @@ func updateGlobalValues():
 	get_tree().get_root().get_node("Control").updateTotalProduction(outputMana, outputAdvanced, outputResearch)
 
 func updateTileInfo():
-	match buildingName:
-		"Base":
-			description = BASE_DESCRIPTION
-			portrait = BASE_PORTRAIT
-			buildingTime = 0
-			updateOutput(10, null, 0, 3)
-			vision = 2
-			buildingAlliance = "ally"
-			
-		"ManaPool":
-			description = MANAPOOL_DESCRIPTION
-			portrait = MANA_PORTRAIT
-			buildingTime = 0.5
-			updateOutput(5, null, null, null)
-			vision = 1
-			buildingAlliance = "ally"
-			
-		"ResourceBldg":
-			description = RESOURCE_DESCRIPTION
-			portrait = RESOURCE_PORTRAIT
-			buildingTime = 0.5
-			updateOutput(-2, null, 1, null)
-			vision = 1
-			buildingAlliance = "ally"
-			
-		"MilitaryBldg":
-			description = MILITARY_DESCRIPTION
-			portrait = MILITARY_PORTRAIT
-			buildingTime = 1
-			updateOutput(null, 0.5, null, 0)
-			setUnitCreationInfo("Goblin", true)
-			vision = 2
-			buildingAlliance = "ally"
-			
-		"UtilityBldg":
-			description = UTILITY_DESCRIPTION
-			portrait = UTILITY_PORTRAIT
-			buildingTime = 15
-			updateOutput(null, null, null, 5)
-			vision = 3
-			buildingAlliance = "ally"
-			
-		"EnemyTest":
-			description = ENEMY_TEST
-			portrait = ENEMY_TEST_PORTRAIT
-			buildingTime = 5
-			updateOutput(null, 3, null, 0)
-			setUnitCreationInfo("baseEnemy", false)
-			buildingAlliance = "enemy"
-			vision = 2
-		_:
-			print("Tile.gd: No name match, given -" + buildingName)
+	var data = databaseRef.getConstructionInfo(buildingName)
+	
+	description = data[0]
+	portrait = data[1]
+	buildingTime = data[2]
+	buildingAlliance = data[3]
+	vision = data[4]
+	
+	updateOutput(data[5][0],data[5][1],data[5][2],data[5][3])
+	
+	if data[6] != null:
+		setUnitCreationInfo(data[6])
+	
 	if buildingAlliance != "enemy":
 		updateInSightOf(vision, self, true)
 	
-func setUnitCreationInfo(unitName, isAlly):
+func setUnitCreationInfo(unitName):
 	unitProductionName = unitName
-	unitProductionIsAlly = isAlly
+	if buildingAlliance == "enemy":
+		unitProductionIsAlly = false
+	elif buildingAlliance == "ally":
+		unitProductionIsAlly = true
+
 
 func updateInSightOf(toCheck, objectGivingSight, adding):
 	var index = 0
