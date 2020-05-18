@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
@@ -44,6 +44,7 @@
 [ext_resource path="res://MainGame/UI/Resources/HighlightSelected.png" type="Texture" id=42]
 [ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=43]
 [ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=44]
+[ext_resource path="res://MainGame/UI/CostHolder.gd" type="Script" id=45]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -92,10 +93,10 @@ __meta__ = {
 }
 
 [node name="CostHolder" type="HBoxContainer" parent="MiddlePanel/PanelContainer"]
-visible = false
-margin_top = 204.0
+margin_top = 304.0
 margin_right = 400.0
-margin_bottom = 244.0
+margin_bottom = 344.0
+script = ExtResource( 45 )
 
 [node name="ManaOutput" type="HBoxContainer" parent="MiddlePanel/PanelContainer/CostHolder"]
 margin_right = 198.0
@@ -629,6 +630,9 @@ rect_min_size = Vector2( 60, 60 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Empty2" parent="BottomUI/MiddleSection/TileActions/TopRow" instance=ExtResource( 15 )]
 margin_left = 60.0
@@ -1515,12 +1519,10 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/TileActions" method="_on_Upgrade_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/TileActions/TopRow/Upgrade" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Upgrade_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

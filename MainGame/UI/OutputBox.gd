@@ -22,7 +22,6 @@ func hideAll():
 		
 func updateUI(tileGroup):
 	hideAll()
-
 	# For when a single tile is selected, not in a group.
 	if typeof(tileGroup) == int(17):
 		tileGroup = [tileGroup]

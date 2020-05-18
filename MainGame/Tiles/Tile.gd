@@ -63,8 +63,7 @@ var seenOnce = false
 
 var inBattle = false
 
-var tileDatabase = preload("res://MainGame/Tiles/TileDatabase.gd")
-var databaseRef = tileDatabase.new()
+onready var databaseRef = get_tree().get_root().get_node("Control").tileDatabase
 
 func _process(delta):
 	buildingTime -= delta
@@ -73,11 +72,13 @@ func _process(delta):
 			buildingComplete = true
 			buildingTime = 0
 			
-			updateGlobalValues()
+			
 			
 			if unitProduction == null:
 				set_process(false)
 			get_node("TileHolder/BuildingProgressBar").hide()
+			if buildingAlliance == "ally":
+				updateGlobalValues()
 		
 		else:
 			percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
@@ -193,6 +194,7 @@ func updateOutput(mana, unit, advanced, research):
 	unitProduction = outputUnit
 	outputAdvanced = advanced
 	outputResearch = research
+	updateGlobalValues()
 
 func setUnitStationed(unit):
 	unitStationed = unit

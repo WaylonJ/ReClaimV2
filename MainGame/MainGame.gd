@@ -18,7 +18,7 @@ var manaProduction = 0
 var advancedProduction = 0
 var researchProduction = 0
 
-var manaSupply = 500
+var manaSupply = 750
 var advancedSupply = 100
 var researchSupply = 100
 
@@ -31,6 +31,7 @@ var selectedName = "e"
 # Variables to hold scripts from other places
 var linkCreator = load("res://MainGame/GenerateTileLinks.gd").new()
 var unitMovement = load("res://MainGame/Units/UnitMovement.gd").new()
+var tileDatabase = load("res://MainGame/Tiles/TileDatabase.gd").new()
 
 func _ready():
 	print("Started!")
@@ -43,7 +44,7 @@ func _ready():
 	# Initializes the unitMovement script
 	get_node("UnitHolder").add_child(unitMovement)
 	unitMovement.makeCostGraph(startingArray)
-
+	
 	set_process(true)
 	
 func _process(delta):
@@ -191,33 +192,19 @@ func checkCaps():
 	if advancedSupply > advancedCap:
 		advancedSupply = advancedCap
 
-func checkBuildable(tile):
-	match tile:
-		"ManaPool":
-			if manaSupply > 100:
-				manaSupply -= 100
-				return true
+func checkSupply(manaCost, advancedCost):
+	if manaSupply >= manaCost and advancedSupply >= advancedCost:
+		return true
+	else:
+		return false
 
-		"ResourceBldg":
-			if manaSupply > 150:
-				manaSupply -= 150
-				return true
-
-		"MilitaryBldg":
-			if manaSupply > 125 and advancedSupply > 25:
-				manaSupply -= 125
-				advancedSupply -= 25
-				return true
-
-		"UtilityBldg":
-			if manaSupply > 200 and advancedSupply > 50:
-				manaSupply -= 200
-				advancedSupply -= 50
-				return true
-		_:
-			print("MainGame.gd: I've no idea how this triggered")
-	
-	return false
+func checkBuildable(manaCost, advancedCost):
+	if checkSupply(manaCost, advancedCost):
+		manaSupply -= manaCost
+		advancedSupply -= advancedCost
+		return true
+	else:
+		return false
 	
 func checkIfSomethingSelected():
 	return selectedName

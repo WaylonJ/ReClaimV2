@@ -34,32 +34,68 @@ var research = 0
 var unitName = null
 
 const ManaPoolUpgradeCosts = [
+	[100, 0],
 	[250, 0],
 	[750, 10],
 	[2500, 50],
 	[10000, 200],
 	[50000, 600],]
 
+const ManaPoolOutput = [
+	[5, null, null, null],
+	[10, null, null, null],
+	[20, null, null, null],
+	[40, null, null, null],
+	[80, null, null, null],
+	[160, null, null, null],]
+
 const GoblinUpgradeCosts = [
+	[125, 25],
 	[300, 100],
 	[1000, 300],
 	[5000, 1000],
 	[20000, 5000],
 	[75000, 15000],]
 	
+const GoblinOutput = [
+	[null, null, 0.5, null],
+	[null, null, 0.25, null],
+	[null, null, 0.125, null],
+	[null, null, 0.0625, null],
+	[null, null, 0.03125, null],
+	[null, null, 0.015625, null],]
+	
 const ResourceUpgradeCosts = [
+	[150, 0],
 	[500, 0],
 	[3000, 50],
 	[15000, 200],
 	[80000, 600],
 	[250000, 2000],]
+
+const ResourceOutput = [
+	[-2, 1, null, null],
+	[-4, 2, null, null],
+	[-8, 4, null, null],
+	[-16, 8, null, null],
+	[-32, 16, null, null],
+	[-64, 32, null, null],]
 	
 const UtilityUpgradeCosts = [
+	[200, 50],
 	[1000, 200],
 	[4000, 500],
 	[10000, 1500],
 	[40000, 5000],
 	[100000, 12500],]
+	
+const UtilityOutput = [
+	[null, null, null, 5],
+	[null, null, null, 10],
+	[null, null, null, 15],
+	[null, null, null, 20],
+	[null, null, null, 25],
+	[null, null, null, 30],]
 
 func _ready():
 	pass # Replace with function body.
@@ -165,18 +201,38 @@ func getConstructionInfo(name):
 func getUpgradeInfo(tileName, tier):
 	match tileName:
 		"ManaPool":
-			return ManaPoolUpgradeCosts[tier - 1]
+			return ManaPoolUpgradeCosts[tier]
 
 		"ResourceBldg":
-			return ResourceUpgradeCosts[tier - 1]
+			return ResourceUpgradeCosts[tier]
 
 			
 		"MilitaryBldg":
-			return GoblinUpgradeCosts[tier - 1]
+			return GoblinUpgradeCosts[tier]
 
 			
 		"UtilityBldg":
-			return UtilityUpgradeCosts[tier - 1]
+			return UtilityUpgradeCosts[tier]
+			
+		_:
+			print("TileDatabase: Invalid bldg name")
+
+func getOutputInfo(tileName, tier):
+	tier -= 1
+	match tileName:
+		"ManaPool":
+			return ManaPoolOutput[tier]
+
+		"ResourceBldg":
+			return ResourceOutput[tier]
+
+			
+		"MilitaryBldg":
+			return GoblinOutput[tier]
+
+			
+		"UtilityBldg":
+			return UtilityOutput[tier]
 			
 		_:
 			print("TileDatabase: Invalid bldg name")

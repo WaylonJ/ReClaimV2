@@ -55,7 +55,9 @@ func _input(event):
 						if selectedTile.buildingName == "Base":
 							return
 						for tile in get_tree().get_nodes_in_group("Tiles"):
-							appendIfSameTypeOfTile(tile)
+							selectedTile = tile
+							appendIfNoTilesSelectedOrSimilarTiles()
+#							appendIfSameTypeOfTile(tile)
 						doubleClick = false
 			
 			# Click on the map, but not in a tile. Shift key is NOT held down
@@ -97,16 +99,18 @@ func appendIfSameTypeOfTile(tile):
 			updateUI()
 
 func selectTile():
+	print(selectedTile.buildingTier)
 	selectedTileGroup.append(selectedTile)
 	selectedTile.get_node("TileHolder/Highlight").show()
 	selectedTile.set("selected", true)
 
 func appendIfNoTilesSelectedOrSimilarTiles():
-	if len(selectedTileGroup) == 0 or selectedTile.get("buildingName") == selectedTileGroup[0].get("buildingName"):
+	if len(selectedTileGroup) == 0 or (selectedTile.get("buildingName") == selectedTileGroup[0].get("buildingName") and selectedTile.get("buildingTier") == selectedTileGroup[0].get("buildingTier")):
 		# If clicks on empty tile, acts as if on map.
 		for tile in unselectableTiles:
 			if selectedTile.buildingName == tile:
 				selectedTile = baseTile
+		
 		# Ensures it isn't already selected and also not the baseTile
 		if !(selectedTile.get("selected")) and selectedTile != baseTile:
 			selectTile()
@@ -182,3 +186,18 @@ func emptyTileGroup():
 		item.get_node("TileHolder/Highlight").hide()
 		item.set("selected", false)
 	selectedTileGroup = []
+	
+func removeTile(tile):
+	for index in range(selectedTileGroup.size()):
+		if tile == selectedTileGroup[index]:
+			tile.get_node("TileHolder/Highlight").hide()
+			tile.set("selected", false)
+			selectedTileGroup.remove(index)
+			return
+
+func resetOutputBox():
+	if selectedTileGroup.size() == 0:
+		selectBaseTile()
+	get_node("Production/OutputBox").updateUI(selectedTileGroup)
+	get_node("Portrait/NumSelected").setCounter(len(selectedTileGroup))
+	

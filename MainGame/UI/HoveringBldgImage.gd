@@ -13,6 +13,9 @@ var Resource_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_ResourceBldg
 var Utility_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_UtilityBldg.png")
 
 onready var tileInfoRef = get_node("../../BottomUI/MiddleSection/TileInfo")
+onready var rootRef = get_tree().get_root().get_node("Control")
+onready var databaseRef = rootRef.tileDatabase
+
 
 func _ready():
 	pass
@@ -103,13 +106,11 @@ func _input(event):
 
 func attemptToCreateBuilding(bldg):
 	#CHECK RESOURCE COST AND THE LIKE HERE
-	if get_tree().get_root().get_node("Control").checkBuildable(bldg):
+	var costs = databaseRef.getUpgradeInfo(bldg, 0)
+	
+	if rootRef.checkBuildable(costs[0], costs[1]):
 		createTile()
-		
 		return true
-#	if true:
-#		createTile()
-		
 
 func createTile():
 	currentTile.set("buildingName", selectedBldg)

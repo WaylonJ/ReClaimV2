@@ -2,12 +2,17 @@ extends Panel
 
 onready var tileInfoRef = get_node("../BottomUI/MiddleSection/TileInfo")
 onready var panelTextRef = get_node("PanelContainer/TextHolder/PanelText")
+onready var costHolderRef = get_node("PanelContainer/CostHolder")
+onready var upgradeRef = load("res://MainGame/Tiles/upgradeTile.gd").new()
 
 func _ready():
 	hide()
 	connectConstructionOptions()
 	connectTileActions()
 	connectUpgradeMenu()
+	
+	# Needed for tile upgrades/
+	add_child(upgradeRef)
 
 func connectConstructionOptions():
 	var resourceBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"
@@ -34,13 +39,14 @@ func _on_BldgButton_mouseEntered(type):
 			print("Panel.gd: Everything else??")
 	
 func connectTileActions():
-	var upgradeMenuButton = "../BottomUI/MiddleSection/TileActions/TopRow/Upgrade"
+	var upgradeButton = "../BottomUI/MiddleSection/TileActions/TopRow/Upgrade"
 	var sellButton = "../BottomUI/MiddleSection/TileActions/TopRow/Sell"
 	var pauseButton = "../BottomUI/MiddleSection/TileActions/TopRow/Pause"
 	
-	get_node(upgradeMenuButton).connect("mouse_entered", self, "_on_TileAction_mouseEntered", ["Upgrade"])
-	get_node(upgradeMenuButton).connect("mouse_exited", self, "hidePanel")
-	get_node(upgradeMenuButton).connect("pressed", self, "hidePanel")
+	get_node(upgradeButton).connect("mouse_entered", self, "_on_TileAction_mouseEntered", ["Upgrade"])
+	get_node(upgradeButton).connect("mouse_exited", self, "hidePanel")
+	get_node(upgradeButton).connect("pressed", self, "attemptUpgrade")
+	get_node(upgradeButton).connect("pressed", self, "hidePanel")
 	get_node(sellButton).connect("mouse_entered", self, "_on_TileAction_mouseEntered", ["Sell"])
 	get_node(sellButton).connect("mouse_exited", self, "hidePanel")
 	get_node(sellButton).connect("pressed", self, "hidePanel")
@@ -93,8 +99,12 @@ func _on_Upgrade_mouseEntered(type):
 			panelTextRef.text = "Unlocks a cool new utility skill that I haven't made yet."
 
 func hidePanel():
+	costHolderRef.hide()
 	hide()
 
 func showCost():
-#	tileInfoRef.
-	pass
+	costHolderRef.show()
+	costHolderRef.setCosts(tileInfoRef.selectedTileGroup[0], tileInfoRef.selectedTileGroup.size())
+	
+func attemptUpgrade():
+	upgradeRef.upgradeTile(tileInfoRef.selectedTileGroup)
