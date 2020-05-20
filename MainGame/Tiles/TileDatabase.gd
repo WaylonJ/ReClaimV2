@@ -176,11 +176,11 @@ func getConstructionInfo(name):
 		"EnemyTest":
 			description = ENEMY_TEST
 			portrait = ENEMY_TEST_PORTRAIT
-			buildingTime = 5
+			buildingTime = 0.1
 			buildingAlliance = "enemy"
 			
 			mana = null
-			unit = 3
+			unit = 1
 			advanced = null
 			research = null
 			

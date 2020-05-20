@@ -1,8 +1,8 @@
 extends Control
 
-# Constants 
-const BASE_ROWS = 50
-const BASE_COLS = 50
+# Constants (50)
+const BASE_ROWS = 10
+const BASE_COLS = 10
 
 # Other variables
 var bigArr = []
@@ -41,9 +41,7 @@ func _ready():
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
 
-	# Initializes the unitMovement script
-	get_node("UnitHolder").add_child(unitMovement)
-	unitMovement.makeCostGraph(startingArray)
+
 	
 	set_process(true)
 	
@@ -66,6 +64,10 @@ func startNewGame():
 	# Makes the links between each tile
 	get_node("LinkHolder").add_child(linkCreator)
 	linkCreator.createLinks(startingArray)
+	
+	# Initializes the unitMovement script
+	get_node("UnitHolder").add_child(unitMovement)
+	unitMovement.makeCostGraph(startingArray)
 
 	# Establishes Base tile
 	makeBaseTile()
@@ -87,7 +89,8 @@ func populateBoard():
 func makeEnemyPositions():
 	# Will attempt to create tiles / 5 locations to be enemy Fortification locations.
 	# Requirements: Not within 4 tiles of another enemy. Not within 3 tiles of the Player Base
-	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
+#	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
+	var createEnemyAttempts = 4
 	var tile
 	while createEnemyAttempts != 0:
 		tile = selectRandomTiles()
@@ -127,6 +130,7 @@ func checkForAllyOrEnemyTilesNearby(tile, toCheck, nothingFound):
 func makeEnemyBase(tile):
 	var enemyTilePNG = preload("res://MainGame/Tiles/Resources/PH_Tile_EnemyBase.png")
 	tile.set("buildingName", "EnemyTest")
+	tile.findDistanceFromBase(baseTile)
 	tile.startBuilding()
 	tile.createTile()
 	tile.get_node("TileHolder/Background").set("texture", enemyTilePNG)

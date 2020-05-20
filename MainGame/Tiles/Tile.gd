@@ -54,6 +54,7 @@ var aboveTile
 var rightTile
 var belowTile
 var leftTile
+var distanceFromBase = 0
 
 # Vision variables
 var vision = 0
@@ -64,6 +65,7 @@ var seenOnce = false
 var inBattle = false
 
 onready var databaseRef = get_tree().get_root().get_node("Control").tileDatabase
+onready var rootRef = get_tree().get_root().get_node("Control")
 
 func _process(delta):
 	buildingTime -= delta
@@ -247,11 +249,16 @@ func createUnit():
 			unitStationed.mergeWithOtherGroup(newUnit)
 	else:
 		if enemyStationed == null:
+			print("ENEMY STATION WAS NULL")
 			get_tree().get_root().get_node("Control/UnitHolder/EnemyController").add_child(newUnit)
 			newUnit.add_to_group("Enemies")
 			newUnit.setTile(self)
 			newUnit.set_position(Vector2(self.get_position()[0] + 65, self.get_position()[1] - 75))
 			setEnemyStationed(newUnit)
 		else:
+			print(enemyStationed)
+			print("enemy station not null?!?")
 			enemyStationed.mergeWithOtherGroup(newUnit)
 
+func findDistanceFromBase(baseTile):
+	distanceFromBase = rootRef.unitMovement.findDistanceBetweenTwoTiles(self, baseTile)

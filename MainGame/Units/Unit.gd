@@ -82,6 +82,7 @@ func appendPath(newPath, replacing):
 	pathToMove.append(newPath)
 	if currentPath.empty():
 		currentPath = pathToMove.pop_front()
+		print("Current should contain front, updating path")
 		updatePath()
 	# Righ click for movement, with no shift
 	elif replacing:
@@ -105,13 +106,17 @@ func setOppositeDirection():
 func updatePath():
 	if len(currentPath) > 1:
 		prevTile = currentPath.pop_front()
-		prevTile.unitStationed = null
+		if isAlly:
+			prevTile.unitStationed = null
+		else:
+			prevTile.enemyStationed = null
 		set_process(true)
 		findDirection(currentPath[0])
 		placeAtStartOfPath(prevTile)
 		calcDistances()
 
 	else:
+		print("In else, shouldnt see this")
 		updateHostTile()
 		# Resets the position of the unit to be at the top of the tile
 		directionMoving = "up"
@@ -209,13 +214,15 @@ func updateTotalStats():
 	totalMaxHealth = tempMaxHP
 	totalOffense = tempOffense
 	totalSpeed = tempSpeed
+	
+	showNumberOfUnitsTag()
 
 	
 func checkHighestVision():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				setVision(2)
+				setVision(4)
 			"Goblin":
 				setVision(1)
 	
@@ -236,30 +243,28 @@ func updateTilesVision():
 func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
 	mergeUnits(newAddition)
-	
-	# If there is a single unit, hide tag. Otherwise show number of units.
-	showNumberOfUnitsTag()
 
-	# If Host is selected,
-	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
-		#If new addition is NOT already selected
-		if !get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
-			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(self)
+	if isAlly:
+		# If Host is selected,
+		if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
+			#If new addition is NOT already selected
+			if !get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
+				get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(self)
+				get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
+				
+		#If Host is not selected, but moving unit is:
+		if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
+			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
 			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
-			
-	#If Host is not selected, but moving unit is:
-	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
-		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
-		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
-	
-	#Removes sight of old unit
-	hostTile.updateInSightOf(vision, newAddition, false)
-	
-	#Removes old unit.
-	newAddition.queue_free()
-	
-	# Updates vision
-	checkHighestVision()
+		
+		#Removes sight of old unit
+		hostTile.updateInSightOf(vision, newAddition, false)
+		
+		#Removes old unit.
+		newAddition.queue_free()
+		
+		# Updates vision
+		checkHighestVision()
 
 func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:

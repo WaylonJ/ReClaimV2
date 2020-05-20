@@ -3,6 +3,7 @@ extends "res://MainGame/UnitController.gd"
 
 func _ready():
 	allyUnit = false
+	set_process(true)
 
 func _input(event):
 	pass

@@ -79,8 +79,9 @@ func _mouseExited():
 	overUnit = false
 
 func _mouseEntered(unit):
-	currentUnit = unit
-	overUnit = true
+	if unit.isAlly:
+		currentUnit = unit
+		overUnit = true
 	
 func checkIfUnitAlreadySelected(unit):
 	for item in selectedUnits:

@@ -3,8 +3,12 @@ extends "res://MainGame/Units/Unit.gd"
 var numBaseEnemy = 0
 
 var baseEnemyScript = load("res://MainGame/Units/UnitTypes/BaseEnemy.gd")
+onready var rootRef = get_tree().get_root().get_node("Control")
 
 var baseEnemyRef
+
+var unitSizeTrigger = null
+var unitSizeTriggerConstant = 1
 
 
 func _init():
@@ -58,6 +62,8 @@ func mergeUnits(newAddition):
 	numUnits += newAddition.numUnits
 	updateTotalStats()
 	
+	checkAttackTrigger()
+	
 		
 func setFormation(unit):
 	# Ensures this unit type doesnt already have a position
@@ -73,4 +79,13 @@ func getRef(unitName):
 		"baseEnemy":
 			return baseEnemyRef
 
+func checkAttackTrigger():
+	if unitSizeTrigger == null:
+		unitSizeTrigger = unitSizeTriggerConstant * hostTile.distanceFromBase
+	
+	if numUnits >= unitSizeTrigger:
+		sendToBase()
 
+func sendToBase():
+	rootRef.unitMovement.autoMoveUnit(self, rootRef.baseTile)
+	
