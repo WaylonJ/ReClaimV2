@@ -65,10 +65,12 @@ func _process(delta):
 	if distanceLeft < 0:
 		set_process(false)
 		
-		hostTile.updateInSightOf(vision, self, false)
+		if isAlly:
+			hostTile.updateInSightOf(vision, self, false, false)
 		hostTile = currentPath[0]
 #		removeSelfFromInSightOf()
-		hostTile.updateInSightOf(vision, self, true)
+#		hostTile.updateInSightOf(vision, self, true, false)
+#		print("In sight of values: " + str(hostTile.inSightOf))
 		updatePath()
 
 func generateUnitRefs():
@@ -82,7 +84,6 @@ func appendPath(newPath, replacing):
 	pathToMove.append(newPath)
 	if currentPath.empty():
 		currentPath = pathToMove.pop_front()
-		print("Current should contain front, updating path")
 		updatePath()
 	# Righ click for movement, with no shift
 	elif replacing:
@@ -104,33 +105,56 @@ func setOppositeDirection():
 			return "left"
 
 func updatePath():
+	# Still remaining nodes to go
 	if len(currentPath) > 1:
 		prevTile = currentPath.pop_front()
-		if isAlly:
-			prevTile.unitStationed = null
-		else:
-			prevTile.enemyStationed = null
+		removeSelfFromPreviousTile()
+
+#		setUnitStationedOnHost()
 		set_process(true)
 		findDirection(currentPath[0])
 		placeAtStartOfPath(prevTile)
 		calcDistances()
-
+		
+	# Done traveling
 	else:
-		print("In else, shouldnt see this")
-		updateHostTile()
+		currentPath = []
+		setUnitStationedOnHost()
 		# Resets the position of the unit to be at the top of the tile
 		directionMoving = "up"
 		placeAtStartOfPath(hostTile)
+	
+	hostTile.updateInSightOf(vision, self, true, false)
+	print("In sight of values: " + str(hostTile.inSightOf))
 
 func removeSelfFromInSightOf():
-	prevTile.updateInSightOf(vision, self, false)
+	prevTile.updateInSightOf(vision, self, false, false)
 
-func updateHostTile():
-	hostTile = currentPath.pop_front()
-	if hostTile.unitStationed != null and hostTile.unitStationed != self:
-		hostTile.unitStationed.mergeWithOtherGroup(self)
+func removeSelfFromPreviousTile():
+	if isAlly:
+		if prevTile.unitStationed == self:
+			prevTile.unitStationed = null
 	else:
-		hostTile.setUnitStationed(self)
+		if prevTile.enemyStationed == self:
+			prevTile.enemyStationed = null
+	
+func setUnitStationedOnHost():
+	if isAlly:
+		# Unit already exists on the tile, merge!
+		if hostTile.unitStationed != null and hostTile.unitStationed != self:
+			hostTile.unitStationed.mergeWithOtherGroup(self)
+		
+		# No unit here, set self!
+		else:
+			hostTile.setUnitStationed(self)
+	else:
+		# Unit already exists on the tile, merge!
+		if hostTile.enemyStationed != null and hostTile.enemyStationed != self:
+			hostTile.enemyStationed.mergeWithOtherGroup(self)
+		
+		# No unit here, set self!
+		else:
+			hostTile.setEnemyStationed(self)	
 
 func calcDistances():
 	distanceTotal = DIST_CONSTANT * numUnits
@@ -178,7 +202,6 @@ func createUnit(unitName, amount):
 			unitRefs["Leader"] = leaderRef
 			leaderRef.addFreshUnit(amount)
 			numLeader += amount
-			updateTotalStats()
 			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png")
 			get_node("BG").set("texture", portrait)
@@ -188,11 +211,12 @@ func createUnit(unitName, amount):
 			unitRefs["Goblin"] = goblinRef
 			goblinRef.addFreshUnit(amount)
 			numGoblin += amount
-			updateTotalStats()
 			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Goblin.png")
 			get_node("BG").set("texture", portrait)
 			setFormation("Goblin")
+			
+	updateTotalStats()
 	numUnits = amount
 	if numUnits < 2:
 		get_node("NumUnits").hide()
@@ -216,6 +240,9 @@ func updateTotalStats():
 	totalSpeed = tempSpeed
 	
 	showNumberOfUnitsTag()
+	
+#	if !isAlly:
+#		hostTile.checkIfSeen()
 
 	
 func checkHighestVision():
@@ -238,7 +265,7 @@ func setVision(newVision):
 
 func updateTilesVision():
 	if isAlly:
-		hostTile.updateInSightOf(vision, self, true)
+		hostTile.updateInSightOf(vision, self, true, false)
 
 func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
@@ -258,7 +285,7 @@ func mergeWithOtherGroup(newAddition):
 			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
 		
 		#Removes sight of old unit
-		hostTile.updateInSightOf(vision, newAddition, false)
+		hostTile.updateInSightOf(vision, newAddition, false, false)
 		
 		#Removes old unit.
 		newAddition.queue_free()

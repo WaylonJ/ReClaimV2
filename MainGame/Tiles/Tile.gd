@@ -136,7 +136,9 @@ func updateTileInfo():
 		setUnitCreationInfo(data[6])
 	
 	if buildingAlliance != "enemy":
-		updateInSightOf(vision, self, true)
+		updateInSightOf(vision, self, true, true)
+	else:
+		checkIfSeen()
 	
 func setUnitCreationInfo(unitName):
 	unitProductionName = unitName
@@ -146,22 +148,43 @@ func setUnitCreationInfo(unitName):
 		unitProductionIsAlly = true
 
 
-func updateInSightOf(toCheck, objectGivingSight, adding):
-	var index = 0
+func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
+	# Is a unit
+	if not isBuilding:
+		# Is an ENEMY unit
+		if not objectGivingSight.isAlly:
+			print("Enemy moving, checking seen")
+			checkIfSeen()
+			return
+	
+	
 	
 	# Calls this function in each connected tile with 1 less range
 	if toCheck != 0:
 		if connections[0] == true and aboveTile != null:
-			aboveTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+			aboveTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
 		if connections[1] == true and rightTile != null:
-			rightTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+			rightTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
 		if connections[2] == true and belowTile != null:
-			belowTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+			belowTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
 		if connections[3] == true and leftTile != null:
-			leftTile.updateInSightOf(toCheck - 1, objectGivingSight, adding)
+			leftTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
+	
+	# If adding items to inSightOf
 	if adding:
-		inSightOf.append(objectGivingSight)
+		var newItem = true
+		
+		# Ensures this object isn't already listed in inSightOf
+		for item in inSightOf:
+			if item == objectGivingSight:
+				newItem = false
+				
+		#If it's a new item, add it to the list of inSightOf
+		if newItem:
+			inSightOf.append(objectGivingSight)
+			
 	else:
+		var index = 0
 		for item in inSightOf:
 			if item == objectGivingSight:
 				inSightOf.remove(index)
@@ -177,6 +200,7 @@ func checkIfSeen():
 		get_node("TileHolder/BuildingProgressBar").hide()
 		currentlySeen = false
 		if enemyStationed != null:
+			print("Hiding enemy: " + str(enemyStationed))
 			enemyStationed.hide()
 	
 	#Seen
@@ -187,7 +211,10 @@ func checkIfSeen():
 			get_node("TileHolder/BuildingProgressBar").show()
 		currentlySeen = true
 		seenOnce = true
+#		print("checking stationed")
 		if enemyStationed != null:
+			print("shownig??: " + str(inSightOf))
+			print("Showing enemy: " + str(enemyStationed))
 			enemyStationed.show()
 	
 func updateOutput(mana, unit, advanced, research):
@@ -249,15 +276,13 @@ func createUnit():
 			unitStationed.mergeWithOtherGroup(newUnit)
 	else:
 		if enemyStationed == null:
-			print("ENEMY STATION WAS NULL")
 			get_tree().get_root().get_node("Control/UnitHolder/EnemyController").add_child(newUnit)
 			newUnit.add_to_group("Enemies")
 			newUnit.setTile(self)
 			newUnit.set_position(Vector2(self.get_position()[0] + 65, self.get_position()[1] - 75))
 			setEnemyStationed(newUnit)
+			checkIfSeen()
 		else:
-			print(enemyStationed)
-			print("enemy station not null?!?")
 			enemyStationed.mergeWithOtherGroup(newUnit)
 
 func findDistanceFromBase(baseTile):

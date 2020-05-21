@@ -14,7 +14,7 @@ func _ready():
 
 func _mouseInTile(tile):
 	tileHovered = tile
-	print(tile)
+#	print(tile)
 
 func _mouseOutOfTile(tile):
 	tileHovered = null
@@ -177,7 +177,7 @@ func insertIntoCostQueue(newItem):
 func autoMoveUnit(unit, destination):
 	findShortestPath(unit.hostTile, destination)
 	path = costQueue
-	print("Automove triggered, this is path: " + str(path))
+#	print("Automove triggered, this is path: " + str(path))
 	unit.appendPath(path, true)
 
 func findDistanceBetweenTwoTiles(tile1, tile2):

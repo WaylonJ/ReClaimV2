@@ -8,6 +8,8 @@ const BASE_COLS = 10
 var bigArr = []
 var startingArray = []
 var length = 0
+var randTileRow = null
+var randTileCol = null
 
 var baseTile = null
 
@@ -90,19 +92,22 @@ func makeEnemyPositions():
 	# Will attempt to create tiles / 5 locations to be enemy Fortification locations.
 	# Requirements: Not within 4 tiles of another enemy. Not within 3 tiles of the Player Base
 #	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
-	var createEnemyAttempts = 4
+	var createEnemyAttempts = 1
 	var tile
 	while createEnemyAttempts != 0:
 		tile = selectRandomTiles()
 		if checkForAllyOrEnemyTilesNearby(tile, 3, true):
+			print("MADE ENEMY")
+			print(randTileRow)
+			print(randTileCol)
 			makeEnemyBase(tile)
 		createEnemyAttempts -= 1
 
 func selectRandomTiles():
 	# Gets a random row and column. Returns the tile found at that location.
 	randomize()
-	var randTileRow = randi() % BASE_ROWS
-	var randTileCol = randi() % BASE_COLS
+	randTileRow = randi() % BASE_ROWS
+	randTileCol = randi() % BASE_COLS
 	
 	return startingArray[randTileRow][randTileCol]
 	

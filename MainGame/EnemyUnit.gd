@@ -48,7 +48,7 @@ func checkHighestVision():
 	for item in unitTypes:
 		match item:
 			"baseEnemy":
-				setVision(1)
+				setVision(0)
 
 func mergeUnits(newAddition):
 	if newAddition.numBaseEnemy !=0:
@@ -61,7 +61,6 @@ func mergeUnits(newAddition):
 		baseEnemyRef.mergeUnit(newAddition.baseEnemyRef)
 	numUnits += newAddition.numUnits
 	updateTotalStats()
-	
 	checkAttackTrigger()
 	
 		
@@ -87,5 +86,6 @@ func checkAttackTrigger():
 		sendToBase()
 
 func sendToBase():
+	print("Sending enemy attack!!")
 	rootRef.unitMovement.autoMoveUnit(self, rootRef.baseTile)
 	
