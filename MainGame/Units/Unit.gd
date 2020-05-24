@@ -84,7 +84,8 @@ func appendPath(newPath, replacing):
 	if isUnitMoving():
 		checkIfTurnAroundNeeded(newPath)
 	
-	if currentPath.empty():
+	else:
+		removeSelfFromPreviousTile()
 		currentPath = newPath
 		updatePath()
 		
@@ -97,12 +98,10 @@ func checkIfTurnAroundNeeded(newPath):
 	if newPath.size() == 1:
 		print("Return to host")
 		switchDirections()
-		currentPath = newPath
 	
 	# Check if the newPath's first next tile is the same as the one currently being traveled to.
 	elif newPath[1] == currentPath[0]:
 		newPath.pop_front()
-		currentPath = newPath
 	
 	# The unit needs to turn around, then reset the path
 	else:
@@ -113,7 +112,8 @@ func checkIfTurnAroundNeeded(newPath):
 			
 			# Needs to create a new path starting from the tile it's currently traveling to.
 			newPath = rootRef.unitMovement.findShortestPath(prevTile, newPath[size - 1])
-		currentPath = newPath
+	
+	currentPath = newPath
 
 func isUnitMoving():
 	# If the unit is already moving, we don't need to 
@@ -146,11 +146,17 @@ func setOppositeDirection():
 			return "left"
 
 func updatePath():
+	prevTile = currentPath.pop_front()
+	
+	if !isAlly:
+		hideOrShowEnemiesBasedOnTileVisibility()
+	
 	# Still remaining nodes to go
-	if len(currentPath) > 1:
-		prevTile = currentPath.pop_front()
-		removeSelfFromPreviousTile()
-
+	if len(currentPath) > 0:
+		
+		# Enemy Unit is moving to a tile that is currently seen
+		
+			
 #		setUnitStationedOnHost()
 		set_process(true)
 		findDirection(currentPath[0])
@@ -160,7 +166,7 @@ func updatePath():
 	# Done traveling
 	else:
 		isMoving = false
-		hostTile = currentPath.pop_front()
+		hostTile = prevTile
 		currentPath = []
 		setUnitStationedOnHost()
 		# Resets the position of the unit to be at the top of the tile
@@ -169,6 +175,16 @@ func updatePath():
 	
 	prevTile.updateInSightOf(vision, self, true, false)
 #	print("In sight of values: " + str(prevTile.inSightOf))
+
+func hideOrShowEnemiesBasedOnTileVisibility():
+	# If the tile it's currently on is hidden, it should hide
+	if !prevTile.currentlySeen:
+		self.hide()
+	
+	# If the tile it's going to is NOT hidden, it should show
+	if len(currentPath) != 0:
+		if currentPath[0].currentlySeen:
+			self.show()
 
 func removeSelfFromInSightOf():
 	prevTile.updateInSightOf(vision, self, false, false)

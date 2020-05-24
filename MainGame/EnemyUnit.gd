@@ -60,7 +60,9 @@ func mergeUnits(newAddition):
 		baseEnemyRef.mergeUnit(newAddition.baseEnemyRef)
 	numUnits += newAddition.numUnits
 	updateTotalStats()
-	checkAttackTrigger()
+	
+	if hostTile.buildingAlliance == "enemy":
+		checkAttackTrigger()
 	
 		
 func setFormation(unit):

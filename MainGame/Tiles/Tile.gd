@@ -153,7 +153,6 @@ func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 	if not isBuilding:
 		# Is an ENEMY unit
 		if not objectGivingSight.isAlly:
-			print("Enemy moving, checking seen")
 			checkIfSeen()
 			return
 	
@@ -214,12 +213,9 @@ func checkIfSeen():
 func setEnemyVisibility(tileSeen):
 	if enemyStationed != null:
 		if tileSeen:
-			print("Hiding enemy: " + str(enemyStationed))
-			enemyStationed.hide()
-		else:
-			print("shownig??: " + str(inSightOf))
-			print("Showing enemy: " + str(enemyStationed))
 			enemyStationed.show()
+		else:
+			enemyStationed.hide()
 
 func updateOutput(mana, unit, advanced, research):
 	outputMana = mana
