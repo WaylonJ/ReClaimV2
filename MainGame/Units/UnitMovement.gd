@@ -27,13 +27,14 @@ func _input(event):
 #			print("Unit Movement, selected units: " + str(get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits))
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
 				if !(unit.snared):
-					findShortestPath(unit.hostTile, tileHovered)
-					path = costQueue
+					checkIfUnitMoving(unit)
 					unit.appendPath(path, true)
 
-func sendUnitOnPath(unit, path):
-	unit.moveTo(path)
-	pass
+func checkIfUnitMoving(unit):
+	if unit.isMoving:
+		path = findShortestPath(unit.prevTile, tileHovered)
+	else:
+		path = findShortestPath(unit.hostTile, tileHovered)
 
 func printPath(path):
 	var home = path[0]
@@ -46,7 +47,7 @@ func findShortestPath(origin, target):
 	# In case tile selected is the one the unit is stationed at
 	if origin == target:
 		costQueue = [origin]
-		return
+		return costQueue
 		
 	var current = null
 	var done = false
@@ -62,7 +63,7 @@ func findShortestPath(origin, target):
 		
 #	print("Unit movement: " + str(costQueue))
 	resetCostGraph()
-	return
+	return costQueue
 		
 func checkNeighboursAndInsertInCostQueue(item, target):
 	var connectionIndex = 0

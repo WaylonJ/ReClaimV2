@@ -199,9 +199,7 @@ func checkIfSeen():
 		get_node("MapBackground").hide()
 		get_node("TileHolder/BuildingProgressBar").hide()
 		currentlySeen = false
-		if enemyStationed != null:
-			print("Hiding enemy: " + str(enemyStationed))
-			enemyStationed.hide()
+		setEnemyVisibility(false)
 	
 	#Seen
 	else:
@@ -211,12 +209,18 @@ func checkIfSeen():
 			get_node("TileHolder/BuildingProgressBar").show()
 		currentlySeen = true
 		seenOnce = true
-#		print("checking stationed")
-		if enemyStationed != null:
+		setEnemyVisibility(true)
+	
+func setEnemyVisibility(tileSeen):
+	if enemyStationed != null:
+		if tileSeen:
+			print("Hiding enemy: " + str(enemyStationed))
+			enemyStationed.hide()
+		else:
 			print("shownig??: " + str(inSightOf))
 			print("Showing enemy: " + str(enemyStationed))
 			enemyStationed.show()
-	
+
 func updateOutput(mana, unit, advanced, research):
 	outputMana = mana
 	outputUnit = unit

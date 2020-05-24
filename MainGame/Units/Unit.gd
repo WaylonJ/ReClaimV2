@@ -18,6 +18,7 @@ var numUnits = 0
 
 # Misc. variables
 var isAlly = true
+var isMoving = false
 var unitTypes = []
 var portrait
 
@@ -33,6 +34,7 @@ var formation = {}
 # Movement vars
 var pathToMove = []
 var currentPath = []
+onready var rootRef = get_tree().get_root().get_node("Control")
 
 var distanceTotal
 var distanceLeft
@@ -66,11 +68,8 @@ func _process(delta):
 		set_process(false)
 		
 		if isAlly:
-			hostTile.updateInSightOf(vision, self, false, false)
-		hostTile = currentPath[0]
-#		removeSelfFromInSightOf()
-#		hostTile.updateInSightOf(vision, self, true, false)
-#		print("In sight of values: " + str(hostTile.inSightOf))
+			prevTile.updateInSightOf(vision, self, false, false)
+
 		updatePath()
 
 func generateUnitRefs():
@@ -81,15 +80,57 @@ func generateUnitRefs():
 	add_child(goblinRef)
 
 func appendPath(newPath, replacing):
-	pathToMove.append(newPath)
+	# Start of new movement order, check if currently moving
+	if isUnitMoving():
+		checkIfTurnAroundNeeded(newPath)
+	
 	if currentPath.empty():
-		currentPath = pathToMove.pop_front()
+		currentPath = newPath
 		updatePath()
-	# Righ click for movement, with no shift
-	elif replacing:
-		returnUnitToHostTile()
 		
-func returnUnitToHostTile():
+	# STILL NEED TO IMPLEMENT SHIFT CLICKING FOR SPECIFIC PATHS
+#	elif replacing:
+#		returnUnitToHostTile()
+		
+func checkIfTurnAroundNeeded(newPath):
+	# If length is 0, unit is being asked to return to prev Tile
+	if newPath.size() == 1:
+		print("Return to host")
+		switchDirections()
+		currentPath = newPath
+	
+	# Check if the newPath's first next tile is the same as the one currently being traveled to.
+	elif newPath[1] == currentPath[0]:
+		newPath.pop_front()
+		currentPath = newPath
+	
+	# The unit needs to turn around, then reset the path
+	else:
+		print("Turn around, then continue on path")
+		switchDirections()
+		if currentPath[0] == newPath[0]:
+			var size = newPath.size()
+			
+			# Needs to create a new path starting from the tile it's currently traveling to.
+			newPath = rootRef.unitMovement.findShortestPath(prevTile, newPath[size - 1])
+		currentPath = newPath
+
+func isUnitMoving():
+	# If the unit is already moving, we don't need to 
+	if isMoving == true:
+		return true
+	else:
+		# First given movement order. Remove self from Host Tile, set Host Tile to null, set Moving
+		isMoving = true
+		prevTile = hostTile
+		removeSelfFromPreviousTile()
+		hostTile = null
+		return false
+		
+func switchDirections():
+	# Sets this so if multiple switch backs occur, the unit doesn't teleport when the path is replaced.
+	prevTile = currentPath[0]
+	
 	directionMoving = setOppositeDirection()
 	distanceLeft = (DIST_CONSTANT * numUnits) - distanceLeft
 
@@ -118,14 +159,16 @@ func updatePath():
 		
 	# Done traveling
 	else:
+		isMoving = false
+		hostTile = currentPath.pop_front()
 		currentPath = []
 		setUnitStationedOnHost()
 		# Resets the position of the unit to be at the top of the tile
 		directionMoving = "up"
 		placeAtStartOfPath(hostTile)
 	
-	hostTile.updateInSightOf(vision, self, true, false)
-	print("In sight of values: " + str(hostTile.inSightOf))
+	prevTile.updateInSightOf(vision, self, true, false)
+#	print("In sight of values: " + str(prevTile.inSightOf))
 
 func removeSelfFromInSightOf():
 	prevTile.updateInSightOf(vision, self, false, false)

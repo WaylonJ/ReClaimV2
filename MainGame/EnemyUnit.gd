@@ -3,7 +3,6 @@ extends "res://MainGame/Units/Unit.gd"
 var numBaseEnemy = 0
 
 var baseEnemyScript = load("res://MainGame/Units/UnitTypes/BaseEnemy.gd")
-onready var rootRef = get_tree().get_root().get_node("Control")
 
 var baseEnemyRef
 
