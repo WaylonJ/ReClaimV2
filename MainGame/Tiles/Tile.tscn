@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://MainGame/Tiles/Tile.gd" type="Script" id=1]
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_BaseMapBG.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Unseen.png" type="Texture" id=4]
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Highlight.png" type="Texture" id=5]
 [ext_resource path="res://MainGame/Tiles/ShowBattleButton.gd" type="Script" id=6]
+[ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_MilitaryBldg.png" type="Texture" id=7]
 
 [node name="Tile" type="Panel"]
 margin_left = 245.185
@@ -75,7 +76,14 @@ margin_bottom = 19.0
 value = 50.0
 
 [node name="ShowBattleButton" type="Button" parent="TileHolder"]
-margin_right = 12.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 60 )
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_right = 125.0
+margin_bottom = 125.0
+rect_min_size = Vector2( 125, 125 )
+mouse_filter = 1
+icon = ExtResource( 7 )
+expand_icon = true
 script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

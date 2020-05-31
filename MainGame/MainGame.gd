@@ -82,6 +82,9 @@ func startNewGame():
 	var testEnemyTile = startingArray[length][length - 1]
 	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
+	testEnemyTile = startingArray[length][length + 1]
+	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+	
 
 func populateBoard():
 	makeEnemyPositions()

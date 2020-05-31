@@ -8,10 +8,13 @@ var allUnits
 var tile
 
 var allHPBars = []
+var allAATimers = []
 
 var hPBarRefsByUnitName = {}
+var aATimerByUnitName = {}
 var unitRefs = {}
 var attackRates = {}
+var baseAttackRates = {}
 var currentTargettedPosition = {}
 var allyPositions = {}
 var enemyPositions = {}
@@ -28,11 +31,21 @@ func _process(delta):
 			checkBattleStatus()
 			continue
 		
-		attackRates[unitName] -= delta
+		progressAAs(unitName, delta)
 		if attackRates[unitName] < 0:
 			triggerAttack(unitName)
+			updateHealthBars()
+			
+			attackRates[unitName] = baseAttackRates[unitName]
+
+func progressAAs(unitName, delta):
+	attackRates[unitName] -= delta * 10
+	aATimerByUnitName[unitName].value = 100 - ( attackRates[unitName] / baseAttackRates[unitName] ) * 100
+
+func updateHealthBars():
+	for group in allUnits:
+		for unitName in group.unitTypes:
 			hPBarRefsByUnitName[unitName].value = unitRefs[unitName].currentHP
-			attackRates[unitName] = unitRefs[unitName].baseAttackSpeed
 
 func addBattle(ally, enemy, battleTile):
 	allyUnits = ally
@@ -40,53 +53,65 @@ func addBattle(ally, enemy, battleTile):
 	allUnits = [ally, enemy]
 	tile = battleTile
 	
-	
 	initializeUnitRefs()
 	initializeAttackRates()
 	initializeAutoAttackTargets()
 	initializePositions()
-	initializeHealthBarRefs()
+	initializeHealthBarRefsAndAARefs()
 	
 	set_process(true)
-	for item in hPBarRefsByUnitName:
-		print(item)
-		print(hPBarRefsByUnitName[item])
 
-func initializeHealthBarRefs():
+func initializeHealthBarRefsAndAARefs():
 	# Get the references of all health bars in order
 	for row in get_parent().get_node("Panel/HBoxContainer/BattleHolder").get_children():
 		for panel in row.get_children():
 			allHPBars.append(panel.get_node("Health"))
 			
+	for row in get_parent().get_node("Panel/HBoxContainer/BattleHolder").get_children():
+		for panel in row.get_children():
+			allAATimers.append(panel.get_node("Timer"))
+			
 	for item in allyPositions:
 		match item:
 			0:
-				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[1]
+				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[3]
+				aATimerByUnitName[allyPositions[item]] = allAATimers[3]
 			1:
-				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[5]
+				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[4]
+				aATimerByUnitName[allyPositions[item]] = allAATimers[4]
 			2:
-				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[9]
+				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[5]
+				aATimerByUnitName[allyPositions[item]] = allAATimers[5]
 			3:
 				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[0]
+				aATimerByUnitName[allyPositions[item]] = allAATimers[0]
 			4:
-				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[4]
+				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[1]
+				aATimerByUnitName[allyPositions[item]] = allAATimers[1]
 			5:
-				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[8]
+				hPBarRefsByUnitName[allyPositions[item]] = allHPBars[2]
+				aATimerByUnitName[allyPositions[item]] = allAATimers[2]
 
 	for item in enemyPositions:
 		match item:
 			0:
-				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[2]
-			1:
 				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[6]
-			2:
-				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[10]
-			3:
-				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[3]
-			4:
+				aATimerByUnitName[enemyPositions[item]] = allAATimers[6]
+			1:
 				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[7]
+				aATimerByUnitName[enemyPositions[item]] = allAATimers[7]
+			2:
+				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[8]
+				aATimerByUnitName[enemyPositions[item]] = allAATimers[8]
+			3:
+				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[9]
+				aATimerByUnitName[enemyPositions[item]] = allAATimers[9]
+			4:
+				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[10]
+				aATimerByUnitName[enemyPositions[item]] = allAATimers[10]
 			5:
 				hPBarRefsByUnitName[enemyPositions[item]] = allHPBars[11]
+				aATimerByUnitName[enemyPositions[item]] = allAATimers[11]
 
 func initializeUnitRefs():
 	for group in allUnits:
@@ -103,6 +128,7 @@ func initializePositions():
 func initializeAttackRates():
 	for group in allUnits:
 		for unitName in group.unitTypes:
+			baseAttackRates[unitName] = unitRefs[unitName].baseAttackSpeed
 			attackRates[unitName] = unitRefs[unitName].baseAttackSpeed
 		
 func initializeAutoAttackTargets():

@@ -5,6 +5,7 @@ var battles = []
 
 var skillUnitPositions = []
 var tileUnitPositions = []
+var listOfBattles = []
 
 var battleHolder
 var oldZoom
@@ -14,8 +15,8 @@ var battleController
 func _ready():
 	initializeSkillAndTileUnitPositions()
 	battleHolder = get_node("Panel/HBoxContainer/BattleHolder")
-	battleController = load("res://MainGame/BattleScreen/BattleController.gd").new()
-	add_child(battleController)
+#	battleController = load("res://MainGame/BattleScreen/BattleController.gd").new()
+#	add_child(battleController)
 	pass 
 	
 func _input(event):
@@ -25,7 +26,12 @@ func _input(event):
 
 func addBattle(ally, enemy, tile):
 	battles.append([ally, enemy, tile])
+	
+	battleController = load("res://MainGame/BattleScreen/BattleController.gd").new()
+	add_child(battleController)
 	battleController.addBattle(ally, enemy, tile)
+	listOfBattles.append(battleController)
+	print(get_children())
 	
 func openBattleScreen(tile):
 	show()
@@ -40,7 +46,13 @@ func hideBattleScreen():
 		get_node("/root/Control").unselectEverything()
 		showOrHideUI("show")
 		get_node("/root/Control/Camera2D").set_zoom(oldZoom)
+		resetAllUnits()
 	
+func resetAllUnits():
+	get_node("Hb")
+	
+	
+	pass
 
 func showBattle(battle):
 	var allyGroup = battle[0]

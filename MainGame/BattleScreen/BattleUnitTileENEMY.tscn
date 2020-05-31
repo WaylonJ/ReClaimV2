@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://MainGame/BattleScreen/Resources/BattleHolder/PH_BattleScreen_AttackTimerBG.png" type="Texture" id=1]
+[ext_resource path="res://MainGame/UI/Resources/Empty.png" type="Texture" id=2]
+[ext_resource path="res://MainGame/BattleScreen/Resources/BattleHolder/PH_Battle_HealthBarBG.png" type="Texture" id=3]
+[ext_resource path="res://MainGame/BattleScreen/Resources/BattleHolder/PH_Battle_HealthBarProgress.png" type="Texture" id=4]
+[ext_resource path="res://MainGame/BattleScreen/Resources/BattleHolder/PH_BattleScreen_AttackTimerProgress.png" type="Texture" id=5]
+[ext_resource path="res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png" type="Texture" id=6]
+
+[node name="Panel" type="TextureRect"]
+margin_right = 200.0
+margin_bottom = 175.0
+rect_min_size = Vector2( 200, 240 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="unitImage" type="TextureRect" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -41.2791
+margin_top = -36.6855
+margin_right = 33.7209
+margin_bottom = 38.3145
+rect_min_size = Vector2( 75, 75 )
+mouse_filter = 2
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Health" type="TextureProgress" parent="."]
+visible = false
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 155.351
+margin_top = -89.6907
+margin_right = 185.351
+margin_bottom = 90.3098
+rect_min_size = Vector2( 30, 0 )
+rect_scale = Vector2( 0.7, 1 )
+size_flags_vertical = 3
+value = 60.0
+texture_under = ExtResource( 3 )
+texture_progress = ExtResource( 4 )
+fill_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="TextureProgress" parent="."]
+visible = false
+anchor_left = 0.00399048
+anchor_right = 0.00399048
+margin_left = 18.8583
+margin_top = 168.526
+margin_right = 68.8583
+margin_bottom = 218.526
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 5 )
+fill_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}

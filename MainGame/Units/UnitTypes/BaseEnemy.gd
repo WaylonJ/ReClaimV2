@@ -6,7 +6,7 @@ func _init():
 	baseMaxHP = 30
 	baseOffense = 10
 	baseSpeed = 5
-	baseAttackSpeed = 3.5
+	baseAttackSpeed = 35.0
 	basePRes = 0.1
 	
 	numUnits = 0

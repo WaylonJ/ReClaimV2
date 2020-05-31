@@ -351,6 +351,9 @@ func mergeWithOtherGroup(newAddition):
 		
 		# Updates vision
 		checkHighestVision()
+	
+#	if hostTile.inBattle:
+		
 
 func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:

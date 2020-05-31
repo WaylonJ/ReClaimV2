@@ -1,8 +1,7 @@
-extends VBoxContainer
+extends HBoxContainer
 
 var tiles = []
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	attachAllTilesToArray()
 	
@@ -15,33 +14,46 @@ func attachAllTilesToArray():
 			tempHolder.append(child)
 		tiles.append(tempHolder)
 
+
+# 0,0 | 1,0 | 2,0 | 3,0
+# 0,1 | 1,1 | 2,1 | 3,1
+# 0,2 | 1,2 | 2,2 | 3,2
+
 func setUnitToPosition(unitRef, image, position):
 	var unitImage
 	var tile
 	match position:
 		0:
-			tile = tiles[0][1]
+			tile = tiles[1][0]
 		1:
 			tile = tiles[1][1]
 		2:
-			tile = tiles[2][1]
+			tile = tiles[1][2]
 		3:
 			tile = tiles[0][0]
 		4:
-			tile = tiles[1][0]
+			tile = tiles[0][1]
 		5:
-			tile = tiles[2][0]
+			tile = tiles[0][2]
 	unitImage = tile.get_node("unitImage")
 	unitImage.set("texture", image)
 	unitImage.show()
 	
 	setHealthBar(unitRef, tile)
+	setAATimer(unitRef, tile)
 	
 func setHealthBar(unit, tile):
 	var bar = tile.get_node("Health")
 	bar.show()
 	bar.max_value = unit.maxHP
 	bar.value = unit.currentHP
+	
+func setAATimer(unit, tile):
+	var timer = tile.get_node("Timer")
+	timer.show()
+	timer.max_value = 100.5
+	timer.value = 0.0
+	
 
 func setEnemyToPosition(unit, image, position):
 	var tile
@@ -49,23 +61,24 @@ func setEnemyToPosition(unit, image, position):
 	var progressBar
 	match position:
 		0:
-			tile = tiles[0][2]
+			tile = tiles[2][0]
 		1:
-			tile = tiles[1][2]
+			tile = tiles[2][1]
 		2:
 			tile = tiles[2][2]
 		3:
-			tile = tiles[0][3]
+			tile = tiles[3][0]
 		4:
-			tile = tiles[1][3]
+			tile = tiles[3][1]
 		5:
-			tile = tiles[2][3]
+			tile = tiles[3][2]
 	
 	unitImage = tile.get_node("unitImage")
 	unitImage.set("texture", image)
 	unitImage.show()
 	
 	setHealthBar(unit, tile)
+	setAATimer(unit, tile)
 
 
 
