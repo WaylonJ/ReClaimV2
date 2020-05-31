@@ -7,7 +7,7 @@ var baseEnemyScript = load("res://MainGame/Units/UnitTypes/BaseEnemy.gd")
 var baseEnemyRef
 
 var unitSizeTrigger = null
-var unitSizeTriggerConstant = 1
+var unitSizeTriggerConstant = 3
 
 
 func _init():
@@ -81,9 +81,10 @@ func getRef(unitName):
 
 func checkAttackTrigger():
 	if unitSizeTrigger == null:
-		unitSizeTrigger = unitSizeTriggerConstant * hostTile.distanceFromBase
+		unitSizeTrigger = floor(unitSizeTriggerConstant * (pow(hostTile.distanceFromBase, 1.2)))
 	
 	if numUnits >= unitSizeTrigger:
+		print("Unit size: " + str(unitSizeTrigger))
 		sendToBase()
 
 func sendToBase():

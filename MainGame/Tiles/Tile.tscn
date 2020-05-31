@@ -14,6 +14,9 @@ margin_top = 186.185
 margin_right = 370.185
 margin_bottom = 311.185
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MapBackground" type="Sprite" parent="."]
 modulate = Color( 0.611765, 0.611765, 0.611765, 1 )
@@ -76,12 +79,20 @@ margin_bottom = 19.0
 value = 50.0
 
 [node name="ShowBattleButton" type="Button" parent="TileHolder"]
-modulate = Color( 1, 1, 1, 0.501961 )
-margin_right = 125.0
-margin_bottom = 125.0
-rect_min_size = Vector2( 125, 125 )
+modulate = Color( 1, 0, 0, 1 )
+self_modulate = Color( 36.99, 0, 0, 0.07 )
+margin_left = -10.0
+margin_top = -10.0
+margin_right = 135.0
+margin_bottom = 135.0
+rect_min_size = Vector2( 145, 145 )
 mouse_filter = 1
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0.901961, 0, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 0.0352941, 0, 1, 1 )
 icon = ExtResource( 7 )
+clip_text = true
 expand_icon = true
 script = ExtResource( 6 )
 __meta__ = {

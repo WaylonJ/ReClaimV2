@@ -29,6 +29,7 @@ var buildingTimeMax = 69
 var buildingComplete = true
 var percentBuilt = 0
 var buildingAlliance = "neutral"
+var tileAwake = true
 
 # Build production variables
 var outputMana = null
@@ -57,6 +58,7 @@ var leftTile
 var distanceFromBase = 0
 
 # Vision variables
+var distanceFromOriginal = 0
 var vision = 0
 var inSightOf = []
 var currentlySeen = false
@@ -68,37 +70,44 @@ onready var databaseRef = get_tree().get_root().get_node("Control").tileDatabase
 onready var rootRef = get_tree().get_root().get_node("Control")
 
 func _process(delta):
-	buildingTime -= delta
 	if !buildingComplete:
 		if buildingTime <= 0:
-			buildingComplete = true
-			buildingTime = 0
-			
-			
-			
-			if unitProduction == null:
-				set_process(false)
-			get_node("TileHolder/BuildingProgressBar").hide()
-			if buildingAlliance == "ally":
-				updateGlobalValues()
-		
+			completeBuildingConstruction()
 		else:
-			percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
-			get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
+			continueBuildingConstruction(delta)
 		
-	if unitProduction != null and buildingComplete:
-		unitProduction -= delta
-		if unitProduction < 0:
-			createUnit()
-			unitProduction = outputUnit
-		else:
-			# Show somewhere on a bar that units are being made
-			pass
+	# If the building produces units, is complete, and the tile is awake, CONTINUE PRODUCTION
+	if unitProduction != null and buildingComplete and tileAwake:
+		updateUnitProduction(delta)
 	
 func _ready():
 	set_process(false)
 	checkIfSeen()
 	
+func updateUnitProduction(delta):
+	unitProduction -= delta
+	if unitProduction < 0:
+		createUnit()
+		unitProduction = outputUnit
+	else:
+		# Show somewhere on a bar that units are being made
+		pass
+
+func completeBuildingConstruction():
+	buildingComplete = true
+	buildingTime = 0
+	
+	if unitProduction == null:
+		set_process(false)
+	get_node("TileHolder/BuildingProgressBar").hide()
+	if buildingAlliance == "ally":
+		updateGlobalValues()
+		
+func continueBuildingConstruction(delta):
+	buildingTime -= delta
+	percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
+	get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
+
 func startBuilding():
 	# Need to add functions that will trigger when a buildin begins to build
 	# Things such as a building bar, locking uses until its done, etc.
@@ -115,7 +124,6 @@ func createTile():
 	
 	buildingComplete = false
 	set_process(true)
-#	get_node("../../BottomUI/MiddleSection/TileInfo").updateUI()
 	
 func updateGlobalValues():
 	# Handles updating global production values
@@ -156,10 +164,9 @@ func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 			checkIfSeen()
 			return
 	
-	
-	
 	# Calls this function in each connected tile with 1 less range
 	if toCheck != 0:
+#		distanceFromOriginal += 1
 		if connections[0] == true and aboveTile != null:
 			aboveTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
 		if connections[1] == true and rightTile != null:
