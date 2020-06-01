@@ -31,6 +31,8 @@ var percentBuilt = 0
 var buildingAlliance = "neutral"
 var tileAwake = true
 var wakeThreshold = 1
+var wakeTimer = 1
+var wakeTimerConstant = 2
 
 # Build production variables
 var outputMana = null
@@ -81,6 +83,13 @@ func _process(delta):
 	# If the building produces units, is complete, and the tile is awake, CONTINUE PRODUCTION
 	if unitProduction != null and buildingComplete and tileAwake:
 		updateUnitProduction(delta)
+		
+	if not tileAwake:
+		wakeTimer -= delta
+		if wakeTimer <= 0:
+			tileAwake = true
+			print("TILE AWAKE")
+			
 	
 func _ready():
 	set_process(false)
@@ -149,7 +158,13 @@ func updateTileInfo():
 		updateInSightOf(vision, self, true, true)
 	else:
 		tileAwake = false
+		activateEnemyTimer()
 		checkIfSeen(self)
+	
+func activateEnemyTimer():
+	if distanceFromBase != 0:
+		wakeTimer = distanceFromBase * wakeTimerConstant
+		set_process(true)
 	
 func setUnitCreationInfo(unitName):
 	unitProductionName = unitName
@@ -262,11 +277,13 @@ func checkIfSeen(tile):
 			get_node("TileHolder/BuildingProgressBar").show()
 		tile.currentlySeen = true
 		tile.seenOnce = true
+		tile.get_node("TileHolder/Unseen").modulate = Color(1, 1, 1, 0.5)
 		tile.setEnemyVisibility(true)
 
 func checkToWakeUp(distance):
 	if wakeThreshold >= distance:
 		tileAwake = true
+		
 
 func setEnemyVisibility(tileSeen):
 	if enemyStationed != null:

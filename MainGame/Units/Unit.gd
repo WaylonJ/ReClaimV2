@@ -308,7 +308,7 @@ func checkHighestVision():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				setVision(10)
+				setVision(3)
 			"Goblin":
 				setVision(1)
 	

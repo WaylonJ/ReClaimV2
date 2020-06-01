@@ -35,6 +35,9 @@ var linkCreator = load("res://MainGame/GenerateTileLinks.gd").new()
 var unitMovement = load("res://MainGame/Units/UnitMovement.gd").new()
 var tileDatabase = load("res://MainGame/Tiles/TileDatabase.gd").new()
 
+var testTime = 0
+var testTime2 = 0
+
 func _ready():
 	print("Started!")
 	startNewGame()
@@ -56,6 +59,11 @@ func _process(delta):
 	else:
 		myTimer -= delta
 	
+	testTime += delta
+	if testTime >= 1:
+		testTime2 += 1
+		testTime -= 1
+		print(testTime2)
 	checkCaps()
 	updateUI()
 
@@ -70,6 +78,8 @@ func startNewGame():
 	# Initializes the unitMovement script
 	get_node("UnitHolder").add_child(unitMovement)
 	unitMovement.makeCostGraph(startingArray)
+	
+	
 
 	# Establishes Base tile
 	makeBaseTile()
@@ -85,10 +95,34 @@ func startNewGame():
 	testEnemyTile = startingArray[length][length + 1]
 	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
+	setTileBorders(startingArray)
+	
 
 func populateBoard():
 	makeEnemyPositions()
 
+func setTileBorders(array):
+	for item in array:
+		print(item)
+	
+	for row in array:
+		for item in row:
+			if item.connections[0]:
+				item.get_node("MapBackground/TopOpen").show()
+			else:
+				item.get_node("MapBackground/TopClosed").show()
+			if item.connections[1]:
+				item.get_node("MapBackground/RightOpen").show()
+			else:
+				item.get_node("MapBackground/RightClosed").show()
+			if item.connections[2]:
+				item.get_node("MapBackground/BotOpen").show()
+			else:
+				item.get_node("MapBackground/BotClosed").show()
+			if item.connections[3]:
+				item.get_node("MapBackground/LeftOpen").show()
+			else:
+				item.get_node("MapBackground/LeftClosed").show()
 
 # This should probably all be in a new script
 func makeEnemyPositions():

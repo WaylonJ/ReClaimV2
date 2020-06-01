@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://MainGame/Tiles/Tile.gd" type="Script" id=1]
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_BaseMapBG.png" type="Texture" id=2]
@@ -7,6 +7,14 @@
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_Highlight.png" type="Texture" id=5]
 [ext_resource path="res://MainGame/Tiles/ShowBattleButton.gd" type="Script" id=6]
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_MilitaryBldg.png" type="Texture" id=7]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsTopClosed.png" type="Texture" id=8]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsBotClosed.png" type="Texture" id=9]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsLeftClosed.png" type="Texture" id=10]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsRightClosed.png" type="Texture" id=11]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsTopOpen.png" type="Texture" id=12]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsRightOpen.png" type="Texture" id=13]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsBotOpen.png" type="Texture" id=14]
+[ext_resource path="res://MainGame/Links/Resources/MapWallsLeftOpen.png" type="Texture" id=15]
 
 [node name="Tile" type="Panel"]
 margin_left = 245.185
@@ -26,6 +34,94 @@ z_as_relative = false
 texture = ExtResource( 2 )
 offset = Vector2( 62, 62 )
 region_rect = Rect2( 62, 62, 300, 300 )
+
+[node name="BotClosed" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopClosed" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftClosed" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightClosed" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BotOpen" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopOpen" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftOpen" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 15 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightOpen" type="TextureRect" parent="MapBackground"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+texture = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TileHolder" type="Sprite" parent="."]
 z_index = 5
@@ -55,6 +151,9 @@ anchor_bottom = 1.0
 margin_right = 124.0
 margin_bottom = 124.0
 texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Unseen" type="TextureRect" parent="TileHolder"]
 visible = false
@@ -79,6 +178,7 @@ margin_bottom = 19.0
 value = 50.0
 
 [node name="ShowBattleButton" type="Button" parent="TileHolder"]
+visible = false
 modulate = Color( 1, 0, 0, 1 )
 self_modulate = Color( 36.99, 0, 0, 0.07 )
 margin_left = -10.0
