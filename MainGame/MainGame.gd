@@ -100,9 +100,9 @@ func makeEnemyPositions():
 	while createEnemyAttempts != 0:
 		tile = selectRandomTiles()
 		if checkForAllyOrEnemyTilesNearby(tile, 3, true):
-			print("MADE ENEMY")
-			print(randTileRow)
-			print(randTileCol)
+#			print("MADE ENEMY")
+#			print(randTileRow)
+#			print(randTileCol)
 			makeEnemyBase(tile)
 		createEnemyAttempts -= 1
 

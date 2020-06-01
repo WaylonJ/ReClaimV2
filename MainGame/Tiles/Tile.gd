@@ -30,6 +30,7 @@ var buildingComplete = true
 var percentBuilt = 0
 var buildingAlliance = "neutral"
 var tileAwake = true
+var wakeThreshold = 1
 
 # Build production variables
 var outputMana = null
@@ -63,6 +64,7 @@ var vision = 0
 var inSightOf = []
 var currentlySeen = false
 var seenOnce = false
+var tempVisionSeenOnce = false
 
 var inBattle = false
 
@@ -82,7 +84,7 @@ func _process(delta):
 	
 func _ready():
 	set_process(false)
-	checkIfSeen()
+	checkIfSeen(self)
 	
 func updateUnitProduction(delta):
 	unitProduction -= delta
@@ -146,7 +148,8 @@ func updateTileInfo():
 	if buildingAlliance != "enemy":
 		updateInSightOf(vision, self, true, true)
 	else:
-		checkIfSeen()
+		tileAwake = false
+		checkIfSeen(self)
 	
 func setUnitCreationInfo(unitName):
 	unitProductionName = unitName
@@ -157,66 +160,114 @@ func setUnitCreationInfo(unitName):
 
 
 func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
-	# Is a unit
-	if not isBuilding:
-		# Is an ENEMY unit
-		if not objectGivingSight.isAlly:
-			checkIfSeen()
-			return
+	var queueOfRemaining = [self]
+	var arrayOfAll = []
+	var tileToCheck
+	var numberToCheckForAppend
 	
-	# Calls this function in each connected tile with 1 less range
-	if toCheck != 0:
-#		distanceFromOriginal += 1
-		if connections[0] == true and aboveTile != null:
-			aboveTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
-		if connections[1] == true and rightTile != null:
-			rightTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
-		if connections[2] == true and belowTile != null:
-			belowTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
-		if connections[3] == true and leftTile != null:
-			leftTile.updateInSightOf(toCheck - 1, objectGivingSight, adding, isBuilding)
+	distanceFromOriginal = 0
+
+	# If enemy unit, no need to continue
+	if returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
+		return
 	
-	# If adding items to inSightOf
+	# Main loop, goes through (Vision) amount of times
+	tempVisionSeenOnce = true
+	while(toCheck >= 0):
+		
+		# Appends or removes all members of 'inSightOf' for the tile
+		for tile in queueOfRemaining:
+			arrayOfAll.append(tile)
+			
+			addOrRemoveFromSight(adding, objectGivingSight, tile)
+		
+		numberToCheckForAppend = queueOfRemaining.size()
+		distanceFromOriginal += 1
+		
+		# Finds all adjacent tiles, adds them to queueOfRemaining
+		while numberToCheckForAppend != 0 and toCheck > 0:
+			
+			numberToCheckForAppend -= 1
+			tileToCheck = queueOfRemaining.pop_front()
+			
+			if tileToCheck.connections[0] == true and tileToCheck.aboveTile != null and !tileToCheck.aboveTile.tempVisionSeenOnce:
+				queueOfRemaining.append(tileToCheck.aboveTile)
+				tileToCheck.aboveTile.tempVisionSeenOnce = true
+			if tileToCheck.connections[1] == true and tileToCheck.rightTile != null and !tileToCheck.rightTile.tempVisionSeenOnce:
+				queueOfRemaining.append(tileToCheck.rightTile)
+				tileToCheck.rightTile.tempVisionSeenOnce = true
+			if tileToCheck.connections[2] == true and tileToCheck.belowTile != null and !tileToCheck.belowTile.tempVisionSeenOnce:
+				queueOfRemaining.append(tileToCheck.belowTile)
+				tileToCheck.belowTile.tempVisionSeenOnce = true
+			if tileToCheck.connections[3] == true and tileToCheck.leftTile != null and !tileToCheck.leftTile.tempVisionSeenOnce:
+				queueOfRemaining.append(tileToCheck.leftTile)
+				tileToCheck.leftTile.tempVisionSeenOnce = true
+				
+		toCheck -= 1
+		
+	# Reset tempVision var
+	for tile in arrayOfAll:
+		tile.tempVisionSeenOnce = false
+	
+
+func addOrRemoveFromSight(adding, objectGivingSight, tile):
+	# Adding items to inSightOf
 	if adding:
 		var newItem = true
 		
 		# Ensures this object isn't already listed in inSightOf
-		for item in inSightOf:
+		for item in tile.inSightOf:
 			if item == objectGivingSight:
 				newItem = false
 				
 		#If it's a new item, add it to the list of inSightOf
 		if newItem:
-			inSightOf.append(objectGivingSight)
+			tile.inSightOf.append(objectGivingSight)
 			
+		# Check if this is an enemy tile that needs to be woken up.
+		tile.checkToWakeUp(distanceFromOriginal)
+	
+	# Remove items from inSightOf
 	else:
 		var index = 0
-		for item in inSightOf:
+		for item in tile.inSightOf:
 			if item == objectGivingSight:
-				inSightOf.remove(index)
+				tile.inSightOf.remove(index)
 			index += 1
 	
-	checkIfSeen()
+	tile.checkIfSeen(tile)
 
-func checkIfSeen():
+func returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
+	# Is a unit
+	if not isBuilding:
+		# Is an ENEMY unit
+		if not objectGivingSight.isAlly:
+			checkIfSeen(self)
+			return true
+
+func checkIfSeen(tile):
 	# Hidden
-	if inSightOf.empty():
-		get_node("TileHolder/Unseen").show()
-		get_node("MapBackground").hide()
-		get_node("TileHolder/BuildingProgressBar").hide()
-		currentlySeen = false
-		setEnemyVisibility(false)
+	if tile.inSightOf.empty():
+		tile.get_node("TileHolder/Unseen").show()
+		tile.get_node("MapBackground").hide()
+		tile.get_node("TileHolder/BuildingProgressBar").hide()
+		tile.currentlySeen = false
+		tile.setEnemyVisibility(false)
 	
 	#Seen
 	else:
-		get_node("TileHolder/Unseen").hide()
-		get_node("MapBackground").show()
-		if !(buildingComplete):
+		tile.get_node("TileHolder/Unseen").hide()
+		tile.get_node("MapBackground").show()
+		if !(tile.buildingComplete):
 			get_node("TileHolder/BuildingProgressBar").show()
-		currentlySeen = true
-		seenOnce = true
-		setEnemyVisibility(true)
-	
+		tile.currentlySeen = true
+		tile.seenOnce = true
+		tile.setEnemyVisibility(true)
+
+func checkToWakeUp(distance):
+	if wakeThreshold >= distance:
+		tileAwake = true
+
 func setEnemyVisibility(tileSeen):
 	if enemyStationed != null:
 		if tileSeen:
@@ -288,7 +339,7 @@ func createUnit():
 			newUnit.setTile(self)
 			newUnit.set_position(Vector2(self.get_position()[0] + 65, self.get_position()[1] - 75))
 			setEnemyStationed(newUnit)
-			checkIfSeen()
+			checkIfSeen(self)
 		else:
 			enemyStationed.mergeWithOtherGroup(newUnit)
 
