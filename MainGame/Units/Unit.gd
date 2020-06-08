@@ -277,8 +277,8 @@ func createUnit(unitName, amount):
 			
 	updateTotalStats()
 	numUnits = amount
-	if numUnits < 2:
-		get_node("NumUnits").hide()
+	
+	showNumberOfUnitsTag()
 	checkHighestVision()
 	
 func updateTotalStats():
@@ -329,20 +329,11 @@ func updateTilesVision():
 func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
 	mergeUnits(newAddition)
-
+	
+	
 	if isAlly:
-		# If Host is selected,
-		if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
-			#If new addition is NOT already selected
-			if !get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
-				get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(self)
-				get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
-				
-		#If Host is not selected, but moving unit is:
-		if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
-			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
-			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
-		
+		handleCurrentSelection(newAddition)
+
 		#Removes sight of old unit
 		hostTile.updateInSightOf(vision, newAddition, false, false)
 		
@@ -352,8 +343,22 @@ func mergeWithOtherGroup(newAddition):
 		# Updates vision
 		checkHighestVision()
 	
-#	if hostTile.inBattle:
+	if hostTile.inBattle:
+		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
 		
+
+func handleCurrentSelection(newAddition):
+	# If Host is selected,
+	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
+		#If new addition is NOT already selected
+		if !get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
+			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(self)
+			get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
+			
+	#If Host is not selected, but moving unit is:
+	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(newAddition):
+		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
+		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
 
 func mergeUnits(newAddition):
 	if newAddition.numLeader !=0:

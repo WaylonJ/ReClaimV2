@@ -21,6 +21,7 @@ margin_left = 245.185
 margin_top = 186.185
 margin_right = 370.185
 margin_bottom = 311.185
+mouse_filter = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -29,11 +30,8 @@ __meta__ = {
 [node name="MapBackground" type="Sprite" parent="."]
 modulate = Color( 0.611765, 0.611765, 0.611765, 1 )
 show_behind_parent = true
-z_index = 1
-z_as_relative = false
 texture = ExtResource( 2 )
 offset = Vector2( 62, 62 )
-region_rect = Rect2( 62, 62, 300, 300 )
 
 [node name="BotClosed" type="TextureRect" parent="MapBackground"]
 visible = false
@@ -155,11 +153,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Unseen" type="TextureRect" parent="TileHolder"]
+[node name="Unseen" type="TextureRect" parent="TileHolder/Background"]
 visible = false
 margin_right = 125.0
 margin_bottom = 125.0
 texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Highlight" type="TextureRect" parent="TileHolder"]
 visible = false

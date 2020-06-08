@@ -30,8 +30,8 @@ func getAllTiles():
 	
 
 	for tile in tiles:
-		tile.connect("mouse_entered", self, "_on_mouse_entered_highlight", [tile])
-		tile.connect("mouse_exited", self, "_on_mouse_exited_highlight", [tile])
+		tile.get_node("TileHolder/Background").connect("mouse_entered", self, "_on_mouse_entered_highlight", [tile])
+		tile.get_node("TileHolder/Background").connect("mouse_exited", self, "_on_mouse_exited_highlight", [tile])
 		
 #	var backButton = get_tree().get_root().get_node("UI/BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton")
 #	backButton.connect("pressed", self, "_on_BackButton_pressed")

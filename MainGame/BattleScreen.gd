@@ -11,6 +11,7 @@ var battleHolder
 var oldZoom
 
 var battleController
+onready var rootRef = get_tree().get_root().get_node("Control")
 
 func _ready():
 	initializeSkillAndTileUnitPositions()
@@ -19,9 +20,6 @@ func _ready():
 #	add_child(battleController)
 	pass 
 	
-func _input(event):
-	if Input.is_key_pressed(KEY_ESCAPE):
-		hideBattleScreen()
 		
 
 func addBattle(ally, enemy, tile):
@@ -31,14 +29,28 @@ func addBattle(ally, enemy, tile):
 	add_child(battleController)
 	battleController.addBattle(ally, enemy, tile)
 	listOfBattles.append(battleController)
-	print(get_children())
+	print("Battle Screen Children: " + str(get_children()))
 	
+func refreshUnits(tile):
+	var battleRef = findBattleFromTile(tile)
+	
+	battleRef.refreshUnits()
+	
+func findBattleFromTile(tile):
+	var index = 0
+	for battle in battles:
+		if battle[2] == tile:
+			return listOfBattles[index]
+		index += 1
+	
+
 func openBattleScreen(tile):
 	show()
 	get_tree().get_root().get_node("Control").selectSomething("Battle")
 	for item in battles:
 		if item[2] == tile:
-			showBattle(item)
+			updateScreen(item)
+			print("BATTLE STUFF: " + str(item))
 
 func hideBattleScreen():
 	if self.visible:
@@ -50,14 +62,15 @@ func hideBattleScreen():
 	
 func resetAllUnits():
 	get_node("Hb")
-	
-	
 	pass
 
-func showBattle(battle):
+func updateScreen(battle):
 	var allyGroup = battle[0]
 	var enemyGroup = battle[1]
 	var tile = battle[2]
+	
+	resetBattleScreen()
+	setActiveBattle(battle)
 	
 	initializeSkillsArea(allyGroup)
 	initializeBattleArea(allyGroup, true)
@@ -68,8 +81,20 @@ func showBattle(battle):
 	
 	# If number of battles > 1, show tab on left side to swap between them
 	# checkIfShowTab()
+
+func setActiveBattle(battle):
+	var battleRef = findBattleFromTile(battle[2])
 	
+	battleRef.setActive()
 	
+func resetBattleScreen():
+	# Resets the units on the right half
+	rootRef.get_node("BattleScreen/Panel/HBoxContainer/BattleHolder").reset()
+	
+	# Resets the skills on the left half
+	for node in skillUnitPositions:
+		node.setDefaultBGs()
+
 func editCameraToMakeBattleScreenLookGood():
 	var camera = get_node("/root/Control/Camera2D")
 
@@ -179,7 +204,7 @@ func removeBattle(tile):
 			battles.remove(index)
 		index += 1
 	
-	if battles.empty():
-		hideBattleScreen()
-		tile.hideBattleButton()
+#	if battles.empty():
+	hideBattleScreen()
+	tile.hideBattleButton()
 	

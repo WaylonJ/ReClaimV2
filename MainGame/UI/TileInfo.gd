@@ -76,6 +76,7 @@ func _input(event):
 		previousTile = null
 
 func _mouseInTile(tile):
+#	print("Tile info:" + str(tile))
 	mouseInTile = true
 	selectedTile = tile
 
@@ -148,8 +149,13 @@ func getAllTiles():
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	
 	for tile in tiles:
-		tile.connect("mouse_entered", self, "_mouseInTile", [tile])
-		tile.connect("mouse_exited", self, "_mouseOutOfTile", [tile])
+#		tile.connect("mouse_entered", self, "_mouseInTile", [tile])
+		tile.get_node("TileHolder/Background").connect("mouse_entered", self, "_mouseInTile", [tile])
+		tile.get_node("TileHolder/ShowBattleButton").connect("mouse_entered", self, "_mouseInTile", [tile])
+#		tile.connect("mouse_exited", self, "_mouseOutOfTile", [tile])
+		tile.get_node("TileHolder/Background").connect("mouse_exited", self, "_mouseOutOfTile", [tile])
+		tile.get_node("TileHolder/ShowBattleButton").connect("mouse_exited", self, "_mouseOutOfTile", [tile])
+		
 		if tile.get("buildingName") == "Base":
 			baseTile = tile
 			

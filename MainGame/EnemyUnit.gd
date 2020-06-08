@@ -39,8 +39,8 @@ func createUnit(unitName, amount):
 			get_node("BG").set("texture", portrait)
 			setFormation("baseEnemy")
 	numUnits = amount
-	if numUnits < 2:
-		get_node("NumUnits").hide()
+	
+	showNumberOfUnitsTag()	
 	checkHighestVision()
 
 func checkHighestVision():

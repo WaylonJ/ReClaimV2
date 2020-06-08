@@ -55,7 +55,7 @@ func getAutoAttack():
 func takeDamage(amount):
 	amount *= (1 - basePRes)
 	currentHP -= amount
-	print("Taking damage: " + str(amount))
+#	print("Taking damage: " + str(amount))
 	if currentHP <= 0:
 		killUnit()
 

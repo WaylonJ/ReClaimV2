@@ -17,7 +17,7 @@ func makeTestEnemy(tile):
 	enemy.setTile(tile)
 	 
 	tile.setEnemyStationed(enemy)
-	enemy.createUnit("baseEnemy", 3)
+	enemy.createUnit("baseEnemy", 10)
 	enemy.set_position(Vector2(enemyTilePosition[0] + 65, enemyTilePosition[1] - 75))
 	add_child(enemy)
 

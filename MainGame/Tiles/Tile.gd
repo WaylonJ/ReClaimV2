@@ -263,7 +263,7 @@ func returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
 func checkIfSeen(tile):
 	# Hidden
 	if tile.inSightOf.empty():
-		tile.get_node("TileHolder/Unseen").show()
+		tile.get_node("TileHolder/Background/Unseen").show()
 		tile.get_node("MapBackground").hide()
 		tile.get_node("TileHolder/BuildingProgressBar").hide()
 		tile.currentlySeen = false
@@ -271,13 +271,13 @@ func checkIfSeen(tile):
 	
 	#Seen
 	else:
-		tile.get_node("TileHolder/Unseen").hide()
+		tile.get_node("TileHolder/Background/Unseen").hide()
 		tile.get_node("MapBackground").show()
 		if !(tile.buildingComplete):
 			get_node("TileHolder/BuildingProgressBar").show()
 		tile.currentlySeen = true
 		tile.seenOnce = true
-		tile.get_node("TileHolder/Unseen").modulate = Color(1, 1, 1, 0.5)
+		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)
 		tile.setEnemyVisibility(true)
 
 func checkToWakeUp(distance):

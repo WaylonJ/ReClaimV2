@@ -9,8 +9,10 @@ func _ready():
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	
 	for tile in tiles:
-		tile.connect("mouse_entered", self, "_mouseInTile", [tile])
-		tile.connect("mouse_exited", self, "_mouseOutOfTile", [tile])
+		tile.get_node("TileHolder/Background").connect("mouse_entered", self, "_mouseInTile", [tile])
+		tile.get_node("TileHolder/ShowBattleButton").connect("mouse_entered", self, "_mouseInTile", [tile])
+		tile.get_node("TileHolder/Background").connect("mouse_exited", self, "_mouseOutOfTile", [tile])
+		tile.get_node("TileHolder/ShowBattleButton").connect("mouse_exited", self, "_mouseOutOfTile", [tile])
 
 func _mouseInTile(tile):
 	tileHovered = tile

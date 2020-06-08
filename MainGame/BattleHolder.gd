@@ -4,6 +4,7 @@ var tiles = []
 
 func _ready():
 	attachAllTilesToArray()
+	print(tiles)
 	
 
 func attachAllTilesToArray():
@@ -18,6 +19,15 @@ func attachAllTilesToArray():
 # 0,0 | 1,0 | 2,0 | 3,0
 # 0,1 | 1,1 | 2,1 | 3,1
 # 0,2 | 1,2 | 2,2 | 3,2
+func reset():
+	for column in tiles:
+		for tile in column:
+			tile.get_node("unitImage").hide()
+			tile.get_node("Health").hide()
+			tile.get_node("Health").max_value = 0
+			tile.get_node("Health").value = 0
+			tile.get_node("Timer").hide()
+	print("RESETTING")
 
 func setUnitToPosition(unitRef, image, position):
 	var unitImage
