@@ -18,7 +18,8 @@ var efficacy
 var isAlly = true
 var isAlive = true
 
-func updateFreshStats():
+func updateFreshStats(num):
+	numUnits += num
 	currentHP += numUnits * baseMaxHP
 	maxHP = numUnits * baseMaxHP
 	offense = numUnits * baseOffense
@@ -26,16 +27,17 @@ func updateFreshStats():
 	pRes = basePRes
 	
 func addFreshUnit(num):
-	numUnits += num
-	updateFreshStats()
+	updateFreshStats(num)
 	calcEfficacy()
+	aliveCheck()
 
 func mergeUnit(newUnit):
-	numUnits += newUnit.numUnits
 	updateCurrentStats(newUnit)
 	calcEfficacy()
+	aliveCheck()
 
 func updateCurrentStats(newUnit):
+	numUnits += newUnit.numUnits
 	currentHP = currentHP + newUnit.currentHP
 	maxHP = numUnits * baseMaxHP
 	offense = numUnits * baseOffense
@@ -49,16 +51,20 @@ func calcEfficacy():
 		efficacy = 1.00
 
 func getAutoAttack():
-	var amount = offense
+	var amount = offense * efficacy
 	return amount
 
 func takeDamage(amount):
 	amount *= (1 - basePRes)
 	currentHP -= amount
+	print("Ally: " + str(isAlly) + ", HP: " + str(currentHP))
 #	print("Taking damage: " + str(amount))
-	if currentHP <= 0:
-		killUnit()
+	calcEfficacy()
+	aliveCheck()
 
-func killUnit():
-	isAlive = false
+func aliveCheck():
+	if currentHP > 0:
+		isAlive = true
+	else:
+		isAlive = false
 

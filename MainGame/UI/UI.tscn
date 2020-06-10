@@ -188,7 +188,7 @@ rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
 margin_left = 190.0
-margin_right = 1590.0
+margin_right = 1290.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 800, 0 )
 size_flags_horizontal = 5
@@ -607,6 +607,7 @@ margin_right = 600.0
 margin_bottom = 180.0
 
 [node name="TileActions" type="VBoxContainer" parent="BottomUI/MiddleSection"]
+visible = false
 margin_left = 1100.0
 margin_right = 1400.0
 margin_bottom = 180.0
@@ -1359,8 +1360,8 @@ margin_bottom = 180.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
-margin_left = 1600.0
-margin_right = 1880.0
+margin_left = 1300.0
+margin_right = 1580.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
@@ -1521,8 +1522,8 @@ margin_bottom = 40.0
 mouse_filter = 2
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]

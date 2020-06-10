@@ -1,21 +1,43 @@
 extends VBoxContainer
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+onready var rootRef = get_tree().get_root().get_node("Control")
+onready var databaseRef = rootRef.tileDatabase
 
-# Called when the node enters the scene tree for the first time.
+var costs = null
+var bldg = ''
+
 func _ready():
+	set_process(false)
 	hide()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	if not is_visible():
+		set_process(false)
+	
+	for row in get_children():
+		for child in row.get_children():
+			bldg = child.get_name()
+			if bldg == 'Empty2':
+				return
+			costs = databaseRef.getUpgradeInfo(bldg, 0)
+			print(bldg)
+			print(costs)
+			
+			# Buildable, remove filter
+			if rootRef.checkSupply(costs[0], costs[1]):
+				child.get_node("InsufficientShadeHolder").hide()
+			
+			# Not buildable, set filter
+			else:
+				child.get_node("InsufficientShadeHolder").show()
+	
 
 
 func _on_Constructions_pressed():
 	show()
+	set_process(true)
 
 
 func _on_BackButton_pressed():
 	hide()
+	set_process(false)

@@ -68,7 +68,7 @@ func refreshUnits():
 	initializeHealthBarRefsAndAARefs()
 
 func updateHealthBars():
-	print("Updating health bars: " + str(allUnits))
+#	print("Updating health bars: " + str(allUnits))
 	for group in allUnits:
 		for unitName in group.unitTypes:
 			hPBarRefsByUnitName[unitName].value = unitRefs[unitName].currentHP
@@ -189,7 +189,7 @@ func triggerAttack(unitName):
 	var targettedUnit = getTargettedUnit(unitName, targetPosition)
 	var attack = unitRefs[unitName].getAutoAttack()
 	
-#	print(str(unitName) + " dealing this much damage: " + str(attack))
+	print(str(unitName) + " dealing this much damage: " + str(attack))
 	targettedUnit.takeDamage(attack)
 
 func getTargettedUnit(unitName, position):

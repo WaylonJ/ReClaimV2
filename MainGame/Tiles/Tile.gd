@@ -112,6 +112,7 @@ func completeBuildingConstruction():
 		set_process(false)
 	get_node("TileHolder/BuildingProgressBar").hide()
 	if buildingAlliance == "ally":
+		updateInSightOf(vision, self, true, true)
 		updateGlobalValues()
 		
 func continueBuildingConstruction(delta):
@@ -151,12 +152,11 @@ func updateTileInfo():
 	
 	updateOutput(data[5][0],data[5][1],data[5][2],data[5][3])
 	
+	# data[6] == unitName
 	if data[6] != null:
 		setUnitCreationInfo(data[6])
 	
-	if buildingAlliance != "enemy":
-		updateInSightOf(vision, self, true, true)
-	else:
+	if buildingAlliance == "enemy":
 		tileAwake = false
 		activateEnemyTimer()
 		checkIfSeen(self)
