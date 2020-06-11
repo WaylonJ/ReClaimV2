@@ -4,6 +4,7 @@ onready var tileInfoRef = get_node("../BottomUI/MiddleSection/TileInfo")
 onready var panelTextRef = get_node("PanelContainer/TextHolder/PanelText")
 onready var costHolderRef = get_node("PanelContainer/CostHolder")
 onready var upgradeRef = load("res://MainGame/Tiles/upgradeTile.gd").new()
+onready var sellRef = load("res://MainGame/Tiles/sellTile.gd").new()
 
 func _ready():
 	hide()
@@ -13,6 +14,7 @@ func _ready():
 	
 	# Needed for tile upgrades/
 	add_child(upgradeRef)
+	add_child(sellRef)
 
 func connectConstructionOptions():
 	var resourceBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"
@@ -46,13 +48,13 @@ func connectTileActions():
 	get_node(upgradeButton).connect("mouse_entered", self, "_on_TileAction_mouseEntered", ["Upgrade"])
 	get_node(upgradeButton).connect("mouse_exited", self, "hidePanel")
 	get_node(upgradeButton).connect("pressed", self, "attemptUpgrade")
-	get_node(upgradeButton).connect("pressed", self, "hidePanel")
+	get_node(upgradeButton).connect("pressed", self, "refreshPanel")
 	get_node(sellButton).connect("mouse_entered", self, "_on_TileAction_mouseEntered", ["Sell"])
 	get_node(sellButton).connect("mouse_exited", self, "hidePanel")
-	get_node(sellButton).connect("pressed", self, "hidePanel")
+	get_node(sellButton).connect("pressed", self, "triggerSell")
 	get_node(pauseButton).connect("mouse_entered", self, "_on_TileAction_mouseEntered", ["Pause"])
 	get_node(pauseButton).connect("mouse_exited", self, "hidePanel")
-	get_node(pauseButton).connect("pressed", self, "hidePanel")
+#	get_node(pauseButton).connect("pressed", self, "hidePanel")
 
 func _on_TileAction_mouseEntered(type):
 	show()
@@ -66,6 +68,18 @@ func _on_TileAction_mouseEntered(type):
 			panelTextRef.text = "Freeze the wages of everyone here, causing them to go on strike. They'll wait patiently inside though and start work immediately if you give them their money back"
 		_:
 			print("Panel.gd: Everything else??")
+
+func refreshPanel():
+	print("refreshing")
+	hidePanel()
+	_on_TileAction_mouseEntered("Upgrade")
+
+func triggerSell():
+	sellRef.sellTile(tileInfoRef.selectedTileGroup)
+	hidePanel()
+	
+func attemptUpgrade():
+	upgradeRef.upgradeTile(tileInfoRef.selectedTileGroup)
 
 func connectUpgradeMenu():
 	var attackUpg = "../BottomUI/MiddleSection/UpgradeMenu/TopRow/AttackUpg"
@@ -106,5 +120,4 @@ func showCost():
 	costHolderRef.show()
 	costHolderRef.setCosts(tileInfoRef.selectedTileGroup[0], tileInfoRef.selectedTileGroup.size())
 	
-func attemptUpgrade():
-	upgradeRef.upgradeTile(tileInfoRef.selectedTileGroup)
+

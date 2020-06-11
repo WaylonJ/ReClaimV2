@@ -9,10 +9,6 @@ var removeThese = []
 #var databaseRef = 11
 
 func _ready():
-#	print("hello?")s
-#	print("At readY: " + str(databaseRef))
-#	add_child(databaseRef)
-#	print("upgradeTile1: " + str(databaseRef))
 	pass # Replace with function body.
 
 func upgradeTile(tileGroup):

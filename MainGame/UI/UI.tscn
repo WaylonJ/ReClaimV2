@@ -188,7 +188,7 @@ rect_min_size = Vector2( 180, 180 )
 
 [node name="MiddleSection" type="HBoxContainer" parent="BottomUI"]
 margin_left = 190.0
-margin_right = 1290.0
+margin_right = 990.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 800, 0 )
 size_flags_horizontal = 5
@@ -342,7 +342,7 @@ align = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
 margin_left = 500.0
-margin_right = 1100.0
+margin_right = 800.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 180 )
 custom_constants/separation = 0
@@ -375,6 +375,7 @@ custom_fonts/font = ExtResource( 13 )
 text = "Improvements"
 
 [node name="ConstructionOptions" type="VBoxContainer" parent="BottomUI/MiddleSection/NoSelection"]
+visible = false
 margin_left = 300.0
 margin_right = 600.0
 margin_bottom = 180.0
@@ -397,7 +398,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 script = ExtResource( 16 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"]
@@ -415,7 +415,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/MilitaryBldg"]
 anchor_right = 1.0
@@ -433,7 +432,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/UtilityBldg"]
 anchor_right = 1.0
@@ -447,7 +445,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ManaPool"]
 anchor_right = 1.0
@@ -460,7 +457,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/Empty2"]
 anchor_right = 1.0
@@ -478,7 +474,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty2"]
 anchor_right = 1.0
@@ -490,7 +485,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty3"]
 anchor_right = 1.0
@@ -502,7 +496,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty4"]
 anchor_right = 1.0
@@ -514,7 +507,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty5"]
 anchor_right = 1.0
@@ -526,7 +518,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/MiddleRow/Empty6"]
 anchor_right = 1.0
@@ -545,7 +536,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty6"]
 anchor_right = 1.0
@@ -557,7 +547,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty7"]
 anchor_right = 1.0
@@ -569,7 +558,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty8"]
 anchor_right = 1.0
@@ -581,7 +569,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/Empty9"]
 anchor_right = 1.0
@@ -593,7 +580,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton"]
 anchor_right = 1.0
@@ -625,7 +611,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/TopRow/Empty1"]
 anchor_right = 1.0
@@ -640,7 +625,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/TopRow/Empty2"]
 anchor_right = 1.0
@@ -691,7 +675,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/MiddleRow/Empty1"]
 anchor_right = 1.0
@@ -703,7 +686,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/MiddleRow/Empty2"]
 anchor_right = 1.0
@@ -715,7 +697,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/MiddleRow/Empty3"]
 anchor_right = 1.0
@@ -727,7 +708,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/MiddleRow/Empty4"]
 anchor_right = 1.0
@@ -739,7 +719,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/MiddleRow/Empty5"]
 anchor_right = 1.0
@@ -757,7 +736,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/BotRow/Empty1"]
 anchor_right = 1.0
@@ -769,7 +747,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/BotRow/Empty2"]
 anchor_right = 1.0
@@ -781,7 +758,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/BotRow/Empty3"]
 anchor_right = 1.0
@@ -793,7 +769,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/BotRow/Empty4"]
 anchor_right = 1.0
@@ -805,7 +780,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/TileActions/BotRow/Empty5"]
 anchor_right = 1.0
@@ -831,7 +805,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/TopRow/AttackUpg"]
 anchor_right = 1.0
@@ -843,7 +816,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/TopRow/DefenseUpg"]
 anchor_right = 1.0
@@ -896,7 +868,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/MiddleRow/Unknown2"]
 anchor_right = 1.0
@@ -908,7 +879,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/MiddleRow/Unknown3"]
 anchor_right = 1.0
@@ -920,7 +890,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/MiddleRow/Unknown4"]
 anchor_right = 1.0
@@ -932,7 +901,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/MiddleRow/Unknown5"]
 anchor_right = 1.0
@@ -944,7 +912,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/MiddleRow/Unknown6"]
 anchor_right = 1.0
@@ -964,7 +931,6 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 60.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/BotRow/Unknown7"]
 anchor_right = 1.0
@@ -976,7 +942,6 @@ margin_left = 60.0
 margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/BotRow/Unknown8"]
 anchor_right = 1.0
@@ -988,7 +953,6 @@ margin_left = 120.0
 margin_top = 0.0
 margin_right = 180.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/BotRow/Unknown9"]
 anchor_right = 1.0
@@ -1000,7 +964,6 @@ margin_left = 180.0
 margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/BotRow/Unknown10"]
 anchor_right = 1.0
@@ -1012,7 +975,6 @@ margin_left = 240.0
 margin_top = 0.0
 margin_right = 300.0
 margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
 
 [node name="TextureRect" type="TextureRect" parent="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return"]
 anchor_right = 1.0
@@ -1360,8 +1322,8 @@ margin_bottom = 180.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="RightSection" type="HBoxContainer" parent="BottomUI"]
-margin_left = 1300.0
-margin_right = 1580.0
+margin_left = 1000.0
+margin_right = 1280.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 280, 0 )
 
@@ -1522,8 +1484,8 @@ margin_bottom = 40.0
 mouse_filter = 2
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

@@ -244,6 +244,11 @@ func checkBuildable(manaCost, advancedCost):
 	else:
 		return false
 	
+func refundCost(manaCost, advancedCost):
+	manaSupply += manaCost
+	advancedSupply += advancedCost
+	checkCaps()
+	
 func checkIfSomethingSelected():
 	return selectedName
 

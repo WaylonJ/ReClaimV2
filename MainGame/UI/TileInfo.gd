@@ -181,6 +181,7 @@ func openTileOptions():
 		get_node("../TileActions").show()
 	
 func resetUI():
+	
 	get_node("../TileActions").hide()
 	get_node("../UpgradeMenu").hide()
 	get_node("../NoSelection/ConstructionOptions").hide()

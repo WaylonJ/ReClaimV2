@@ -6,6 +6,7 @@ const MILITARY_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_P
 const RESOURCE_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_Resource.png")
 const UTILITY_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_Utility.png")
 const ENEMY_TEST_PORTRAIT = preload("res://MainGame/UI/Resources/Portraits/PH_UI_Portrait_EnemyTest.png")
+const BLANK_PORTRAIT = preload("res://MainGame/Tiles/Resources/PH_Tile_Blank.png")
 
 const BASE_DESCRIPTION = "    The Center of Control for your operations. Provides basic resources along with " + \
 	"access towards various upgrades."
@@ -259,6 +260,27 @@ func returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
 		if not objectGivingSight.isAlly:
 			checkIfSeen(self)
 			return true
+
+func resetTile():
+	buildingName = "Blank"
+	description = "aa"
+	get_node("TileHolder/Background").set("texture", BLANK_PORTRAIT)
+	buildingTime = 69
+	buildingAlliance = "neutral"
+	
+	
+	outputMana = null
+	outputUnit = null
+	unitProduction = null
+	unitProductionName = null
+	unitProductionIsAlly = null
+	outputAdvanced = null
+	outputResearch = null
+
+	buildingComplete = false
+	set_process(true)
+	pass
+	
 
 func checkIfSeen(tile):
 	# Hidden
