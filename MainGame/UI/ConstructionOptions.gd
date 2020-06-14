@@ -20,8 +20,6 @@ func _process(delta):
 			if bldg == 'Empty2':
 				return
 			costs = databaseRef.getUpgradeInfo(bldg, 0)
-			print(bldg)
-			print(costs)
 			
 			# Buildable, remove filter
 			if rootRef.checkSupply(costs[0], costs[1]):

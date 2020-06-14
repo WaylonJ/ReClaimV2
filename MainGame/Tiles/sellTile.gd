@@ -16,16 +16,15 @@ func sellTile(tileGroup):
 	var index = 0
 	var tile
 	while not tileGroup.empty():
-		tile = tileGroup[0]
+		tile = tileGroup.pop_front()
 		sellCost = databaseRef.getSellInfo(tile.buildingName, tile.buildingTier)
 
-		
 		# Update global income
 		outputAmount = databaseRef.getOutputInfo(tile.buildingName, tile.buildingTier)
 		rootRef.updateTotalProduction(outputAmount[0] * -1, outputAmount[1] * -1, outputAmount[3] * -1)
 		
 		# Refund supply based on tileCost
-		index = 1
+		index = 0
 		while index < tile.buildingTier:
 			sellCost = databaseRef.getSellInfo(tile.buildingName, tile.buildingTier - index)
 			rootRef.refundCost(sellCost[0] * sellMultiplier, sellCost[1] * sellMultiplier)

@@ -11,6 +11,10 @@ var unselectableTiles = ["Blank"]
 
 var globalSelected = ""
 var doubleClick = false
+var ignoreClick = false
+
+onready var rootRef = get_tree().get_root().get_node("Control")
+onready var hoverBldgRef = rootRef.get_node("UI/HiddenItems/HoveringBldgImage")
 
 func _ready():
 	show()
@@ -21,28 +25,26 @@ func _ready():
 	
 func _input(event):
 	if event is InputEventMouseButton and event.position[1] < 540:
+		if ignoreClick:
+			ignoreClick = false
+			return
 		if event is InputEventMouseButton:
 			if event.doubleclick:
 				doubleClick = true
 			
+		# Left click
 		if !event.is_pressed() and event.button_index == 1:
+			print("mouse click")
+			print(mouseInTile)
 			globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 			
 			# Click onto a completed building tile
 			if mouseInTile and selectedTile.buildingName != "Blank":
+				print(selectedTile.buildingName)
 				
 				# Checks to make sure nothing else is selected, or only other tiles are.
 				if globalSelected == "tile" or globalSelected == "e":
 					setGlobalSelected()
-					
-					# Checks to see if a building to construct is currently selected and prevents shiftClicks from doing anything
-					if checkIfBuildingSelected():
-						# if left click, reset ui
-						if not Input.is_key_pressed(KEY_SHIFT):
-							selectBaseTile()
-						
-						# Prevent further input interaction
-						return
 						
 					# Single click, Shift not pressed
 					if not Input.is_key_pressed(KEY_SHIFT):
@@ -51,6 +53,7 @@ func _input(event):
 					
 					# Append item to selectedTileGroup if group is empty or it's the same type
 					appendIfNoTilesSelectedOrSimilarTiles()
+					print("Selected tiles: " + str(selectedTileGroup))
 					if doubleClick:
 						if selectedTile.buildingName == "Base":
 							return
@@ -61,7 +64,8 @@ func _input(event):
 						doubleClick = false
 			
 			# Click on the map, but not in a tile. Shift key is NOT held down
-			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1 and not mouseInTile:
+			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
+				print("here1")
 				doubleClick = false
 				if globalSelected == "tile":
 					get_tree().get_root().get_node("Control").unselectEverything()
@@ -76,19 +80,15 @@ func _input(event):
 		previousTile = null
 
 func _mouseInTile(tile):
-#	print("Tile info:" + str(tile))
+	print("Tile nanme:" + str(tile.buildingName) + ", " + str(tile))
 	mouseInTile = true
 	selectedTile = tile
 
 func _mouseOutOfTile(tile):
+	print("out of tile")
 	mouseInTile = false
 	selectedTile = null
-
-func checkIfBuildingSelected():
-	if get_node("../NoSelection/ConstructionOptions").is_visible():
-		return true
-	
-	return false
+	doubleClick = false
 
 func appendIfSameTypeOfTile(tile):
 	if tile.get("buildingName") == selectedTile.get("buildingName") and selectedTile.get("buildingName") == selectedTileGroup[0].get("buildingName"):
@@ -100,7 +100,6 @@ func appendIfSameTypeOfTile(tile):
 			updateUI()
 
 func selectTile():
-	print(selectedTile.buildingTier)
 	selectedTileGroup.append(selectedTile)
 	selectedTile.get_node("TileHolder/Highlight").show()
 	selectedTile.set("selected", true)
@@ -115,9 +114,13 @@ func appendIfNoTilesSelectedOrSimilarTiles():
 		# Ensures it isn't already selected and also not the baseTile
 		if !(selectedTile.get("selected")) and selectedTile != baseTile:
 			selectTile()
+			updateUI()
+		elif selectedTile == baseTile:
+			print("here2")
+			selectBaseTile()
 		
 		#Calls UI update / sets previousTile
-		updateUI()
+		
 
 func checkIfInfoOnly():
 	for invalidName in infoOnlyTiles:
@@ -195,12 +198,8 @@ func emptyTileGroup():
 	selectedTileGroup = []
 	
 func removeTile(tile):
-	for index in range(selectedTileGroup.size()):
-		if tile == selectedTileGroup[index]:
-			tile.get_node("TileHolder/Highlight").hide()
-			tile.set("selected", false)
-			selectedTileGroup.remove(index)
-			return
+	tile.get_node("TileHolder/Highlight").hide()
+	tile.set("selected", false)
 
 func resetOutputBox():
 	if selectedTileGroup.size() == 0:

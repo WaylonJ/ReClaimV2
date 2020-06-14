@@ -186,7 +186,7 @@ func getConstructionInfo(name):
 			
 			unitName = "baseEnemy"
 		_:
-			print("TileDatabase: Invalid bldg name")
+			print("getConstructionInfo - TileDatabase: Invalid bldg name")
 			
 	return [
 	description,
@@ -215,9 +215,10 @@ func getUpgradeInfo(tileName, tier):
 			return UtilityUpgradeCosts[tier]
 			
 		_:
-			print("TileDatabase: Invalid bldg name")
+			print("getUpgradeInfo - TileDatabase: Invalid bldg name")
 			
 func getSellInfo(tileName, tier):
+	tier -= 1
 	match tileName:
 		"ManaPool":
 			return ManaPoolUpgradeCosts[tier]
@@ -234,24 +235,21 @@ func getSellInfo(tileName, tier):
 			return UtilityUpgradeCosts[tier]
 			
 		_:
-			print("TileDatabase: Invalid bldg name")
+			print("getSellInfo - TileDatabase: Invalid bldg name")
 
 func getOutputInfo(tileName, tier):
 	tier -= 1
 	match tileName:
 		"ManaPool":
 			return ManaPoolOutput[tier]
-
 		"ResourceBldg":
 			return ResourceOutput[tier]
-
 			
 		"MilitaryBldg":
 			return GoblinOutput[tier]
-
 			
 		"UtilityBldg":
 			return UtilityOutput[tier]
 			
 		_:
-			print("TileDatabase: Invalid bldg name")
+			print("getOutputInfo - TileDatabase: Invalid bldg name. Given: " + str(tileName))

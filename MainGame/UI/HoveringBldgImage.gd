@@ -118,6 +118,10 @@ func createTile():
 	currentTile.createTile()
 	tempBG = null
 	
+	tileInfoRef.selectedTile = currentTile
+	tileInfoRef.ignoreClick = true
+	print("THIS IS CURRENT: " + str(currentTile))
+	
 	# If shift not held down, revert to base tile. Otherwise don't change ui
 	if not Input.is_key_pressed(KEY_SHIFT):
 		pass

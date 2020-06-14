@@ -4,7 +4,7 @@ var tiles = []
 
 func _ready():
 	attachAllTilesToArray()
-	print(tiles)
+#	print(tiles)
 	
 
 func attachAllTilesToArray():

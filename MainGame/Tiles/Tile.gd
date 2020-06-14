@@ -277,7 +277,7 @@ func resetTile():
 	outputAdvanced = null
 	outputResearch = null
 
-	buildingComplete = false
+	buildingComplete = true
 	set_process(true)
 	pass
 	
@@ -320,7 +320,6 @@ func updateOutput(mana, unit, advanced, research):
 	unitProduction = outputUnit
 	outputAdvanced = advanced
 	outputResearch = research
-	updateGlobalValues()
 
 func setUnitStationed(unit):
 	unitStationed = unit

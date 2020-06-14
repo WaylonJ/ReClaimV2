@@ -29,7 +29,7 @@ func _ready():
 	reDrawTiles()					#This should be done in map creation or expansion
 	
 	for i in nodeDict:
-		print(nodeDict[i])
+		print("Tilemap:" + str(nodeDict[i]))
 
 
 #Creates the initial map.
