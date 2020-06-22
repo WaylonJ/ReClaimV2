@@ -29,22 +29,30 @@ func updateUI(tileGroup):
 	for tile in tileGroup:
 		if tile.outputMana != null:
 			totalMana += tile.get("outputMana")
-			get_node("ManaOutput/Label").set_text(str(totalMana))
-			get_node("ManaOutput").show()
-	
+		
 		if tile.outputUnit != null:
 			totalUnit += tile.get("outputUnit")
-			get_node("UnitOutput/Label").set_text(str(totalUnit))
-			get_node("UnitOutput").show()
-	
+		
 		if tile.outputAdvanced != null:
 			totalAdvanced += tile.get("outputAdvanced")
-			get_node("AdvancedOutput/Label").set_text(str(totalAdvanced))
-			get_node("AdvancedOutput").show()
-	
+		
 		if tile.outputResearch != null:
 			totalResearch += tile.get("outputResearch")
-			get_node("ResearchOutput/Label").set_text(str(totalResearch))
-			get_node("ResearchOutput").show()
-			
+	
+	if totalMana != null and totalMana > 0:
+		get_node("ManaOutput/Label").set_text(str(totalMana))
+		get_node("ManaOutput").show()
+	
+	if totalUnit != null and totalUnit > 0:
+		get_node("UnitOutput/Label").set_text(str(totalUnit))
+		get_node("UnitOutput").show()
+	
+	if totalAdvanced != null and totalAdvanced > 0:
+		get_node("AdvancedOutput/Label").set_text(str(totalAdvanced))
+		get_node("AdvancedOutput").show()
+	
+	if totalResearch != null and totalResearch > 0:
+		get_node("ResearchOutput/Label").set_text(str(totalResearch))
+		get_node("ResearchOutput").show()
+		
 

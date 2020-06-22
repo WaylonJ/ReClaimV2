@@ -84,17 +84,18 @@ func startNewGame():
 
 	populateBoard()
 	# Make test enemy unit
-	var testEnemyTile = startingArray[length][length - 1]
-	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
-	
-	testEnemyTile = startingArray[length][length + 1]
-	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+#	var testEnemyTile = startingArray[length][length - 1]
+#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+#
+#	testEnemyTile = startingArray[length][length + 1]
+#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
 	setTileBorders(startingArray)
 	
 
 func populateBoard():
-	makeEnemyPositions()
+	makeEnemyBases()
+	makeEnemyUnits()
 
 func setTileBorders(array):	
 	for row in array:
@@ -117,20 +118,39 @@ func setTileBorders(array):
 				item.get_node("MapBackground/LeftClosed").show()
 
 # This should probably all be in a new script
-func makeEnemyPositions():
+func makeEnemyBases():
 	# Will attempt to create tiles / 5 locations to be enemy Fortification locations.
 	# Requirements: Not within 4 tiles of another enemy. Not within 3 tiles of the Player Base
-#	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
-	var createEnemyAttempts = 0
+	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
+#	var createEnemyAttempts = 0
 	var tile
 	while createEnemyAttempts != 0:
 		tile = selectRandomTiles()
 		if checkForAllyOrEnemyTilesNearby(tile, 3, true):
-#			print("MADE ENEMY")
-#			print(randTileRow)
-#			print(randTileCol)
 			makeEnemyBase(tile)
 		createEnemyAttempts -= 1
+
+func makeEnemyUnits():
+	# Will attempt to create tiles / 2 locations to be enemy unit locations.
+	# Requirements: Not within 3 tiles of the Player Base
+	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 2
+	var tile
+	var validTile
+	
+	while createEnemyAttempts != 0:
+		# Checks if an enemy unit is already stationed here or if this is an enemy base
+		validTile = false
+		while not validTile:
+			tile = selectRandomTiles()
+			if tile.get("enemyStationed") == null and tile.get("buildingAlliance") == "neutral":
+				validTile = true
+		
+		if checkForBase(tile, 4, true):
+			makeEnemyUnit(tile)
+			createEnemyAttempts -= 1
+		
+func makeEnemyUnit(tile):
+	get_node("UnitHolder/EnemyController").makeBaseEnemy(tile)
 
 func selectRandomTiles():
 	# Gets a random row and column. Returns the tile found at that location.
@@ -139,6 +159,27 @@ func selectRandomTiles():
 	randTileCol = randi() % BASE_COLS
 	
 	return startingArray[randTileRow][randTileCol]
+	
+func checkForBase(tile, toCheck, nothingFound):
+	# This function goes up to 'toCheck' distance away from the original tile searching for
+	# ally tiles. If it finds them, it'll return false, telling the parent that there 
+	# already exists a created building nearby. Causing the parent's while loop to continue.
+	if nothingFound == false or tile.get("buildingAlliance") == "ally":
+		# This new placement is too close to an existing ally or enemy building. 
+		return false
+		
+	# Need to make sure no ally tiles are within 3 tiles
+	if toCheck != 0:
+		if tile.connections[0] == true and tile.aboveTile != null:
+			nothingFound = checkForBase(tile.aboveTile, toCheck - 1, nothingFound)
+		if tile.connections[1] == true and tile.rightTile != null:
+			nothingFound = checkForBase(tile.rightTile, toCheck - 1, nothingFound)
+		if tile.connections[2] == true and tile.belowTile != null:
+			nothingFound = checkForBase(tile.belowTile, toCheck - 1, nothingFound)
+		if tile.connections[3] == true and tile.leftTile != null:
+			nothingFound = checkForBase(tile.leftTile, toCheck - 1, nothingFound)
+			
+	return nothingFound
 	
 func checkForAllyOrEnemyTilesNearby(tile, toCheck, nothingFound):
 	# This function goes up to 'toCheck' distance away from the original tile searching for

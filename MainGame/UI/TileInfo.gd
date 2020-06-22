@@ -200,6 +200,11 @@ func emptyTileGroup():
 func removeTile(tile):
 	tile.get_node("TileHolder/Highlight").hide()
 	tile.set("selected", false)
+	var index = 0
+	for currTile in selectedTileGroup:
+		if currTile == tile:
+			selectedTileGroup.remove(index)
+		index += 1
 
 func resetOutputBox():
 	if selectedTileGroup.size() == 0:

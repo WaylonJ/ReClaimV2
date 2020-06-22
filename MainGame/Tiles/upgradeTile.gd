@@ -37,6 +37,17 @@ func updateTileWithUpgrade(tile):
 	# TBD 
 	
 	# Remove past values from production
+	removePastValuesFromProduction(tile)
+	
+	# Update tile Output
+	newOutput = databaseRef.getOutputInfo(tile.buildingName, tile.buildingTier)
+	tile.updateOutput(newOutput[0], newOutput[1], newOutput[2], newOutput[3])
+	
+	# Add new values to production
+	rootRef.updateTotalProduction(tile.outputMana, tile.outputAdvanced, tile.outputResearch)
+	removeThese.append(tile)
+	
+func removePastValuesFromProduction(tile):
 	var newMana = tile.outputMana
 	var newAdvanced = tile.outputAdvanced
 	var newResearch = tile.outputResearch
@@ -49,16 +60,6 @@ func updateTileWithUpgrade(tile):
 		newResearch *= -1
 
 	rootRef.updateTotalProduction(newMana, newAdvanced, newResearch)
-	
-	# Update tile Output
-	newOutput = databaseRef.getOutputInfo(tile.buildingName, tile.buildingTier)
-	tile.updateOutput(newOutput[0], newOutput[1], newOutput[2], newOutput[3])
-	
-	# Add new values to production
-	rootRef.updateTotalProduction(tile.outputMana, tile.outputAdvanced, tile.outputResearch)
-	removeThese.append(tile)
-	
-	
 	
 func removeAllUpgraded(originalAmount):
 	if removeThese.size() == originalAmount:
