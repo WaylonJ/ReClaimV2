@@ -151,13 +151,10 @@ func updatePath():
 	if !isAlly:
 		hideOrShowEnemiesBasedOnTileVisibility()
 	
+	checkCollision()
+	
 	# Still remaining nodes to go
 	if len(currentPath) > 0:
-		
-		# Enemy Unit is moving to a tile that is currently seen
-		
-			
-#		setUnitStationedOnHost()
 		set_process(true)
 		findDirection(currentPath[0])
 		placeAtStartOfPath(prevTile)
@@ -175,6 +172,12 @@ func updatePath():
 	
 	prevTile.updateInSightOf(vision, self, true, false)
 #	print("In sight of values: " + str(prevTile.inSightOf))
+
+func checkCollision():
+	if isAlly and prevTile.enemyStationed != null:
+		currentPath = []
+	elif not isAlly and prevTile.unitStationed != null:
+		currentPath = []
 
 func hideOrShowEnemiesBasedOnTileVisibility():
 	# If the tile it's currently on is hidden, it should hide
@@ -308,7 +311,7 @@ func checkHighestVision():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				setVision(3)
+				setVision(15)
 			"Goblin":
 				setVision(1)
 	
@@ -330,22 +333,20 @@ func mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
 	mergeUnits(newAddition)
 	
-	
-	if isAlly:
-		handleCurrentSelection(newAddition)
+	# Updates UI components
+	handleCurrentSelection(newAddition)
 
-		#Removes sight of old unit
-		hostTile.updateInSightOf(vision, newAddition, false, false)
-		
-		#Removes old unit.
-		newAddition.queue_free()
-		
-		# Updates vision
-		checkHighestVision()
+	#Removes sight of old unit
+	hostTile.updateInSightOf(vision, newAddition, false, false)
+	
+	#Removes old unit.
+	newAddition.queue_free()
+	
+	# Updates vision
+	checkHighestVision()
 	
 	if hostTile.inBattle:
 		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
-		
 
 func handleCurrentSelection(newAddition):
 	# If Host is selected,
@@ -421,10 +422,11 @@ func setFormationClosestTo(pos, unit):
 	else:
 		# Checks for free bottom row
 		var index = 3
-		for index in range(6):
+		while index < 6:
 			if heldPositions[index] == false:
 				formation[unit] = index
 				return
+			
 		# Checks for free top row
 		for i in range(3):
 			if heldPositions[i] == false:

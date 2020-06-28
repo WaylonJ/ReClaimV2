@@ -121,8 +121,8 @@ func setTileBorders(array):
 func makeEnemyBases():
 	# Will attempt to create tiles / 5 locations to be enemy Fortification locations.
 	# Requirements: Not within 4 tiles of another enemy. Not within 3 tiles of the Player Base
-	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
-#	var createEnemyAttempts = 0
+#	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 5
+	var createEnemyAttempts = 1
 	var tile
 	while createEnemyAttempts != 0:
 		tile = selectRandomTiles()
@@ -133,7 +133,8 @@ func makeEnemyBases():
 func makeEnemyUnits():
 	# Will attempt to create tiles / 2 locations to be enemy unit locations.
 	# Requirements: Not within 3 tiles of the Player Base
-	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 2
+#	var createEnemyAttempts = BASE_COLS * BASE_ROWS / 2
+	var createEnemyAttempts = 1
 	var tile
 	var validTile
 	

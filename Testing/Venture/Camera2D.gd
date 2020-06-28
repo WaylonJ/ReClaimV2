@@ -4,6 +4,8 @@ var myZoom
 
 var currentZoomLevel = 1
 var cameraDragging = false
+var cameraDragged = false
+var cameraDragPos 
 
 var previousPosition: Vector2 = Vector2(0,0);
 
@@ -79,12 +81,22 @@ func inputDragMouse(event):
 		if event.is_pressed() and event.button_index == 2:
 			if event.position[1] < 540:
 				previousPosition = event.position
+				cameraDragPos = previousPosition
 				cameraDragging = true
 		elif !event.is_pressed():
 			cameraDragging = false
+			cameraDragged = false
 	if event is InputEventMouseMotion && cameraDragging:
-		position += (previousPosition - event.position)*myZoom
+		determineIfCameraDragged(event.position)
+		self.position += (previousPosition - event.position)*myZoom
 		previousPosition = event.position
+
+func determineIfCameraDragged(curPos):
+	var xMove = cameraDragPos[0] - curPos[0]
+	var yMove = cameraDragPos[1] - curPos[1]
+	if (abs(xMove) + abs(yMove)) > 15:
+		cameraDragged = true
+	
 
 func inputZoomInOrOut(event):
 	if event is InputEventMouseButton:

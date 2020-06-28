@@ -80,12 +80,12 @@ func _input(event):
 		previousTile = null
 
 func _mouseInTile(tile):
-	print("Tile nanme:" + str(tile.buildingName) + ", " + str(tile))
+#	print("Tile nanme:" + str(tile.buildingName) + ", " + str(tile))
 	mouseInTile = true
 	selectedTile = tile
 
 func _mouseOutOfTile(tile):
-	print("out of tile")
+#	print("out of tile")
 	mouseInTile = false
 	selectedTile = null
 	doubleClick = false

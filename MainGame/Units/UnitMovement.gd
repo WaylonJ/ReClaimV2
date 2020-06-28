@@ -5,6 +5,8 @@ var path = null
 var costGraph = []
 var costQueue
 
+onready var rootRef = get_tree().get_root().get_node("Control")
+
 func _ready():
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	
@@ -27,6 +29,10 @@ func _input(event):
 		# Checks to make sure a unit is selected and cursor is over a tile
 		if get_tree().get_root().get_node("Control").selectedName == "allyUnit" and tileHovered != null:
 #			print("Unit Movement, selected units: " + str(get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits))
+			if rootRef.get_node("Camera2D").cameraDragged:
+				print("DRAGGING RETURNING")
+				return
+			
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
 				if !(unit.snared):
 					checkIfUnitMoving(unit)

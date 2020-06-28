@@ -61,10 +61,16 @@ func mergeUnits(newAddition):
 	numUnits += newAddition.numUnits
 	updateTotalStats()
 	
+func mergeWithOtherGroup(newAddition):
+	# Merge the units and the stats together
+	mergeUnits(newAddition)
+	
+	if hostTile.inBattle:
+		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+	
 	if hostTile.buildingAlliance == "enemy":
 		checkAttackTrigger()
 	
-		
 func setFormation(unit):
 	# Ensures this unit type doesnt already have a position
 	if !(unit in formation):

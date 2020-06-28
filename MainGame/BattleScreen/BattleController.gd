@@ -247,6 +247,7 @@ func battleEnd(allyWin):
 		enemyUnits.snared = false
 		allyUnits.queue_free()
 		tile.unitStationed = null
+		tile.updateInSightOf(allyUnits.vision, allyUnits, false, false)
 		
 	get_parent().removeBattle(tile)
 
