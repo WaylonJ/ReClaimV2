@@ -5,6 +5,8 @@ var path = null
 var costGraph = []
 var costQueue
 
+var shiftHeld = false
+
 onready var rootRef = get_tree().get_root().get_node("Control")
 
 func _ready():
@@ -24,25 +26,46 @@ func _mouseOutOfTile(tile):
 	tileHovered = null
 
 func _input(event):
+	if Input.is_key_pressed(KEY_SHIFT):
+		shiftHeld = true
+	else:
+		shiftHeld = false
 	# Checks for a right click
 	if event is InputEventMouseButton and event.button_index == 2 and !event.is_pressed():
 		# Checks to make sure a unit is selected and cursor is over a tile
 		if get_tree().get_root().get_node("Control").selectedName == "allyUnit" and tileHovered != null:
-#			print("Unit Movement, selected units: " + str(get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits))
+			# If you right click on a tile, but move the cursor too much, this cancels the movement order. 
+			# Prevents accidental movement orders when scrolling around
 			if rootRef.get_node("Camera2D").cameraDragged:
-				print("DRAGGING RETURNING")
 				return
 			
 			for unit in get_tree().get_root().get_node("Control/UnitHolder/UnitController").selectedUnits:
-				if !(unit.snared):
-					checkIfUnitMoving(unit)
-					unit.appendPath(path, true)
+				handleMovementLogic(unit)
 
-func checkIfUnitMoving(unit):
-	if unit.isMoving:
-		path = findShortestPath(unit.prevTile, tileHovered)
+func handleMovementLogic(unit):
+	# Can't move, end here
+	if unit.snared:
+		return
+	
+	var replaceCurrentPath = true
+	
+	if shiftHeld:
+		if unit.isMoving:
+			# Append path to end of current path
+			path = findShortestPath(unit.currentPath.pop_back(), tileHovered)
+			replaceCurrentPath = false
+		else:
+			# Append path to empty current path
+			path = findShortestPath(unit.hostTile, tileHovered)
 	else:
-		path = findShortestPath(unit.hostTile, tileHovered)
+		if unit.isMoving:
+			# Replace current path with new path
+			path = findShortestPath(unit.prevTile, tileHovered)
+		else:
+			# Append path to empty current path
+			path = findShortestPath(unit.hostTile, tileHovered)
+	
+	unit.appendPath(path, replaceCurrentPath)
 
 func printPath(path):
 	var home = path[0]

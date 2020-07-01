@@ -345,6 +345,13 @@ func showBattleButton():
 
 func hideBattleButton():
 	get_node("TileHolder/ShowBattleButton").hide()
+	
+	# Gives enemies their last movement order so that they may continue.
+	if enemyStationed != null:
+		print("Giving the enemy it's last movement order")
+		enemyStationed.currentPath = enemyStationed.pathToMove
+		enemyStationed.updatePath()
+		
 
 func createUnit():
 	var unit = null

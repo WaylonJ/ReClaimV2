@@ -80,14 +80,18 @@ func generateUnitRefs():
 	add_child(goblinRef)
 
 func appendPath(newPath, replacing):
-	# Start of new movement order, check if currently moving
-	if isUnitMoving():
-		checkIfTurnAroundNeeded(newPath)
-	
+	if replacing:
+		# Start of new movement order, check if currently moving
+		if isUnitMoving():
+			checkIfTurnAroundNeeded(newPath)
+		
+		else:
+			removeSelfFromPreviousTile()
+			currentPath = newPath
+			updatePath()
 	else:
-		removeSelfFromPreviousTile()
-		currentPath = newPath
-		updatePath()
+		for item in newPath:
+			currentPath.append(item)
 		
 	# STILL NEED TO IMPLEMENT SHIFT CLICKING FOR SPECIFIC PATHS
 #	elif replacing:
@@ -174,9 +178,11 @@ func updatePath():
 #	print("In sight of values: " + str(prevTile.inSightOf))
 
 func checkCollision():
-	if isAlly and prevTile.enemyStationed != null:
-		currentPath = []
-	elif not isAlly and prevTile.unitStationed != null:
+	# Checks to see if theres conflicting units on the tile. Ally and enemy, or enemy and ally.
+	if ((isAlly and prevTile.enemyStationed != null) or 
+	(not isAlly and prevTile.unitStationed != null)):
+		currentPath.push_front(prevTile)
+		pathToMove = currentPath
 		currentPath = []
 
 func hideOrShowEnemiesBasedOnTileVisibility():
