@@ -388,5 +388,34 @@ func createUnit():
 		else:
 			enemyStationed.mergeWithOtherGroup(newUnit)
 
+func getStationaryUnitOnTile():
+	for unit in get_tree().get_nodes_in_group("Units"):
+		# Unit is sitting on top of this tile, not moving.
+		if unit.hostTile == self and not unit.isMoving:
+			return unit
+
+func getAllUnitsStationed():
+	var foundUnits = []
+	for unit in get_tree().get_nodes_in_group("Units"):
+		if unit.hostTile == self:
+			foundUnits.append(unit)
+	
+	return foundUnits
+	
+func checkIfAnyUnitsOnThisTile(alliance):
+	if alliance == "ally":
+		for unit in get_tree().get_nodes_in_group("Units"):
+			if unit.hostTile == self:
+				return true
+
+	else:
+		for unit in get_tree().get_nodes_in_group("Enemies"):
+			if unit.hostTile == self:
+				return true
+		
+	return false
+	
+	
+
 func findDistanceFromBase(baseTile):
 	distanceFromBase = rootRef.unitMovement.findDistanceBetweenTwoTiles(self, baseTile)

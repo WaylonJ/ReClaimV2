@@ -67,8 +67,11 @@ func _process(delta):
 	if distanceLeft < 0:
 		set_process(false)
 		
+		removeSelfFromPreviousTile()
+		
+		
 		if isAlly:
-			prevTile.updateInSightOf(vision, self, false, false)
+			hostTile.updateInSightOf(vision, self, false, false)
 
 		updatePath()
 
@@ -87,10 +90,9 @@ func appendPath(newPath, replacing):
 		
 		else:
 			isMoving = true
-			prevTile = hostTile
-			removeSelfFromPreviousTile()
+#			removeSelfFromPreviousTile()
 			currentPath = newPath
-			hostTile = null
+#			hostTile = null
 			updatePath()
 	else:
 		for item in newPath:
@@ -118,15 +120,13 @@ func checkIfTurnAroundNeeded(newPath):
 			var size = newPath.size()
 			
 			# Needs to create a new path starting from the tile it's currently traveling to.
-			newPath = rootRef.unitMovement.findShortestPath(prevTile, newPath[size - 1])
+			newPath = rootRef.unitMovement.findShortestPath(hostTile, newPath[size - 1])
 	
 	currentPath = newPath
 
-
-		
 func switchDirections():
 	# Sets this so if multiple switch backs occur, the unit doesn't teleport when the path is replaced.
-	prevTile = currentPath[0]
+	hostTile = currentPath[0]
 	
 	directionMoving = setOppositeDirection()
 	distanceLeft = (DIST_CONSTANT * numUnits) - distanceLeft
@@ -143,44 +143,46 @@ func setOppositeDirection():
 			return "left"
 
 func updatePath():
-	prevTile = currentPath.pop_front()
+	hostTile = currentPath.pop_front()
+	setUnitStationedOnHost()
 	
+	# Vision stuff
 	if !isAlly:
 		hideOrShowEnemiesBasedOnTileVisibility()
 	
+	# When updatePath is called, need to see if entering this new tile caused a collision
 	checkCollision()
 	
 	# Still remaining nodes to go
 	if len(currentPath) > 0:
 		set_process(true)
 		findDirection(currentPath[0])
-		placeAtStartOfPath(prevTile)
+		placeAtStartOfPath(hostTile)
 		calcDistances()
 		
 	# Done traveling
 	else:
 		isMoving = false
-		hostTile = prevTile
 		currentPath = []
 		setUnitStationedOnHost()
 		# Resets the position of the unit to be at the top of the tile
 		directionMoving = "up"
 		placeAtStartOfPath(hostTile)
 	
-	prevTile.updateInSightOf(vision, self, true, false)
+	hostTile.updateInSightOf(vision, self, true, false)
 #	print("In sight of values: " + str(prevTile.inSightOf))
 
 func checkCollision():
 	# Checks to see if theres conflicting units on the tile. Ally and enemy, or enemy and ally.
-	if ((isAlly and prevTile.enemyStationed != null) or 
-	(not isAlly and prevTile.unitStationed != null)):
-		currentPath.push_front(prevTile)
+	if ((isAlly and hostTile.checkIfAnyUnitsOnThisTile("enemy") != null) or 
+	(not isAlly and hostTile.checkIfAnyUnitsOnThisTile("ally") != null)):
+		currentPath.push_front(hostTile)
 		pathToMove = currentPath
 		currentPath = []
 
 func hideOrShowEnemiesBasedOnTileVisibility():
 	# If the tile it's currently on is hidden, it should hide
-	if !prevTile.currentlySeen:
+	if !hostTile.currentlySeen:
 		self.hide()
 	
 	# If the tile it's going to is NOT hidden, it should show
@@ -189,17 +191,24 @@ func hideOrShowEnemiesBasedOnTileVisibility():
 			self.show()
 
 func removeSelfFromInSightOf():
-	prevTile.updateInSightOf(vision, self, false, false)
+	hostTile.updateInSightOf(vision, self, false, false)
 
 func removeSelfFromPreviousTile():
+	print("removing self from this tile: " + str(hostTile))
 	if isAlly:
-		if prevTile.unitStationed == self:
-			prevTile.unitStationed = null
+		if hostTile.unitStationed == self:
+			hostTile.unitStationed = null
+			print("removed")
 	else:
-		if prevTile.enemyStationed == self:
-			prevTile.enemyStationed = null
+		if hostTile.enemyStationed == self:
+			hostTile.enemyStationed = null
 	
 func setUnitStationedOnHost():
+	print("Setting self on this tile: " + str(hostTile))
+	# If this unit still has movement to go, do NOT merge
+	if not currentPath.empty():
+		return
+	
 	if isAlly:
 		# Unit already exists on the tile, merge!
 		if hostTile.unitStationed != null and hostTile.unitStationed != self:
@@ -218,6 +227,8 @@ func setUnitStationedOnHost():
 			hostTile.setEnemyStationed(self)	
 
 func calcDistances():
+	# This calculates how many units of distance need to be covered. The unit speed is used in the 
+	# _process function, so it isn't needed here.
 	distanceTotal = DIST_CONSTANT * numUnits
 	distanceLeft = distanceTotal
 
@@ -244,13 +255,13 @@ func placeAtStartOfPath(tile):
 			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1]))
 
 func findDirection(nextTile):
-	if prevTile.row < nextTile.row:
+	if hostTile.row < nextTile.row:
 		directionMoving = "down"
-	elif prevTile.row > nextTile.row:
+	elif hostTile.row > nextTile.row:
 		directionMoving = "up"
-	elif prevTile.col < nextTile.col:
+	elif hostTile.col < nextTile.col:
 		directionMoving = "right"
-	elif prevTile.col > nextTile.col:
+	elif hostTile.col > nextTile.col:
 		directionMoving = "left"
 
 func setTile(tile):

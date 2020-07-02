@@ -60,7 +60,7 @@ func handleMovementLogic(unit):
 	else:
 		if unit.isMoving:
 			# Replace current path with new path
-			path = findShortestPath(unit.prevTile, tileHovered)
+			path = findShortestPath(unit.hostTile, tileHovered)
 		else:
 			# Append path to empty current path
 			path = findShortestPath(unit.hostTile, tileHovered)
