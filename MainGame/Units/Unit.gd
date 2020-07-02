@@ -82,12 +82,15 @@ func generateUnitRefs():
 func appendPath(newPath, replacing):
 	if replacing:
 		# Start of new movement order, check if currently moving
-		if isUnitMoving():
+		if isMoving == true:
 			checkIfTurnAroundNeeded(newPath)
 		
 		else:
+			isMoving = true
+			prevTile = hostTile
 			removeSelfFromPreviousTile()
 			currentPath = newPath
+			hostTile = null
 			updatePath()
 	else:
 		for item in newPath:
@@ -96,7 +99,7 @@ func appendPath(newPath, replacing):
 	# STILL NEED TO IMPLEMENT SHIFT CLICKING FOR SPECIFIC PATHS
 #	elif replacing:
 #		returnUnitToHostTile()
-		
+
 func checkIfTurnAroundNeeded(newPath):
 	# If length is 0, unit is being asked to return to prev Tile
 	if newPath.size() == 1:
@@ -119,17 +122,7 @@ func checkIfTurnAroundNeeded(newPath):
 	
 	currentPath = newPath
 
-func isUnitMoving():
-	# If the unit is already moving, we don't need to 
-	if isMoving == true:
-		return true
-	else:
-		# First given movement order. Remove self from Host Tile, set Host Tile to null, set Moving
-		isMoving = true
-		prevTile = hostTile
-		removeSelfFromPreviousTile()
-		hostTile = null
-		return false
+
 		
 func switchDirections():
 	# Sets this so if multiple switch backs occur, the unit doesn't teleport when the path is replaced.
