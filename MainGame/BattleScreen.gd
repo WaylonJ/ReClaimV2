@@ -206,5 +206,5 @@ func removeBattle(tile):
 	
 #	if battles.empty():
 	hideBattleScreen()
-	tile.hideBattleButton()
+	tile.battle_hideBattleButton()
 	

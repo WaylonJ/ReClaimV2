@@ -255,7 +255,7 @@ func battleEnd(allyWin):
 		allyUnits.battle_lost()
 		enemyUnits.battle_won()
 #		tile.allyStationed = null
-		tile.updateInSightOf(allyUnits.vision, allyUnits, false, false)
+		tile.vision_updateInSightOf(allyUnits.vision, allyUnits, false, false)
 		
 	get_parent().removeBattle(tile)
 	tile.inBattle = false

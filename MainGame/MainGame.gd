@@ -206,9 +206,9 @@ func checkForAllyOrEnemyTilesNearby(tile, toCheck, nothingFound):
 func makeEnemyBase(tile):
 	var enemyTilePNG = preload("res://MainGame/Tiles/Resources/PH_Tile_EnemyBase.png")
 	tile.set("buildingName", "EnemyTest")
-	tile.findDistanceFromBase(baseTile)
-	tile.startBuilding()
-	tile.createTile()
+	tile.basic_findDistanceFromBase(baseTile)
+	tile.bldg_startBuilding()
+	tile.bldg_createTile()
 	tile.get_node("TileHolder/Background").set("texture", enemyTilePNG)
 	
 
@@ -239,8 +239,8 @@ func makeBaseTile():
 	
 	baseTile = startingArray[length][length]
 	baseTile.set("buildingName", "Base")
-	baseTile.startBuilding()
-	baseTile.createTile()
+	baseTile.bldg_startBuilding()
+	baseTile.bldg_createTile()
 	baseTile.get_node("TileHolder/Background").set("texture", BaseTilePNG)
 	
 func updateTotalProduction(mana, advanced, research):

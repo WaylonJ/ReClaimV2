@@ -30,6 +30,6 @@ func sellTile(tileGroup):
 			rootRef.refundCost(sellCost[0] * sellMultiplier, sellCost[1] * sellMultiplier)
 			index += 1
 		# 
-		tile.resetTile()
+		tile.basic_resetTile()
 		tileInfoRef.removeTile(tile)
 		tileInfoRef.selectBaseTile()

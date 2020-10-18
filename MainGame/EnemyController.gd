@@ -20,7 +20,7 @@ func makeTestEnemy(tile):
 	enemy.add_to_group("Enemies")
 	enemy.hostTile = tile
 	 
-	tile.setEnemyStationed(enemy)
+	tile.unit_setEnemyStationed(enemy)
 	enemy.stats_createUnit("baseEnemy", 10)
 	enemy.set_position(Vector2(enemyTilePosition[0] + 65, enemyTilePosition[1] - 75))
 	add_child(enemy)
@@ -38,8 +38,8 @@ func makeBaseEnemy(tile):
 	enemy.set_position(Vector2(enemyTilePosition[0] + 65, enemyTilePosition[1] - 75))
 	enemy.stats_updateTotalStats()
 	
-	tile.setEnemyStationed(enemy)
-	tile.checkIfSeen(tile)
+	tile.unit_setEnemyStationed(enemy)
+	tile.vision_checkIfSeen(tile)
 	
 	add_child(enemy)
 

@@ -114,8 +114,8 @@ func attemptToCreateBuilding(bldg):
 
 func createTile():
 	currentTile.set("buildingName", selectedBldg)
-	currentTile.startBuilding()
-	currentTile.createTile()
+	currentTile.bldg_startBuilding()
+	currentTile.bldg_createTile()
 	tempBG = null
 	
 	tileInfoRef.selectedTile = currentTile

@@ -72,7 +72,7 @@ func movement_updateMovement(delta):
 		set_process(false)
 		
 		if isAlly:
-			hostTile.updateInSightOf(vision, self, false, false)
+			hostTile.vision_updateInSightOf(vision, self, false, false)
 		movement_updatePath()
 
 func basic_generateUnitRefs():
@@ -90,7 +90,7 @@ func movement_appendPath(newPath, replacing):
 		
 		else:
 			isMoving = true
-			hostTile.removeUnitCompletely(self)
+			hostTile.unit_removeUnitCompletely(self)
 			currentPath = newPath
 #			hostTile = null
 			movement_updatePath()
@@ -148,7 +148,7 @@ func movement_updatePath():
 
 	#Append to unitMoving array on host.
 	if len(currentPath) != 0:
-		hostTile.appendUnitMoving(self)
+		hostTile.unit_appendUnitMoving(self)
 	
 	# Vision stuff
 	if !isAlly:
@@ -161,7 +161,7 @@ func movement_updatePath():
 	
 	movement_evaluateRemainingTraveling()
 	
-	hostTile.updateInSightOf(vision, self, true, false)
+	hostTile.vision_updateInSightOf(vision, self, true, false)
 #	print("In sight of values: " + str(prevTile.inSightOf))
 
 func movement_evaluateRemainingTraveling():
@@ -186,21 +186,21 @@ func movement_evaluateRemainingTraveling():
 func movement_checkCollision():
 	# Checks to see if theres conflicting units on the tile. Ally and enemy, or enemy and ally.
 	if isAlly:
-		if hostTile.checkIfAnyUnitsOnThisTile("enemy") != false:
+		if hostTile.unit_checkIfAnyUnitsOnThisTile("enemy") != false:
 			if hostTile.enemyStationed != null:
-				hostTile.triggerBattleOnTile(self, hostTile.enemyStationed)
+				hostTile.battle_triggerBattleOnTile(self, hostTile.enemyStationed)
 			else:
-				# hostTile.getClosestMovingUnit is not actually made, simply returning first found
-				hostTile.triggerBattleOnTile(self, hostTile.getClosestMovingUnit())
+				# hostTile.unit_getClosestMovingUnit is not actually made, simply returning first found
+				hostTile.battle_triggerBattleOnTile(self, hostTile.unit_getClosestMovingUnit())
 			return true
 	
 	else:
-		if hostTile.checkIfAnyUnitsOnThisTile("ally") != false:
+		if hostTile.unit_checkIfAnyUnitsOnThisTile("ally") != false:
 			if hostTile.allyStationed != null:
-				hostTile.triggerBattleOnTile(self, hostTile.allyStationed)
+				hostTile.battle_triggerBattleOnTile(self, hostTile.allyStationed)
 			else:
-				# hostTile.getClosestMovingUnit is not actually made, simply returning first found
-				hostTile.triggerBattleOnTile(self, hostTile.getClosestMovingUnit())
+				# hostTile.unit_getClosestMovingUnit is not actually made, simply returning first found
+				hostTile.battle_triggerBattleOnTile(self, hostTile.unit_getClosestMovingUnit())
 			return true
 				
 func battle_enter():
@@ -211,7 +211,7 @@ func battle_enter():
 	movement_placeAtStartOfPath(self)
 	
 	# Reset Hosttile's properties containing this unit.
-	hostTile.removeUnitCompletely(self)
+	hostTile.unit_removeUnitCompletely(self)
 	if isAlly:
 		hostTile.allyStationed = self
 	else:
@@ -223,7 +223,7 @@ func battle_won():
 
 	
 func battle_lost():
-	hostTile.removeUnitCompletely(self)
+	hostTile.unit_removeUnitCompletely(self)
 	queue_free()
 
 func vision_hideOrShowEnemiesBasedOnTileVisibility():
@@ -237,8 +237,8 @@ func vision_hideOrShowEnemiesBasedOnTileVisibility():
 			self.show()
 	
 func host_removeSelfFromPreviousTileAsMoving():
-	if hostTile.checkIfInMovingUnit(self):
-		hostTile.removeMovingUnit(self)
+	if hostTile.unit_checkIfInMovingUnit(self):
+		hostTile.unit_removeMovingUnit(self)
 	
 	
 func host_setUnitStationedOnHost():
@@ -253,7 +253,7 @@ func host_setUnitStationedOnHost():
 		
 		# No unit here, set self!
 		else:
-			hostTile.setUnitStationed(self)
+			hostTile.unit_setUnitStationed(self)
 	else:
 		# Unit already exists on the tile, merge!
 		if hostTile.enemyStationed != null and hostTile.enemyStationed != self:
@@ -261,7 +261,7 @@ func host_setUnitStationedOnHost():
 		
 		# No unit here, set self!
 		else:
-			hostTile.setEnemyStationed(self)	
+			hostTile.unit_setEnemyStationed(self)	
 
 func movement_calcDistances():
 	# This calculates how many units of distance need to be covered. The unit speed is used in the 
@@ -348,7 +348,7 @@ func stats_updateTotalStats():
 	ui_showNumberOfUnitsTag()
 	
 #	if !isAlly:
-#		hostTile.checkIfSeen()
+#		hostTile.vision_checkIfSeen()
 
 	
 func vision_checkHighest():
@@ -371,7 +371,7 @@ func vision_setNew(newVision):
 
 func vision_updateTilesVision():
 	if isAlly:
-		hostTile.updateInSightOf(vision, self, true, false)
+		hostTile.vision_updateInSightOf(vision, self, true, false)
 
 func stats_mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
@@ -381,7 +381,7 @@ func stats_mergeWithOtherGroup(newAddition):
 	ui_handleCurrentSelection(newAddition)
 
 	#Removes sight of old unit
-	hostTile.updateInSightOf(vision, newAddition, false, false)
+	hostTile.vision_updateInSightOf(vision, newAddition, false, false)
 	
 	#Removes old unit.
 	newAddition.queue_free()
