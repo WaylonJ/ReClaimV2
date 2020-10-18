@@ -111,12 +111,13 @@ func removeMovingUnit(removeThis):
 			index += 1
 
 func removeUnitCompletely(removeThis):
-	if removeThis in movingUnits:
-		removeMovingUnit(removeThis)
 	if allyStationed == removeThis:
 		allyStationed = null
-	if enemyStationed == removeThis:
+	elif enemyStationed == removeThis:
 		enemyStationed = null
+	elif removeThis in movingUnits:
+		removeMovingUnit(removeThis)
+	
 	
 func updateWakeTimer(delta):
 	wakeTimer -= delta
@@ -397,7 +398,7 @@ func hideBattleButton():
 		print("Giving the enemy it's last movement order")
 		if (len(enemyStationed.pathToMove) != 0):
 			enemyStationed.currentPath = enemyStationed.pathToMove
-			enemyStationed.updatePath()
+			enemyStationed.movement_updatePath()
 		
 
 func createUnit():
@@ -412,28 +413,28 @@ func createUnit():
 		newUnit = unit.instance()
 		
 	newUnit.hostTile = self
-	newUnit.createUnit(unitProductionName, 1)
+	newUnit.stats_createUnit(unitProductionName, 1)
 	
 	
 	if unitProductionIsAlly:
 		if allyStationed == null:
 			get_tree().get_root().get_node("Control/UnitHolder/UnitController").add_child(newUnit)
 			newUnit.add_to_group("Units")
-			newUnit.setTile(self)
+			newUnit.hostTile = self
 			newUnit.set_position(Vector2(self.get_position()[0], self.get_position()[1] - 75))
 			setUnitStationed(newUnit)
 		else:
-			allyStationed.mergeWithOtherGroup(newUnit)
+			allyStationed.stats_mergeWithOtherGroup(newUnit)
 	else:
 		if enemyStationed == null:
 			get_tree().get_root().get_node("Control/UnitHolder/EnemyController").add_child(newUnit)
 			newUnit.add_to_group("Enemies")
-			newUnit.setTile(self)
+			newUnit.hostTile = self
 			newUnit.set_position(Vector2(self.get_position()[0] + 65, self.get_position()[1] - 75))
 			setEnemyStationed(newUnit)
 			checkIfSeen(self)
 		else:
-			enemyStationed.mergeWithOtherGroup(newUnit)
+			enemyStationed.stats_mergeWithOtherGroup(newUnit)
 
 func getStationaryUnitOnTile():
 	for unit in get_tree().get_nodes_in_group("Units"):

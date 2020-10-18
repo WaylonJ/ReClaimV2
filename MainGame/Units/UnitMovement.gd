@@ -66,7 +66,7 @@ func handleMovementLogic(unit):
 			path = findShortestPath(unit.hostTile, tileHovered)
 #			print("In unit movement, path: " + str(path))
 	
-	unit.appendPath(path, replaceCurrentPath)
+	unit.movement_appendPath(path, replaceCurrentPath)
 
 func printPath(path):
 	var home = path[0]
@@ -211,7 +211,7 @@ func autoMoveUnit(unit, destination):
 	findShortestPath(unit.hostTile, destination)
 	path = costQueue
 #	print("Automove triggered, this is path: " + str(path))
-	unit.appendPath(path, true)
+	unit.movement_appendPath(path, true)
 
 func findDistanceBetweenTwoTiles(tile1, tile2):
 	findShortestPath(tile1, tile2)
