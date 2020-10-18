@@ -64,6 +64,7 @@ func handleMovementLogic(unit):
 		else:
 			# Append path to empty current path
 			path = findShortestPath(unit.hostTile, tileHovered)
+#			print("In unit movement, path: " + str(path))
 	
 	unit.appendPath(path, replaceCurrentPath)
 

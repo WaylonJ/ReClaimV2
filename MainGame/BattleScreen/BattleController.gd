@@ -78,6 +78,8 @@ func addBattle(ally, enemy, battleTile):
 	enemyUnits = enemy
 	allUnits = [ally, enemy]
 	tile = battleTile
+	tile.inBattle = true
+	tile.set_process(false)
 	
 	pruneDeletedUnits()
 	
@@ -239,19 +241,28 @@ func battleEnd(allyWin):
 	
 	if allyWin:
 		print("allies won")
-		allyUnits.snared = false
-		enemyUnits.queue_free()
-		tile.enemyStationed = null
+#		allyUnits.snared = false
+#		allyUnits.set_process(true)
+#		enemyUnits.queue_free()
+		allyUnits.battle_won()
+		enemyUnits.battle_lost()
+#		tile.enemyStationed = null
 	else:
 		print("enemies won")
-		enemyUnits.snared = false
-		allyUnits.queue_free()
-		tile.unitStationed = null
+#		enemyUnits.snared = false
+#		enemyUnits.set_process(true)
+#		allyUnits.queue_free()
+		allyUnits.battle_lost()
+		enemyUnits.battle_won()
+#		tile.allyStationed = null
 		tile.updateInSightOf(allyUnits.vision, allyUnits, false, false)
 		
 	get_parent().removeBattle(tile)
+	tile.inBattle = false
+	tile.set_process(true)
 
 func resetAllVars():
+	print("Resetting all Vars")
 	unitRefs = {}
 	attackRates = {}
 	currentTargettedPosition = {}

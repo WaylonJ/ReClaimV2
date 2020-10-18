@@ -67,7 +67,6 @@ void fragment(){
 	
 	COLOR = vec4(color, final * 1.1);
 }"
-custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
@@ -347,28 +346,28 @@ texture = ExtResource( 15 )
 [node name="MidUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
 margin_top = 306.0
 margin_right = 400.0
-margin_bottom = 512.0
+margin_bottom = 513.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="BackUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits"]
 margin_right = 198.0
-margin_bottom = 206.0
+margin_bottom = 207.0
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource( 13 )
 
 [node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit"]
 margin_right = 198.0
-margin_bottom = 142.0
+margin_bottom = 143.0
 size_flags_vertical = 3
 alignment = 1
 
 [node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills"]
 margin_left = 5.0
-margin_top = 8.0
+margin_top = 9.0
 margin_right = 65.0
-margin_bottom = 133.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 60, 125 )
 size_flags_vertical = 4
 flat = true
@@ -380,9 +379,9 @@ texture = ExtResource( 14 )
 
 [node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills"]
 margin_left = 69.0
-margin_top = 8.0
+margin_top = 9.0
 margin_right = 129.0
-margin_bottom = 133.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 60, 125 )
 size_flags_vertical = 4
 flat = true
@@ -394,9 +393,9 @@ texture = ExtResource( 14 )
 
 [node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Skills"]
 margin_left = 133.0
-margin_top = 8.0
+margin_top = 9.0
 margin_right = 193.0
-margin_bottom = 133.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 60, 125 )
 size_flags_vertical = 4
 flat = true
@@ -407,9 +406,9 @@ anchor_bottom = 1.0
 texture = ExtResource( 14 )
 
 [node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit"]
-margin_top = 146.0
+margin_top = 147.0
 margin_right = 198.0
-margin_bottom = 206.0
+margin_bottom = 207.0
 alignment = 1
 
 [node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/BackUnit/Unit"]
@@ -422,22 +421,22 @@ texture = ExtResource( 15 )
 [node name="FrontUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits"]
 margin_left = 202.0
 margin_right = 400.0
-margin_bottom = 206.0
+margin_bottom = 207.0
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource( 13 )
 
 [node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit"]
 margin_right = 198.0
-margin_bottom = 142.0
+margin_bottom = 143.0
 size_flags_vertical = 3
 alignment = 1
 
 [node name="SkillOne" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills"]
 margin_left = 5.0
-margin_top = 8.0
+margin_top = 9.0
 margin_right = 65.0
-margin_bottom = 133.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 60, 125 )
 size_flags_vertical = 4
 flat = true
@@ -449,9 +448,9 @@ texture = ExtResource( 14 )
 
 [node name="SkillTwo" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills"]
 margin_left = 69.0
-margin_top = 8.0
+margin_top = 9.0
 margin_right = 129.0
-margin_bottom = 133.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 60, 125 )
 size_flags_vertical = 4
 flat = true
@@ -463,9 +462,9 @@ texture = ExtResource( 14 )
 
 [node name="SkillThree" type="Button" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Skills"]
 margin_left = 133.0
-margin_top = 8.0
+margin_top = 9.0
 margin_right = 193.0
-margin_bottom = 133.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 60, 125 )
 size_flags_vertical = 4
 flat = true
@@ -476,9 +475,9 @@ anchor_bottom = 1.0
 texture = ExtResource( 14 )
 
 [node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit"]
-margin_top = 146.0
+margin_top = 147.0
 margin_right = 198.0
-margin_bottom = 206.0
+margin_bottom = 207.0
 alignment = 1
 
 [node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/MidUnits/FrontUnit/Unit"]
@@ -489,7 +488,7 @@ rect_min_size = Vector2( 60, 60 )
 texture = ExtResource( 15 )
 
 [node name="RightUnits" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills"]
-margin_top = 512.0
+margin_top = 513.0
 margin_right = 400.0
 margin_bottom = 720.0
 size_flags_horizontal = 3
@@ -497,14 +496,14 @@ size_flags_vertical = 3
 
 [node name="BackUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits"]
 margin_right = 198.0
-margin_bottom = 208.0
+margin_bottom = 207.0
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource( 13 )
 
 [node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit"]
 margin_right = 198.0
-margin_bottom = 144.0
+margin_bottom = 143.0
 size_flags_vertical = 3
 alignment = 1
 
@@ -551,9 +550,9 @@ anchor_bottom = 1.0
 texture = ExtResource( 14 )
 
 [node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit"]
-margin_top = 148.0
+margin_top = 147.0
 margin_right = 198.0
-margin_bottom = 208.0
+margin_bottom = 207.0
 alignment = 1
 
 [node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/BackUnit/Unit"]
@@ -566,14 +565,14 @@ texture = ExtResource( 15 )
 [node name="FrontUnit" type="VBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits"]
 margin_left = 202.0
 margin_right = 400.0
-margin_bottom = 208.0
+margin_bottom = 207.0
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource( 13 )
 
 [node name="Skills" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit"]
 margin_right = 198.0
-margin_bottom = 144.0
+margin_bottom = 143.0
 size_flags_vertical = 3
 alignment = 1
 
@@ -620,9 +619,9 @@ anchor_bottom = 1.0
 texture = ExtResource( 14 )
 
 [node name="Unit" type="HBoxContainer" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit"]
-margin_top = 148.0
+margin_top = 147.0
 margin_right = 198.0
-margin_bottom = 208.0
+margin_bottom = 207.0
 alignment = 1
 
 [node name="Portrait" type="TextureRect" parent="BattleScreen/Panel/HBoxContainer/UnitInfoAndSkills/RightUnits/FrontUnit/Unit"]

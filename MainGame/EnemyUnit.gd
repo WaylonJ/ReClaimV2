@@ -47,7 +47,7 @@ func checkHighestVision():
 	for item in unitTypes:
 		match item:
 			"baseEnemy":
-				setVision(0)
+				vision_setNew(0)
 
 func mergeUnits(newAddition):
 	if newAddition.numBaseEnemy !=0:

@@ -180,7 +180,7 @@ func getConstructionInfo(name):
 			buildingAlliance = "enemy"
 			
 			mana = null
-			unit = 1
+			unit = .25
 			advanced = null
 			research = null
 			

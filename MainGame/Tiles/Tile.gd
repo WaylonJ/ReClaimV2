@@ -50,8 +50,9 @@ var col = null
 
 # Unit selection / stationed variables
 var selected = false
-var unitStationed = null
+var allyStationed = null
 var enemyStationed = null
+var movingUnits = []
 
 # Connections to other tiles variables
 var connections = []
@@ -75,6 +76,7 @@ onready var databaseRef = get_tree().get_root().get_node("Control").tileDatabase
 onready var rootRef = get_tree().get_root().get_node("Control")
 
 func _process(delta):
+	# Updates timer for tiles being built
 	if !buildingComplete:
 		if buildingTime <= 0:
 			completeBuildingConstruction()
@@ -85,16 +87,42 @@ func _process(delta):
 	if unitProduction != null and buildingComplete and tileAwake:
 		updateUnitProduction(delta)
 		
+	# Increments wakeTimer for sleeping tiles
 	if not tileAwake:
-		wakeTimer -= delta
-		if wakeTimer <= 0:
-			tileAwake = true
-			print("TILE AWAKE")
+		updateWakeTimer(delta)
 			
 	
 func _ready():
 	set_process(false)
 	checkIfSeen(self)
+	
+func checkIfInMovingUnit(unit):
+	if (unit in movingUnits):
+		print("Unit found in moving units")
+		return true
+		
+func removeMovingUnit(removeThis):
+	var index = 0
+	for unit in movingUnits:
+		if (unit == removeThis):
+			movingUnits.remove(index)
+			return
+		else:
+			index += 1
+
+func removeUnitCompletely(removeThis):
+	if removeThis in movingUnits:
+		removeMovingUnit(removeThis)
+	if allyStationed == removeThis:
+		allyStationed = null
+	if enemyStationed == removeThis:
+		enemyStationed = null
+	
+func updateWakeTimer(delta):
+	wakeTimer -= delta
+	if wakeTimer <= 0:
+		tileAwake = true
+		print("TILE AWAKE")
 	
 func updateUnitProduction(delta):
 	unitProduction -= delta
@@ -268,7 +296,6 @@ func resetTile():
 	buildingTime = 69
 	buildingAlliance = "neutral"
 	
-	
 	outputMana = null
 	outputUnit = null
 	unitProduction = null
@@ -321,26 +348,45 @@ func updateOutput(mana, unit, advanced, research):
 	outputAdvanced = advanced
 	outputResearch = research
 
+func appendUnitMoving(unit):
+	if unit in movingUnits:
+		return
+	else:
+		movingUnits.append(unit)
+
 func setUnitStationed(unit):
-	unitStationed = unit
-	if enemyStationed != null:
-		inBattle = true
-		snareBothUnits()
-		showBattleButton()
+	allyStationed = unit
+#	if enemyStationed != null:
+#		inBattle = true
+#		snareBothUnits()
+#		get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
+#		showBattleButton()
 
 func setEnemyStationed(unit):
 	enemyStationed = unit
-	if unitStationed != null:
-		inBattle = true
-		snareBothUnits()
-		showBattleButton()
+#	if allyStationed != null:
+#		inBattle = true
+#		snareBothUnits()
+#		showBattleButton()
 
-func snareBothUnits():
-	enemyStationed.snared = true
-	unitStationed.snared = true
+func getClosestMovingUnit():
+	return movingUnits[0]
+
+func triggerBattleOnTile(ally, enemy):
+	inBattle = true
+	snareBothUnits(ally, enemy)
+	get_tree().get_root().get_node("Control/BattleScreen").addBattle(ally, enemy, self)
+	showBattleButton()
+	
+	ally.battle_enter()
+	enemy.battle_enter()
+
+func snareBothUnits(ally, enemy):
+	enemy.snared = true
+	ally.snared = true
 
 func showBattleButton():
-	get_tree().get_root().get_node("Control/BattleScreen").addBattle(unitStationed, enemyStationed, self)
+#	get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
 	get_node("TileHolder/ShowBattleButton").show()
 
 func hideBattleButton():
@@ -349,8 +395,9 @@ func hideBattleButton():
 	# Gives enemies their last movement order so that they may continue.
 	if enemyStationed != null:
 		print("Giving the enemy it's last movement order")
-		enemyStationed.currentPath = enemyStationed.pathToMove
-		enemyStationed.updatePath()
+		if (len(enemyStationed.pathToMove) != 0):
+			enemyStationed.currentPath = enemyStationed.pathToMove
+			enemyStationed.updatePath()
 		
 
 func createUnit():
@@ -369,14 +416,14 @@ func createUnit():
 	
 	
 	if unitProductionIsAlly:
-		if unitStationed == null:
+		if allyStationed == null:
 			get_tree().get_root().get_node("Control/UnitHolder/UnitController").add_child(newUnit)
 			newUnit.add_to_group("Units")
 			newUnit.setTile(self)
 			newUnit.set_position(Vector2(self.get_position()[0], self.get_position()[1] - 75))
 			setUnitStationed(newUnit)
 		else:
-			unitStationed.mergeWithOtherGroup(newUnit)
+			allyStationed.mergeWithOtherGroup(newUnit)
 	else:
 		if enemyStationed == null:
 			get_tree().get_root().get_node("Control/UnitHolder/EnemyController").add_child(newUnit)
@@ -402,16 +449,40 @@ func getAllUnitsStationed():
 	
 	return foundUnits
 	
+func getAllUnitsForTile():
+	var returnUnits = []
+	if allyStationed != null:
+		returnUnits.append(allyStationed)
+	if enemyStationed != null:
+		returnUnits.append(enemyStationed)
+	
+	if (len(movingUnits) != 0):
+		for unit in movingUnits:
+			returnUnits.append(unit)
+	
+	return returnUnits
+	
 func checkIfAnyUnitsOnThisTile(alliance):
 	if alliance == "ally":
-		for unit in get_tree().get_nodes_in_group("Units"):
-			if unit.hostTile == self:
+		for unit in movingUnits:
+			if unit.isAlly:
 				return true
+		if allyStationed != null:
+			return true
+		
+#		for unit in get_tree().get_nodes_in_group("Units"):
+#			if unit.hostTile == self:
+#				return true
 
 	else:
-		for unit in get_tree().get_nodes_in_group("Enemies"):
-			if unit.hostTile == self:
+#		for unit in get_tree().get_nodes_in_group("Enemies"):
+#			if unit.hostTile == self:
+#				return true
+		for unit in movingUnits:
+			if !unit.isAlly:
 				return true
+		if enemyStationed != null:
+			return true
 		
 	return false
 	

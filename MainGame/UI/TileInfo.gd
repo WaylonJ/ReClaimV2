@@ -34,13 +34,13 @@ func _input(event):
 			
 		# Left click
 		if !event.is_pressed() and event.button_index == 1:
-			print("mouse click")
-			print(mouseInTile)
+#			print("mouse click")
+#			print(mouseInTile)
 			globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 			
 			# Click onto a completed building tile
 			if mouseInTile and selectedTile.buildingName != "Blank":
-				print(selectedTile.buildingName)
+#				print(selectedTile.buildingName)
 				
 				# Checks to make sure nothing else is selected, or only other tiles are.
 				if globalSelected == "tile" or globalSelected == "e":
@@ -53,7 +53,7 @@ func _input(event):
 					
 					# Append item to selectedTileGroup if group is empty or it's the same type
 					appendIfNoTilesSelectedOrSimilarTiles()
-					print("Selected tiles: " + str(selectedTileGroup))
+#					print("Selected tiles: " + str(selectedTileGroup))
 					if doubleClick:
 						if selectedTile.buildingName == "Base":
 							return
@@ -65,7 +65,7 @@ func _input(event):
 			
 			# Click on the map, but not in a tile. Shift key is NOT held down
 			elif not Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
-				print("here1")
+#				print("here1")
 				doubleClick = false
 				if globalSelected == "tile":
 					get_tree().get_root().get_node("Control").unselectEverything()
@@ -116,7 +116,7 @@ func appendIfNoTilesSelectedOrSimilarTiles():
 			selectTile()
 			updateUI()
 		elif selectedTile == baseTile:
-			print("here2")
+#			print("here2")
 			selectBaseTile()
 		
 		#Calls UI update / sets previousTile
