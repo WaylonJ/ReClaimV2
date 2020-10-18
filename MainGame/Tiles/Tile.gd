@@ -33,7 +33,7 @@ var buildingAlliance = "neutral"
 var tileAwake = true
 var wakeThreshold = 1
 var wakeTimer = 1
-var wakeTimerConstant = 2
+var wakeTimerConstant = 0.1
 
 # Build production variables
 var outputMana = null
@@ -357,34 +357,20 @@ func unit_appendUnitMoving(unit):
 
 func unit_setUnitStationed(unit):
 	allyStationed = unit
-#	if enemyStationed != null:
-#		inBattle = true
-#		battle_snareBothUnits()
-#		get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
-#		battle_showBattleButton()
 
 func unit_setEnemyStationed(unit):
 	enemyStationed = unit
-#	if allyStationed != null:
-#		inBattle = true
-#		battle_snareBothUnits()
-#		battle_showBattleButton()
 
 func unit_getClosestMovingUnit():
 	return movingUnits[0]
 
 func battle_triggerBattleOnTile(ally, enemy):
 	inBattle = true
-	battle_snareBothUnits(ally, enemy)
 	get_tree().get_root().get_node("Control/BattleScreen").addBattle(ally, enemy, self)
 	battle_showBattleButton()
 	
 	ally.battle_enter()
 	enemy.battle_enter()
-
-func battle_snareBothUnits(ally, enemy):
-	enemy.snared = true
-	ally.snared = true
 
 func battle_showBattleButton():
 #	get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
@@ -400,7 +386,6 @@ func battle_hideBattleButton():
 			enemyStationed.currentPath = enemyStationed.pathToMove
 			enemyStationed.movement_updatePath()
 		
-
 func bldg_createUnit():
 	var unit = null
 	var newUnit = null

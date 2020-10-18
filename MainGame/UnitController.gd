@@ -38,7 +38,7 @@ func makeLeaderUnit(baseTile):
 	leader.add_to_group("Units")
 	leader.hostTile = baseTile
 	baseTile.unit_setUnitStationed(leader)
-	leader.stats_createUnit("Leader", 100)
+	leader.stats_createUnit("Leader", 1)
 	leader.set_position(Vector2(baseTilePosition[0], baseTilePosition[1] - 75))
 	add_child(leader)
 	

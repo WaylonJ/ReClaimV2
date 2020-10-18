@@ -149,6 +149,7 @@ func movement_updatePath():
 	#Append to unitMoving array on host.
 	if len(currentPath) != 0:
 		hostTile.unit_appendUnitMoving(self)
+	hostTile.vision_updateInSightOf(vision, self, true, false)
 	
 	# Vision stuff
 	if !isAlly:
@@ -160,8 +161,6 @@ func movement_updatePath():
 		return
 	
 	movement_evaluateRemainingTraveling()
-	
-	hostTile.vision_updateInSightOf(vision, self, true, false)
 #	print("In sight of values: " + str(prevTile.inSightOf))
 
 func movement_evaluateRemainingTraveling():
@@ -187,6 +186,9 @@ func movement_checkCollision():
 	# Checks to see if theres conflicting units on the tile. Ally and enemy, or enemy and ally.
 	if isAlly:
 		if hostTile.unit_checkIfAnyUnitsOnThisTile("enemy") != false:
+			# Battle is currently underway, 
+#			if hostTile.inBattle:
+				
 			if hostTile.enemyStationed != null:
 				hostTile.battle_triggerBattleOnTile(self, hostTile.enemyStationed)
 			else:
@@ -197,18 +199,26 @@ func movement_checkCollision():
 	else:
 		if hostTile.unit_checkIfAnyUnitsOnThisTile("ally") != false:
 			if hostTile.allyStationed != null:
-				hostTile.battle_triggerBattleOnTile(self, hostTile.allyStationed)
+				hostTile.battle_triggerBattleOnTile(hostTile.allyStationed, self)
 			else:
 				# hostTile.unit_getClosestMovingUnit is not actually made, simply returning first found
-				hostTile.battle_triggerBattleOnTile(self, hostTile.unit_getClosestMovingUnit())
+				hostTile.battle_triggerBattleOnTile(hostTile.unit_getClosestMovingUnit(), self)
 			return true
+				
+func battle_placeAtBattlePositions():
+	if isAlly:
+		set_position(Vector2(hostTile.get_position()[0], hostTile.get_position()[1] - 75))
+	else:
+		set_position(Vector2(hostTile.get_position()[0] + 65, hostTile.get_position()[1] - 75))
 				
 func battle_enter():
 	set_process(false)
 	currentPath.push_front(hostTile)
+	snared = true
 	
-	directionMoving = "up"
-	movement_placeAtStartOfPath(self)
+#	directionMoving = "up"
+#	movement_placeAtStartOfPath(hostTile)
+	battle_placeAtBattlePositions()
 	
 	# Reset Hosttile's properties containing this unit.
 	hostTile.unit_removeUnitCompletely(self)
@@ -216,6 +226,7 @@ func battle_enter():
 		hostTile.allyStationed = self
 	else:
 		hostTile.enemyStationed = self
+	
 	
 func battle_won():
 	snared = false
@@ -281,15 +292,20 @@ func movement_moveUnitAlongPath(distanceMoved):
 			self.set_position(Vector2(self.get_position()[0] - distanceMoved, self.get_position()[1]))
 	
 func movement_placeAtStartOfPath(tile):
+	var bufferChange = 0
+	if !isAlly:
+		bufferChange = 65
+		
 	match directionMoving:
 		"up":
-			self.set_position(Vector2(tile.get_position()[0], tile.get_position()[1] - 75))
+			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] - 75))
 		"down":
-			self.set_position(Vector2(tile.get_position()[0], tile.get_position()[1] + 125))
+			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] + 125))
 		"right":
-			self.set_position(Vector2(tile.get_position()[0] + 125, tile.get_position()[1]))
+			self.set_position(Vector2(tile.get_position()[0] + 125, tile.get_position()[1] + bufferChange))
 		"left":
-			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1]))
+			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1] + bufferChange))
+		
 
 func movement_findDirection(nextTile):
 	if hostTile.row < nextTile.row:
