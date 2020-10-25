@@ -65,11 +65,11 @@ var distanceFromBase = 0
 # Vision variables
 var distanceFromOriginal = 0
 var vision = 0
-var inSightOf = []
+var inSightOf = {}
 var currentlySeen = false
 var seenOnce = false
 var tempVisionSeenOnce = false
-var lightLevel
+var lightLevel = -1
 
 
 var inBattle = false
@@ -206,26 +206,75 @@ func stats_setUnitCreationInfo(unitName):
 		unitProductionIsAlly = true
 
 func vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck):
-	print("IN CHECK EDGE OF VISION")
-
+#	print(tile.lightLevel)
 	
-	if adding:
-		# The tile is not an edge tile from this new object.
-		if toCheck > 0:
-			pass
-#			if edgeOfSight == true:
-#				pass
-				
-		# Need to check if I can make sightOf a dictionary. If I can make it the
-		# tile: toCheck, directionLightCameFrom
-		# Then it'd be easier to control what I need for this
+	for child in tile.get_node("LightShades").get_children():
+		child.hide()
+	
+	# If it has light level 2 or higher, give it full vision.
+	if(tile.lightLevel >= 2):
+		return
 		
+	# Assuming it's light level == 1. Need to find adjacent lightLevel == 2 tiles to
+	# determine the right modulate to apply.
+	
+	# Up, right, down, left
+	var conns = [0, 0, 0, 0]
+	
+	if tile.connections[0] == true and tile.aboveTile != null and tile.aboveTile.lightLevel == 2:
+		conns[0] = 1
+	if tile.connections[1] == true and tile.rightTile != null and tile.rightTile.lightLevel == 2:
+		conns[1] = 1
+	if tile.connections[2] == true and tile.belowTile != null and tile.belowTile.lightLevel == 2:
+		conns[2] = 1
+	if tile.connections[3] == true and tile.leftTile != null and tile.leftTile.lightLevel == 2:
+		conns[3] = 1
+	
+	match conns:
+		# 1 sources
+		[0, 0, 0, 0]:
+			print("a")
+			tile.get_node("LightShades/0Source").show()
 		
+		# 1 sources
+		[1, 0, 0, 0]:
+			tile.get_node("LightShades/1SourceTop").show()
+		[0, 1, 0, 0]:
+			tile.get_node("LightShades/1SourceRight").show()
+		[0, 0, 1, 0]:
+			tile.get_node("LightShades/1SourceBot").show()
+		[0, 0, 0, 1]:
+			tile.get_node("LightShades/1SourceLeft").show()
+#		[0, 0, 0, 0]
+		# 2 sources (opposite)
+		[1, 0, 1, 0]:
+			tile.get_node("LightShades/2SourceVertical").show()
+		[0, 1, 0, 1]:
+			tile.get_node("LightShades/2SourceHorizontal").show()
 		
-		pass
+		# 2 sources (adjacent)
+		[1, 1, 0, 0]:
+			tile.get_node("LightShades/2SourceTopRight").show()
+		[0, 1, 1, 0]:
+			tile.get_node("LightShades/2SourceRightBot").show()
+		[0, 0, 1, 1]:
+			tile.get_node("LightShades/2SourceBotLeft").show()
+		[1, 0, 0, 1]:
+			tile.get_node("LightShades/2SourceLeftTop").show()
 		
-	else:
-		pass
+		# 3 sources
+		[0, 1, 1, 1]:
+			tile.get_node("LightShades/3SourceTop").show()
+		[1, 0, 1, 1]:
+			tile.get_node("LightShades/3SourceRight").show()
+		[1, 1, 0, 1]:
+			tile.get_node("LightShades/3SourceBot").show()
+		[1, 1, 1, 0]:
+			tile.get_node("LightShades/3SourceLeft").show()
+		
+		# 4 sources
+		[1, 1, 1, 1]:
+			tile.get_node("LightShades/4Source").show()
 
 func vision_updateInSightOf(toCheck, objectGivingSight, adding, isABuilding):
 	var queueOfRemaining = [self]
@@ -248,6 +297,7 @@ func vision_updateInSightOf(toCheck, objectGivingSight, adding, isABuilding):
 			arrayOfAll.append(tile)
 			
 			vision_addOrRemoveFromSight(adding, objectGivingSight, tile, toCheck + 1)
+			vision_updateLightLevel(tile)
 			vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck)
 		
 		numberToCheckForAppend = queueOfRemaining.size()
@@ -279,30 +329,43 @@ func vision_updateInSightOf(toCheck, objectGivingSight, adding, isABuilding):
 		tile.tempVisionSeenOnce = false
 	
 
+func vision_updateLightLevel(tile):
+	var highestLevel = 0
+	
+	for source in tile.inSightOf:
+		if tile.inSightOf[source] > highestLevel:
+			highestLevel = tile.inSightOf[source]
+	
+	tile.lightLevel = highestLevel
+
 func vision_addOrRemoveFromSight(adding, objectGivingSight, tile, newLightLevel):
 	# Adding items to inSightOf
 	if adding:
-		var newItem = true
+		tile.inSightOf[objectGivingSight] = newLightLevel
 		
-		# Ensures this object isn't already listed in inSightOf
-		for item in tile.inSightOf:
-			if item == objectGivingSight:
-				newItem = false
-				
-		#If it's a new item, add it to the list of inSightOf
-		if newItem:
-			tile.inSightOf.append(objectGivingSight)
+		
+		
+#		var newItem = true
+#
+#		# Ensures this object isn't already listed in inSightOf
+#		for item in tile.inSightOf:
+#			if item == objectGivingSight:
+#				newItem = false
+#
+#		#If it's a new item, add it to the list of inSightOf
+#		if newItem:
+#			tile.inSightOf.append(objectGivingSight)
 			
 		# Check if this is an enemy tile that needs to be woken up.
 #		tile.bldg_checkToWakeUp(distanceFromOriginal)
 	
 	# Remove items from inSightOf
 	else:
-		var index = 0
-		for item in tile.inSightOf:
-			if item == objectGivingSight:
-				tile.inSightOf.remove(index)
-			index += 1
+#		var index = 0
+#		for item in tile.inSightOf:
+#			if item == objectGivingSight:
+		tile.inSightOf.erase(objectGivingSight)
+#			index += 1
 	
 	tile.vision_checkIfSeen(tile)
 
@@ -335,15 +398,15 @@ func basic_resetTile():
 	
 
 func vision_checkIfSeen(tile):
-	# Hidden
+	# Hidden, hide most things
 	if tile.inSightOf.empty():
 		tile.get_node("TileHolder/Background/Unseen").show()
-		tile.get_node("MapBackground").hide()
+#		tile.get_node("MapBackground").hide()
 		tile.get_node("TileHolder/BuildingProgressBar").hide()
 		tile.currentlySeen = false
 		tile.vision_setEnemyVisibility(false)
 	
-	#Seen
+	#Seen, show most things
 	else:
 		tile.get_node("TileHolder/Background/Unseen").hide()
 		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)

@@ -392,7 +392,7 @@ func vision_checkHighest():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				vision_setNew(4)
+				vision_setNew(2)
 			"Goblin":
 				vision_setNew(1)
 	

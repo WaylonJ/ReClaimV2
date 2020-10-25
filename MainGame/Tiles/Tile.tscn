@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://MainGame/Tiles/Tile.gd" type="Script" id=1]
 [ext_resource path="res://MainGame/Tiles/Resources/PH_Tile_BaseMapBG.png" type="Texture" id=2]
@@ -26,9 +26,13 @@
 [ext_resource path="res://MainGame/Tiles/Resources/LightShades/4 source.png" type="Texture" id=24]
 [ext_resource path="res://MainGame/Tiles/Resources/LightShades/1 source left.png" type="Texture" id=25]
 [ext_resource path="res://MainGame/Tiles/Resources/LightShades/1 source bot.png" type="Texture" id=26]
+[ext_resource path="res://MainGame/Tiles/Resources/LightShades/2 source left top.png" type="Texture" id=27]
+[ext_resource path="res://MainGame/Tiles/Resources/LightShades/2 source bot left.png" type="Texture" id=28]
+[ext_resource path="res://MainGame/Tiles/Resources/LightShades/2 source top right.png" type="Texture" id=29]
+[ext_resource path="res://MainGame/Tiles/Resources/LightShades/2 source right bot.png" type="Texture" id=30]
+[ext_resource path="res://MainGame/Tiles/Resources/LightShades/0 source white.png" type="Texture" id=31]
 
 [node name="Tile" type="Panel"]
-modulate = Color( 1, 1, 1, 0.580392 )
 self_modulate = Color( 1, 1, 1, 0 )
 margin_left = 245.185
 margin_top = 186.185
@@ -41,15 +45,16 @@ __meta__ = {
 }
 
 [node name="MapBackground" type="Sprite" parent="."]
+visible = false
 modulate = Color( 0.611765, 0.611765, 0.611765, 1 )
 show_behind_parent = true
 texture = ExtResource( 2 )
 offset = Vector2( 62, 62 )
 
 [node name="Walls" type="Sprite" parent="."]
-visible = false
 modulate = Color( 0.611765, 0.611765, 0.611765, 1 )
 show_behind_parent = true
+z_index = 2
 offset = Vector2( 62, 62 )
 
 [node name="BotClosed" type="TextureRect" parent="Walls"]
@@ -150,7 +155,34 @@ __meta__ = {
 
 [node name="LightShades" type="Sprite" parent="."]
 show_behind_parent = true
+z_index = 1
 offset = Vector2( 62, 62 )
+
+[node name="000Base" type="TextureRect" parent="LightShades"]
+modulate = Color( 0.0470588, 0.0392157, 0.156863, 1 )
+self_modulate = Color( 1, 1, 1, 0.584314 )
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+mouse_filter = 2
+texture = ExtResource( 31 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="0Source" type="TextureRect" parent="LightShades"]
+visible = false
+modulate = Color( 0.0470588, 0.0392157, 0.156863, 1 )
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+mouse_filter = 2
+texture = ExtResource( 31 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="1SourceTop" type="TextureRect" parent="LightShades"]
 visible = false
@@ -220,6 +252,54 @@ margin_right = 212.0
 margin_bottom = 212.0
 mouse_filter = 2
 texture = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="2SourceTopRight" type="TextureRect" parent="LightShades"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+mouse_filter = 2
+texture = ExtResource( 29 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="2SourceRightBot" type="TextureRect" parent="LightShades"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+mouse_filter = 2
+texture = ExtResource( 30 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="2SourceBotLeft" type="TextureRect" parent="LightShades"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+mouse_filter = 2
+texture = ExtResource( 28 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="2SourceLeftTop" type="TextureRect" parent="LightShades"]
+visible = false
+margin_left = -88.0
+margin_top = -88.0
+margin_right = 212.0
+margin_bottom = 212.0
+mouse_filter = 2
+texture = ExtResource( 27 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -309,7 +389,8 @@ text = "Upg"
 [node name="Background" type="TextureRect" parent="TileHolder"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 124.0
+margin_left = 1.0
+margin_right = 125.0
 margin_bottom = 124.0
 texture = ExtResource( 3 )
 __meta__ = {

@@ -94,7 +94,7 @@ func startNewGame():
 	
 
 func populateBoard():
-	makeEnemyBases()
+#	makeEnemyBases()
 	makeEnemyUnits()
 
 func setTileBorders(array):	
