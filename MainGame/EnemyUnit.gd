@@ -12,35 +12,35 @@ var unitSizeTriggerConstant = 3
 
 func _init():
 	isAlly = false
-	generateUnitRefs()
+	basic_generateUnitRefs()
 
 func _ready():
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/EnemyController"), "_mouseExited")
 	set_process(false)
 
-func generateUnitRefs():
+func basic_generateUnitRefs():
 	leaderRef = leaderScript.new()
 	add_child(leaderRef)
 	
 	baseEnemyRef = baseEnemyScript.new()
 	add_child(baseEnemyRef)
 
-func createUnit(unitName, amount):
+func stats_createUnit(unitName, amount):
 	match unitName:
 		"baseEnemy":
 			unitTypes.append("baseEnemy")
 			unitRefs["baseEnemy"] = baseEnemyRef
 			baseEnemyRef.addFreshUnit(amount)
 			numBaseEnemy += amount
-			updateTotalStats()
+			stats_updateTotalStats()
 			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_BasicEnemy.png")
 			get_node("BG").set("texture", portrait)
-			setFormation("baseEnemy")
+			ui_setFormation("baseEnemy")
 	numUnits = amount
 	
-	showNumberOfUnitsTag()	
+	ui_showNumberOfUnitsTag()	
 	checkHighestVision()
 
 func checkHighestVision():
@@ -49,38 +49,38 @@ func checkHighestVision():
 			"baseEnemy":
 				vision_setNew(0)
 
-func mergeUnits(newAddition):
+func stats_mergeUnits(newAddition):
 	if newAddition.numBaseEnemy !=0:
 		if numBaseEnemy == 0:
 			unitTypes.append("baseEnemy")
 			unitRefs["baseEnemy"] = baseEnemyRef
-			setFormation("baseEnemy")
+			ui_setFormation("baseEnemy")
 			
 		numBaseEnemy += newAddition.numBaseEnemy
 		baseEnemyRef.mergeUnit(newAddition.baseEnemyRef)
 	numUnits += newAddition.numUnits
-	updateTotalStats()
+	stats_updateTotalStats()
 	
-func mergeWithOtherGroup(newAddition):
+func stats_mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
-	mergeUnits(newAddition)
+	stats_mergeUnits(newAddition)
 	
-	if hostTile.inBattle:
-		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+	#Removes old unit.
+	newAddition.queue_free()
 	
 	if hostTile.buildingAlliance == "enemy":
 		checkAttackTrigger()
 	
-func setFormation(unit):
+func ui_setFormation(unit):
 	# Ensures this unit type doesnt already have a position
 	if !(unit in formation):
 		match unit:
 			"baseEnemy":
-				setFormationClosestTo(1, unit)
+				ui_setFormationClosestTo(1, unit)
 			_:
 				print("Unit.gd: we got a mis-match")
 			
-func getRef(unitName):
+func basic_getRef(unitName):
 	match unitName:
 		"baseEnemy":
 			return baseEnemyRef
@@ -90,10 +90,10 @@ func checkAttackTrigger():
 		unitSizeTrigger = floor(unitSizeTriggerConstant * (pow(hostTile.distanceFromBase, 1.2)))
 	
 	if numUnits >= unitSizeTrigger:
-		print("Unit size: " + str(unitSizeTrigger))
+#		print("Unit size: " + str(unitSizeTrigger))
 		sendToBase()
 
 func sendToBase():
-	print("Sending enemy attack!!")
+#	print("Sending enemy attack!!")
 	rootRef.unitMovement.autoMoveUnit(self, rootRef.baseTile)
 	

@@ -94,28 +94,28 @@ func startNewGame():
 	
 
 func populateBoard():
-	makeEnemyBases()
+#	makeEnemyBases()
 	makeEnemyUnits()
 
 func setTileBorders(array):	
 	for row in array:
 		for item in row:
 			if item.connections[0]:
-				item.get_node("MapBackground/TopOpen").show()
+				item.get_node("Walls/TopOpen").show()
 			else:
-				item.get_node("MapBackground/TopClosed").show()
+				item.get_node("Walls/TopClosed").show()
 			if item.connections[1]:
-				item.get_node("MapBackground/RightOpen").show()
+				item.get_node("Walls/RightOpen").show()
 			else:
-				item.get_node("MapBackground/RightClosed").show()
+				item.get_node("Walls/RightClosed").show()
 			if item.connections[2]:
-				item.get_node("MapBackground/BotOpen").show()
+				item.get_node("Walls/BotOpen").show()
 			else:
-				item.get_node("MapBackground/BotClosed").show()
+				item.get_node("Walls/BotClosed").show()
 			if item.connections[3]:
-				item.get_node("MapBackground/LeftOpen").show()
+				item.get_node("Walls/LeftOpen").show()
 			else:
-				item.get_node("MapBackground/LeftClosed").show()
+				item.get_node("Walls/LeftClosed").show()
 
 # This should probably all be in a new script
 func makeEnemyBases():
@@ -206,9 +206,9 @@ func checkForAllyOrEnemyTilesNearby(tile, toCheck, nothingFound):
 func makeEnemyBase(tile):
 	var enemyTilePNG = preload("res://MainGame/Tiles/Resources/PH_Tile_EnemyBase.png")
 	tile.set("buildingName", "EnemyTest")
-	tile.findDistanceFromBase(baseTile)
-	tile.startBuilding()
-	tile.createTile()
+	tile.basic_findDistanceFromBase(baseTile)
+	tile.bldg_startBuilding()
+	tile.bldg_createTile()
 	tile.get_node("TileHolder/Background").set("texture", enemyTilePNG)
 	
 
@@ -239,8 +239,8 @@ func makeBaseTile():
 	
 	baseTile = startingArray[length][length]
 	baseTile.set("buildingName", "Base")
-	baseTile.startBuilding()
-	baseTile.createTile()
+	baseTile.bldg_startBuilding()
+	baseTile.bldg_createTile()
 	baseTile.get_node("TileHolder/Background").set("texture", BaseTilePNG)
 	
 func updateTotalProduction(mana, advanced, research):

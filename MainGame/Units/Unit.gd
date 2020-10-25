@@ -52,19 +52,19 @@ func _ready():
 	set_process(false)
 
 func _init():
-	generateUnitRefs()
+	basic_generateUnitRefs()
 
 func _process(delta):
-	updateMovement(delta)
+	movement_updateMovement(delta)
 	
 
-func updateMovement(delta):
+func movement_updateMovement(delta):
 	distanceLeft -= delta * totalSpeed
 	distanceMovedSinceLastTick += (delta * totalSpeed) / numUnits
 	
 	# Progress unit towards next tile visually
 	if distanceMovedSinceLastTick >= 1:
-		moveUnitAlongPath(distanceMovedSinceLastTick * 10)
+		movement_moveUnitAlongPath(distanceMovedSinceLastTick * 10)
 		distanceMovedSinceLastTick -= 1
 	
 	# Units has reached its destination
@@ -72,28 +72,28 @@ func updateMovement(delta):
 		set_process(false)
 		
 		if isAlly:
-			hostTile.updateInSightOf(vision, self, false, false)
-		updatePath()
+			hostTile.vision_updateInSightOf(vision, self, false, false)
+		movement_updatePath()
 
-func generateUnitRefs():
+func basic_generateUnitRefs():
 	leaderRef = leaderScript.new()
 	add_child(leaderRef)
 	
 	goblinRef = goblinScript.new()
 	add_child(goblinRef)
 
-func appendPath(newPath, replacing):
+func movement_appendPath(newPath, replacing):
 	if replacing:
 		# Start of new movement order, check if currently moving
 		if (isMoving == true):
-			checkIfTurnAroundNeeded(newPath)
+			movement_checkIfTurnAroundNeeded(newPath)
 		
 		else:
 			isMoving = true
-			removeSelfFromPreviousTileAsStationed()
+			hostTile.unit_removeUnitCompletely(self)
 			currentPath = newPath
 #			hostTile = null
-			updatePath()
+			movement_updatePath()
 	else:
 		for item in newPath:
 			currentPath.append(item)
@@ -102,11 +102,11 @@ func appendPath(newPath, replacing):
 #	elif replacing:
 #		returnUnitToHostTile()
 
-func checkIfTurnAroundNeeded(newPath):
+func movement_checkIfTurnAroundNeeded(newPath):
 	# If length is 0, unit is being asked to return to prev Tile
 	if newPath.size() == 1:
 		print("Return to host")
-		switchDirections()
+		ui_switchDirections()
 	
 	# Check if the newPath's first next tile is the same as the one currently being traveled to.
 	elif newPath[1] == currentPath[0]:
@@ -115,7 +115,7 @@ func checkIfTurnAroundNeeded(newPath):
 	# The unit needs to turn around, then reset the path
 	else:
 		print("Turn around, then continue on path")
-		switchDirections()
+		ui_switchDirections()
 		if currentPath[0] == newPath[0]:
 			var size = newPath.size()
 			
@@ -124,14 +124,14 @@ func checkIfTurnAroundNeeded(newPath):
 	
 	currentPath = newPath
 
-func switchDirections():
+func ui_switchDirections():
 	# Sets this so if multiple switch backs occur, the unit doesn't teleport when the path is replaced.
 	hostTile = currentPath[0]
 	
-	directionMoving = setOppositeDirection()
+	directionMoving = movement_setOppositeDirection()
 	distanceLeft = (DIST_CONSTANT * numUnits) - distanceLeft
 
-func setOppositeDirection():
+func movement_setOppositeDirection():
 	match directionMoving:
 		"up":
 			return "down"
@@ -142,112 +142,120 @@ func setOppositeDirection():
 		"right":
 			return "left"
 
-func updatePath():
-#	print("In update, current path: " + str(currentPath))
-	removeSelfFromPreviousTileAsMoving()
-	print(len(currentPath))
+func movement_updatePath():
+	host_removeSelfFromPreviousTileAsMoving()
 	hostTile = currentPath.pop_front()
-#	setUnitStationedOnHost()
+
+	#Append to unitMoving array on host.
 	if len(currentPath) != 0:
-		setUnitMovingOnHost()
+		hostTile.unit_appendUnitMoving(self)
+	hostTile.vision_updateInSightOf(vision, self, true, false)
 	
 	# Vision stuff
 	if !isAlly:
-		hideOrShowEnemiesBasedOnTileVisibility()
+		vision_hideOrShowEnemiesBasedOnTileVisibility()
 	
-	# When updatePath is called, need to see if entering this new tile caused a collision
-	if (checkCollision()):
+	# When movement_updatePath is called, need to see if entering this new tile caused a collision
+	if (movement_checkCollision()):
 		print("Collision detected, starting battle")
 		return
 	
-	evaluateRemainingTraveling()
-	
-	hostTile.updateInSightOf(vision, self, true, false)
+	movement_evaluateRemainingTraveling()
 #	print("In sight of values: " + str(prevTile.inSightOf))
 
-func evaluateRemainingTraveling():
+func movement_evaluateRemainingTraveling():
 	# Still remaining nodes to go
 	if len(currentPath) > 0:
+#		print("setting process true")
 		set_process(true)
-		findDirection(currentPath[0])
-		placeAtStartOfPath(hostTile)
-		calcDistances()
+		movement_findDirection(currentPath[0])
+		movement_placeAtStartOfPath(hostTile)
+		movement_calcDistances()
 		
 	# Done traveling
 	else:
 #		print("Done traveling")
 		isMoving = false
-		removeSelfFromPreviousTileAsMoving()
+		host_removeSelfFromPreviousTileAsMoving()
 		currentPath = []
-		setUnitStationedOnHost()
+		host_setUnitStationedOnHost()
 		# Resets the position of the unit to be at the top of the tile
 		directionMoving = "up"
-		placeAtStartOfPath(hostTile)
+		movement_placeAtStartOfPath(hostTile)
 
-func checkCollision():
+func movement_checkCollision():
 	# Checks to see if theres conflicting units on the tile. Ally and enemy, or enemy and ally.
 	if isAlly:
-		if hostTile.checkIfAnyUnitsOnThisTile("enemy") != false:
+		if hostTile.unit_checkIfAnyUnitsOnThisTile("enemy") != false:
+			# Battle is currently underway, 
+			if hostTile.inBattle:
+				rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+				# We don't want to trigger a new battle. If the unit ends here, it'll merge.
+				# If it keeps moving, it'll just move past.
+				return false
+				
 			if hostTile.enemyStationed != null:
-				hostTile.triggerBattleOnTile(self, hostTile.enemyStationed)
+				hostTile.battle_triggerBattleOnTile(self, hostTile.enemyStationed)
 			else:
-				# hostTile.getClosestMovingUnit is not actually made, simply returning first found
-				hostTile.triggerBattleOnTile(self, hostTile.getClosestMovingUnit())
+				# hostTile.unit_getClosestMovingUnit is not actually made, simply returning first found
+				hostTile.battle_triggerBattleOnTile(self, hostTile.unit_getClosestMovingUnit())
 			return true
 	
 	else:
-		if hostTile.checkIfAnyUnitsOnThisTile("ally") != false:
+		if hostTile.unit_checkIfAnyUnitsOnThisTile("ally") != false:
+			if hostTile.inBattle:
+				rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+				# We don't want to trigger a new battle. If the unit ends here, it'll merge.
+				# If it keeps moving, it'll just move past.
+				return false
+				
 			if hostTile.allyStationed != null:
-				hostTile.triggerBattleOnTile(self, hostTile.allyStationed)
+				hostTile.battle_triggerBattleOnTile(hostTile.allyStationed, self)
 			else:
-				# hostTile.getClosestMovingUnit is not actually made, simply returning first found
-				hostTile.triggerBattleOnTile(self, hostTile.getClosestMovingUnit())
+				# hostTile.unit_getClosestMovingUnit is not actually made, simply returning first found
+				hostTile.battle_triggerBattleOnTile(hostTile.unit_getClosestMovingUnit(), self)
 			return true
+				
+func battle_placeAtBattlePositions():
+	if isAlly:
+		set_position(Vector2(hostTile.get_position()[0], hostTile.get_position()[1] - 75))
+	else:
+		set_position(Vector2(hostTile.get_position()[0] + 65, hostTile.get_position()[1] - 75))
 				
 func battle_enter():
 	set_process(false)
+	isMoving = false
 	currentPath.push_front(hostTile)
+	snared = true
 	
-	directionMoving = "up"
-	placeAtStartOfPath(self)
+#	directionMoving = "up"
+#	movement_placeAtStartOfPath(hostTile)
+	battle_placeAtBattlePositions()
 	
 	# Reset Hosttile's properties containing this unit.
-	hostTile.removeUnitCompletely(self)
+	hostTile.unit_removeUnitCompletely(self)
 	if isAlly:
 		hostTile.allyStationed = self
 	else:
 		hostTile.enemyStationed = self
 	
+	
 func battle_won():
 	snared = false
-	set_process(true)
+	
+	# Gives enemies their last movement order so that they may continue.
+	if (len(currentPath) > 0):
+		print("Giving the winning unit it's last movement order")
+		set_process(true)
+#		currentPath = pathToMove
+		movement_updatePath()
 
 	
 func battle_lost():
-	hostTile.removeUnitCompletely(self)
+	hostTile.unit_removeUnitCompletely(self)
 	queue_free()
-	
-	
-	
-#	if ((isAlly and hostTile.checkIfAnyUnitsOnThisTile("enemy") != false) or 
-#	(not isAlly and hostTile.checkIfAnyUnitsOnThisTile("ally") != false)):
-		
-#		sendAllUnitsToTile(hostTile)
-#		return true
-#		hostTile.triggerBattleOnTile()
-#		currentPath.push_front(hostTile)
-#		pathToMove = currentPath
-#		currentPath = []
 
-func sendAllUnitsToTile(host):
-	var units = host.getAllUnitsForTile()
-	for unit in units:
-		unit.set_process(false)
-		directionMoving = "up"
-		unit.placeAtStartOfPath(hostTile)
-	
-
-func hideOrShowEnemiesBasedOnTileVisibility():
+func vision_hideOrShowEnemiesBasedOnTileVisibility():
 	# If the tile it's currently on is hidden, it should hide
 	if !hostTile.currentlySeen:
 		self.hide()
@@ -256,59 +264,44 @@ func hideOrShowEnemiesBasedOnTileVisibility():
 	if len(currentPath) != 0:
 		if currentPath[0].currentlySeen:
 			self.show()
-
-func removeSelfFromInSightOf():
-	hostTile.updateInSightOf(vision, self, false, false)
-
-func removeSelfFromPreviousTileAsStationed():
-#	print("removing self from this tile: " + str(hostTile))
-	if isAlly:
-		if hostTile.allyStationed == self:
-			hostTile.allyStationed = null
-	else:
-		if hostTile.enemyStationed == self:
-			hostTile.enemyStationed = null
 	
-func removeSelfFromPreviousTileAsMoving():
-	if hostTile.checkIfInMovingUnit(self):
-		hostTile.removeMovingUnit(self)
+func host_removeSelfFromPreviousTileAsMoving():
+	if hostTile.unit_checkIfInMovingUnit(self):
+		hostTile.unit_removeMovingUnit(self)
 	
-func setUnitMovingOnHost():
-	hostTile.appendUnitMoving(self)
 	
-func setUnitStationedOnHost():
-	print("in set unit stationed host")
-#	print("Setting self on this tile: " + str(hostTile))
+func host_setUnitStationedOnHost():
 	# If this unit still has movement to go, do NOT merge
 	if not currentPath.empty():
 		return
 	
 	if isAlly:
-		print("ally")
 		# Unit already exists on the tile, merge!
 		if hostTile.allyStationed != null and hostTile.allyStationed != self:
-			hostTile.allyStationed.mergeWithOtherGroup(self)
+			hostTile.allyStationed.stats_mergeWithOtherGroup(self)
 		
 		# No unit here, set self!
 		else:
-			print("setting stationed")
-			hostTile.setUnitStationed(self)
+			hostTile.unit_setUnitStationed(self)
 	else:
+		print("AM ENEMY")
 		# Unit already exists on the tile, merge!
 		if hostTile.enemyStationed != null and hostTile.enemyStationed != self:
-			hostTile.enemyStationed.mergeWithOtherGroup(self)
+			print("OTHER ENEMY HERE, MERGINE")
+			hostTile.enemyStationed.stats_mergeWithOtherGroup(self)
 		
 		# No unit here, set self!
 		else:
-			hostTile.setEnemyStationed(self)	
+			print("OTHER ENEMY NOT HERE, IM STATIONED")
+			hostTile.unit_setEnemyStationed(self)	
 
-func calcDistances():
+func movement_calcDistances():
 	# This calculates how many units of distance need to be covered. The unit speed is used in the 
 	# _process function, so it isn't needed here.
 	distanceTotal = DIST_CONSTANT * numUnits
 	distanceLeft = distanceTotal
 
-func moveUnitAlongPath(distanceMoved):
+func movement_moveUnitAlongPath(distanceMoved):
 	match directionMoving:
 		"up":
 			self.set_position(Vector2(self.get_position()[0], self.get_position()[1] - distanceMoved))
@@ -319,18 +312,23 @@ func moveUnitAlongPath(distanceMoved):
 		"left":
 			self.set_position(Vector2(self.get_position()[0] - distanceMoved, self.get_position()[1]))
 	
-func placeAtStartOfPath(tile):
+func movement_placeAtStartOfPath(tile):
+	var bufferChange = 0
+	if !isAlly:
+		bufferChange = 65
+		
 	match directionMoving:
 		"up":
-			self.set_position(Vector2(tile.get_position()[0], tile.get_position()[1] - 75))
+			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] - 75))
 		"down":
-			self.set_position(Vector2(tile.get_position()[0], tile.get_position()[1] + 125))
+			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] + 125))
 		"right":
-			self.set_position(Vector2(tile.get_position()[0] + 125, tile.get_position()[1]))
+			self.set_position(Vector2(tile.get_position()[0] + 125, tile.get_position()[1] + bufferChange))
 		"left":
-			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1]))
+			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1] + bufferChange))
+		
 
-func findDirection(nextTile):
+func movement_findDirection(nextTile):
 	if hostTile.row < nextTile.row:
 		directionMoving = "down"
 	elif hostTile.row > nextTile.row:
@@ -339,11 +337,8 @@ func findDirection(nextTile):
 		directionMoving = "right"
 	elif hostTile.col > nextTile.col:
 		directionMoving = "left"
-
-func setTile(tile):
-	hostTile = tile
 	
-func createUnit(unitName, amount):
+func stats_createUnit(unitName, amount):
 	match unitName:
 		"Leader":
 			unitTypes.append("Leader")
@@ -353,7 +348,7 @@ func createUnit(unitName, amount):
 			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png")
 			get_node("BG").set("texture", portrait)
-			setFormation("Leader")
+			ui_setFormation("Leader")
 		"Goblin":
 			unitTypes.append("Goblin")
 			unitRefs["Goblin"] = goblinRef
@@ -362,15 +357,15 @@ func createUnit(unitName, amount):
 			
 			portrait = load("res://MainGame/Units/Resources/TileIcons/PH_Unit_Goblin.png")
 			get_node("BG").set("texture", portrait)
-			setFormation("Goblin")
+			ui_setFormation("Goblin")
 			
-	updateTotalStats()
+	stats_updateTotalStats()
 	numUnits = amount
 	
-	showNumberOfUnitsTag()
+	ui_showNumberOfUnitsTag()
 	vision_checkHighest()
 	
-func updateTotalStats():
+func stats_updateTotalStats():
 	var tempCurHP = 0
 	var tempMaxHP = 0
 	var tempOffense = 0
@@ -387,17 +382,17 @@ func updateTotalStats():
 	totalOffense = tempOffense
 	totalSpeed = tempSpeed
 	
-	showNumberOfUnitsTag()
+	ui_showNumberOfUnitsTag()
 	
 #	if !isAlly:
-#		hostTile.checkIfSeen()
+#		hostTile.vision_checkIfSeen()
 
 	
 func vision_checkHighest():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				vision_setNew(15)
+				vision_setNew(2)
 			"Goblin":
 				vision_setNew(1)
 	
@@ -413,28 +408,25 @@ func vision_setNew(newVision):
 
 func vision_updateTilesVision():
 	if isAlly:
-		hostTile.updateInSightOf(vision, self, true, false)
+		hostTile.vision_updateInSightOf(vision, self, true, false)
 
-func mergeWithOtherGroup(newAddition):
+func stats_mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
-	mergeUnits(newAddition)
+	stats_mergeUnits(newAddition)
 	
 	# Updates UI components
-	handleCurrentSelection(newAddition)
-
-	#Removes sight of old unit
-	hostTile.updateInSightOf(vision, newAddition, false, false)
+	ui_handleCurrentSelection(newAddition)
 	
-	#Removes old unit.
-	newAddition.queue_free()
+	#Removes sight of old unit
+	hostTile.vision_updateInSightOf(vision, newAddition, false, false)
 	
 	# Updates vision
 	vision_checkHighest()
 	
-	if hostTile.inBattle:
-		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+	#Removes old unit.
+	newAddition.queue_free()
 
-func handleCurrentSelection(newAddition):
+func ui_handleCurrentSelection(newAddition):
 	# If Host is selected,
 	if get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").checkIfUnitSelected(self):
 		#If new addition is NOT already selected
@@ -447,45 +439,45 @@ func handleCurrentSelection(newAddition):
 		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unselectUnit(newAddition)
 		get_tree().get_root().get_node("Control/UnitHolder/UnitController").unitClicked(self)
 
-func mergeUnits(newAddition):
+func stats_mergeUnits(newAddition):
 	if newAddition.numLeader !=0:
 		if numLeader == 0:
 			unitTypes.append("Leader")
 			unitRefs["Leader"] = leaderRef
-			setFormation("Leader")
+			ui_setFormation("Leader")
 		numLeader += newAddition.numLeader
 		leaderRef.mergeUnit(newAddition.leaderRef)
 	if newAddition.numGoblin !=0:
 		if numGoblin == 0:
 			unitTypes.append("Goblin")
 			unitRefs["Goblin"] = goblinRef
-			setFormation("Goblin")
+			ui_setFormation("Goblin")
 			
 		numGoblin += newAddition.numGoblin
 		goblinRef.mergeUnit(newAddition.goblinRef)
 	numUnits += newAddition.numUnits
-	updateTotalStats()
+	stats_updateTotalStats()
 	
 	
-func showNumberOfUnitsTag():
+func ui_showNumberOfUnitsTag():
 	if numUnits > 1:
 		get_node("NumUnits").show()
 		get_node("NumUnits").set_text("x" + str(numUnits))
 	else:
 		get_node("NumUnits").hide()
 		
-func setFormation(unit):
+func ui_setFormation(unit):
 	# Ensures this unit type doesnt already have a position
 	if !(unit in formation):
 		match unit:
 			"Leader":
-				setFormationClosestTo(1, unit)
+				ui_setFormationClosestTo(1, unit)
 			"Goblin":
-				setFormationClosestTo(0, unit)
+				ui_setFormationClosestTo(0, unit)
 			_:
 				print("Unit.gd: we got a mis-match")
 			
-func setFormationClosestTo(pos, unit):
+func ui_setFormationClosestTo(pos, unit):
 	var heldPositions = [false, false, false, false, false, false]
 	
 	# Sets true for all positions that currently have a unit holding them
@@ -504,7 +496,7 @@ func setFormationClosestTo(pos, unit):
 			if heldPositions[i] == false:
 				formation[unit] = i
 				return
-		placeInExtraFormation(unit)
+		ui_placeInExtraFormation(unit)
 	else:
 		# Checks for free bottom row
 		var index = 3
@@ -518,17 +510,10 @@ func setFormationClosestTo(pos, unit):
 			if heldPositions[i] == false:
 				formation[unit] = i
 				return
-		placeInExtraFormation(unit)
+		ui_placeInExtraFormation(unit)
 		
-func placeInExtraFormation(unit):
+func ui_placeInExtraFormation(unit):
 	print("Unit.gd: All formation positions filled, placing in extra (does nothing right now)")
-
-func getRef(unitName):
-	match unitName:
-		"Leader":
-			return leaderRef
-		"Goblin":
-			return goblinRef
 
 
 

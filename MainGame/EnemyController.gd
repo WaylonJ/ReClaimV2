@@ -18,10 +18,10 @@ func makeTestEnemy(tile):
 	var enemy = unit.instance()
 	
 	enemy.add_to_group("Enemies")
-	enemy.setTile(tile)
+	enemy.hostTile = tile
 	 
-	tile.setEnemyStationed(enemy)
-	enemy.createUnit("baseEnemy", 10)
+	tile.unit_setEnemyStationed(enemy)
+	enemy.stats_createUnit("baseEnemy", 10)
 	enemy.set_position(Vector2(enemyTilePosition[0] + 65, enemyTilePosition[1] - 75))
 	add_child(enemy)
 
@@ -33,13 +33,13 @@ func makeBaseEnemy(tile):
 	
 	
 	enemy.add_to_group("Enemies")
-	enemy.setTile(tile)
-	enemy.createUnit("baseEnemy", determineSizeOfGroup(tile))
+	enemy.hostTile = tile
+	enemy.stats_createUnit("baseEnemy", determineSizeOfGroup(tile))
 	enemy.set_position(Vector2(enemyTilePosition[0] + 65, enemyTilePosition[1] - 75))
-	enemy.updateTotalStats()
+	enemy.stats_updateTotalStats()
 	
-	tile.setEnemyStationed(enemy)
-	tile.checkIfSeen(tile)
+	tile.unit_setEnemyStationed(enemy)
+	tile.vision_checkIfSeen(tile)
 	
 	add_child(enemy)
 

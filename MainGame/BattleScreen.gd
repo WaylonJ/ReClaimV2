@@ -1,13 +1,13 @@
 extends Sprite
 
 # Holds the various battles currently taking place, format of each item is [ally, enemy, tile]
-var battles = []
+#var battles = []
 
 var skillUnitPositions = []
 var tileUnitPositions = []
 var listOfBattles = []
 
-var battleHolder
+var Battle_Fight_Section
 var oldZoom
 
 var battleController
@@ -15,7 +15,7 @@ onready var rootRef = get_tree().get_root().get_node("Control")
 
 func _ready():
 	initializeSkillAndTileUnitPositions()
-	battleHolder = get_node("Panel/HBoxContainer/BattleHolder")
+	Battle_Fight_Section = get_node("Panel/HBoxContainer/Battle_Fight_Section")
 #	battleController = load("res://MainGame/BattleScreen/BattleController.gd").new()
 #	add_child(battleController)
 	pass 
@@ -23,23 +23,26 @@ func _ready():
 		
 
 func addBattle(ally, enemy, tile):
-	battles.append([ally, enemy, tile])
+#	battles.append([ally, enemy, tile])
 	
 	battleController = load("res://MainGame/BattleScreen/BattleController.gd").new()
 	add_child(battleController)
 	battleController.addBattle(ally, enemy, tile)
 	listOfBattles.append(battleController)
 	print("Battle Screen Children: " + str(get_children()))
+	print("List of battles: " + str(listOfBattles))
+	
 	
 func refreshUnits(tile):
 	var battleRef = findBattleFromTile(tile)
 	
+	print(battleRef)
 	battleRef.refreshUnits()
 	
 func findBattleFromTile(tile):
 	var index = 0
-	for battle in battles:
-		if battle[2] == tile:
+	for battle in listOfBattles:
+		if battle.tile == tile:
 			return listOfBattles[index]
 		index += 1
 	
@@ -47,8 +50,8 @@ func findBattleFromTile(tile):
 func openBattleScreen(tile):
 	show()
 	get_tree().get_root().get_node("Control").selectSomething("Battle")
-	for item in battles:
-		if item[2] == tile:
+	for item in listOfBattles:
+		if item.tile == tile:
 			updateScreen(item)
 			print("BATTLE STUFF: " + str(item))
 
@@ -65,9 +68,9 @@ func resetAllUnits():
 	pass
 
 func updateScreen(battle):
-	var allyGroup = battle[0]
-	var enemyGroup = battle[1]
-	var tile = battle[2]
+	var allyGroup = battle.allyUnits
+	var enemyGroup = battle.enemyUnits
+	var tile = battle.tile
 	
 	resetBattleScreen()
 	setActiveBattle(battle)
@@ -83,13 +86,13 @@ func updateScreen(battle):
 	# checkIfShowTab()
 
 func setActiveBattle(battle):
-	var battleRef = findBattleFromTile(battle[2])
+	var battleRef = findBattleFromTile(battle.tile)
 	
 	battleRef.setActive()
 	
 func resetBattleScreen():
 	# Resets the units on the right half
-	rootRef.get_node("BattleScreen/Panel/HBoxContainer/BattleHolder").reset()
+	rootRef.get_node("BattleScreen/Panel/HBoxContainer/Battle_Fight_Section").reset()
 	
 	# Resets the skills on the left half
 	for node in skillUnitPositions:
@@ -143,9 +146,9 @@ func initializeBattleArea(unitGroup, isAlly):
 				print("BattleScreen.gd: Invalid match found")
 				
 		if isAlly:
-			battleHolder.setUnitToPosition(unitGroup.unitRefs[unit], image, position)
+			Battle_Fight_Section.setUnitToPosition(unitGroup.unitRefs[unit], image, position)
 		else:
-			battleHolder.setEnemyToPosition(unitGroup.unitRefs[unit], image, position)
+			Battle_Fight_Section.setEnemyToPosition(unitGroup.unitRefs[unit], image, position)
 	
 func initializeSkillsArea(ally):
 	var position
@@ -199,12 +202,13 @@ func setUnitToPositionInSkillsArea(unit, position):
 		
 func removeBattle(tile):
 	var index = 0
-	for item in battles:
-		if item[2] == tile:
-			battles.remove(index)
+	for item in listOfBattles:
+		if item.tile == tile:
+			listOfBattles.remove(index)
+			remove_child(item)
 		index += 1
 	
 #	if battles.empty():
 	hideBattleScreen()
-	tile.hideBattleButton()
+	tile.battle_hideBattleButton()
 	

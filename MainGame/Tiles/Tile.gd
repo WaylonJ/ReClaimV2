@@ -33,7 +33,7 @@ var buildingAlliance = "neutral"
 var tileAwake = true
 var wakeThreshold = 1
 var wakeTimer = 1
-var wakeTimerConstant = 2
+var wakeTimerConstant = 0.1
 
 # Build production variables
 var outputMana = null
@@ -65,10 +65,12 @@ var distanceFromBase = 0
 # Vision variables
 var distanceFromOriginal = 0
 var vision = 0
-var inSightOf = []
+var inSightOf = {}
 var currentlySeen = false
 var seenOnce = false
 var tempVisionSeenOnce = false
+var lightLevel = -1
+
 
 var inBattle = false
 
@@ -79,29 +81,29 @@ func _process(delta):
 	# Updates timer for tiles being built
 	if !buildingComplete:
 		if buildingTime <= 0:
-			completeBuildingConstruction()
+			bldg_completeBuildingConstruction()
 		else:
-			continueBuildingConstruction(delta)
+			bldg_continueBuildingConstruction(delta)
 		
 	# If the building produces units, is complete, and the tile is awake, CONTINUE PRODUCTION
 	if unitProduction != null and buildingComplete and tileAwake:
-		updateUnitProduction(delta)
+		bldg_updateUnitProduction(delta)
 		
 	# Increments wakeTimer for sleeping tiles
 	if not tileAwake:
-		updateWakeTimer(delta)
+		bldg_updateWakeTimer(delta)
 			
 	
 func _ready():
 	set_process(false)
-	checkIfSeen(self)
+	vision_checkIfSeen(self)
 	
-func checkIfInMovingUnit(unit):
+func unit_checkIfInMovingUnit(unit):
 	if (unit in movingUnits):
-		print("Unit found in moving units")
+#		print("Unit found in moving units")
 		return true
 		
-func removeMovingUnit(removeThis):
+func unit_removeMovingUnit(removeThis):
 	var index = 0
 	for unit in movingUnits:
 		if (unit == removeThis):
@@ -110,30 +112,31 @@ func removeMovingUnit(removeThis):
 		else:
 			index += 1
 
-func removeUnitCompletely(removeThis):
-	if removeThis in movingUnits:
-		removeMovingUnit(removeThis)
+func unit_removeUnitCompletely(removeThis):
 	if allyStationed == removeThis:
 		allyStationed = null
-	if enemyStationed == removeThis:
+	elif enemyStationed == removeThis:
 		enemyStationed = null
+	elif removeThis in movingUnits:
+		unit_removeMovingUnit(removeThis)
 	
-func updateWakeTimer(delta):
+	
+func bldg_updateWakeTimer(delta):
 	wakeTimer -= delta
 	if wakeTimer <= 0:
 		tileAwake = true
-		print("TILE AWAKE")
+#		print("TILE AWAKE")
 	
-func updateUnitProduction(delta):
+func bldg_updateUnitProduction(delta):
 	unitProduction -= delta
 	if unitProduction < 0:
-		createUnit()
+		bldg_createUnit()
 		unitProduction = outputUnit
 	else:
 		# Show somewhere on a bar that units are being made
 		pass
 
-func completeBuildingConstruction():
+func bldg_completeBuildingConstruction():
 	buildingComplete = true
 	buildingTime = 0
 	
@@ -141,22 +144,22 @@ func completeBuildingConstruction():
 		set_process(false)
 	get_node("TileHolder/BuildingProgressBar").hide()
 	if buildingAlliance == "ally":
-		updateInSightOf(vision, self, true, true)
-		updateGlobalValues()
+		vision_updateInSightOf(vision, self, true, true)
+		stats_updateGlobalValues()
 		
-func continueBuildingConstruction(delta):
+func bldg_continueBuildingConstruction(delta):
 	buildingTime -= delta
 	percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
 	get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
 
-func startBuilding():
+func bldg_startBuilding():
 	# Need to add functions that will trigger when a buildin begins to build
 	# Things such as a building bar, locking uses until its done, etc.
 	pass
 
-func createTile():
+func bldg_createTile():
 	# Updates Portrait, desc, output
-	updateTileInfo()
+	stats_updateTileInfo()
 	
 	# Handles the time aspect to building a building.
 	buildingTimeMax = buildingTime
@@ -166,11 +169,11 @@ func createTile():
 	buildingComplete = false
 	set_process(true)
 	
-func updateGlobalValues():
+func stats_updateGlobalValues():
 	# Handles updating global production values
 	get_tree().get_root().get_node("Control").updateTotalProduction(outputMana, outputAdvanced, outputResearch)
 
-func updateTileInfo():
+func stats_updateTileInfo():
 	var data = databaseRef.getConstructionInfo(buildingName)
 	
 	description = data[0]
@@ -179,31 +182,101 @@ func updateTileInfo():
 	buildingAlliance = data[3]
 	vision = data[4]
 	
-	updateOutput(data[5][0],data[5][1],data[5][2],data[5][3])
+	stats_updateOutput(data[5][0],data[5][1],data[5][2],data[5][3])
 	
 	# data[6] == unitName
 	if data[6] != null:
-		setUnitCreationInfo(data[6])
+		stats_setUnitCreationInfo(data[6])
 	
 	if buildingAlliance == "enemy":
 		tileAwake = false
-		activateEnemyTimer()
-		checkIfSeen(self)
+		bldg_activateEnemyTimer()
+		vision_checkIfSeen(self)
 	
-func activateEnemyTimer():
+func bldg_activateEnemyTimer():
 	if distanceFromBase != 0:
 		wakeTimer = distanceFromBase * wakeTimerConstant
 		set_process(true)
 	
-func setUnitCreationInfo(unitName):
+func stats_setUnitCreationInfo(unitName):
 	unitProductionName = unitName
 	if buildingAlliance == "enemy":
 		unitProductionIsAlly = false
 	elif buildingAlliance == "ally":
 		unitProductionIsAlly = true
 
+func vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck):
+#	print(tile.lightLevel)
+	
+	for child in tile.get_node("LightShades").get_children():
+		child.hide()
+	
+	# If it has light level 2 or higher, give it full vision.
+	if(tile.lightLevel >= 2):
+		return
+		
+	# Assuming it's light level == 1. Need to find adjacent lightLevel == 2 tiles to
+	# determine the right modulate to apply.
+	
+	# Up, right, down, left
+	var conns = [0, 0, 0, 0]
+	
+	if tile.connections[0] == true and tile.aboveTile != null and tile.aboveTile.lightLevel == 2:
+		conns[0] = 1
+	if tile.connections[1] == true and tile.rightTile != null and tile.rightTile.lightLevel == 2:
+		conns[1] = 1
+	if tile.connections[2] == true and tile.belowTile != null and tile.belowTile.lightLevel == 2:
+		conns[2] = 1
+	if tile.connections[3] == true and tile.leftTile != null and tile.leftTile.lightLevel == 2:
+		conns[3] = 1
+	
+	match conns:
+		# 1 sources
+		[0, 0, 0, 0]:
+			print("a")
+			tile.get_node("LightShades/0Source").show()
+		
+		# 1 sources
+		[1, 0, 0, 0]:
+			tile.get_node("LightShades/1SourceTop").show()
+		[0, 1, 0, 0]:
+			tile.get_node("LightShades/1SourceRight").show()
+		[0, 0, 1, 0]:
+			tile.get_node("LightShades/1SourceBot").show()
+		[0, 0, 0, 1]:
+			tile.get_node("LightShades/1SourceLeft").show()
+#		[0, 0, 0, 0]
+		# 2 sources (opposite)
+		[1, 0, 1, 0]:
+			tile.get_node("LightShades/2SourceVertical").show()
+		[0, 1, 0, 1]:
+			tile.get_node("LightShades/2SourceHorizontal").show()
+		
+		# 2 sources (adjacent)
+		[1, 1, 0, 0]:
+			tile.get_node("LightShades/2SourceTopRight").show()
+		[0, 1, 1, 0]:
+			tile.get_node("LightShades/2SourceRightBot").show()
+		[0, 0, 1, 1]:
+			tile.get_node("LightShades/2SourceBotLeft").show()
+		[1, 0, 0, 1]:
+			tile.get_node("LightShades/2SourceLeftTop").show()
+		
+		# 3 sources
+		[0, 1, 1, 1]:
+			tile.get_node("LightShades/3SourceTop").show()
+		[1, 0, 1, 1]:
+			tile.get_node("LightShades/3SourceRight").show()
+		[1, 1, 0, 1]:
+			tile.get_node("LightShades/3SourceBot").show()
+		[1, 1, 1, 0]:
+			tile.get_node("LightShades/3SourceLeft").show()
+		
+		# 4 sources
+		[1, 1, 1, 1]:
+			tile.get_node("LightShades/4Source").show()
 
-func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
+func vision_updateInSightOf(toCheck, objectGivingSight, adding, isABuilding):
 	var queueOfRemaining = [self]
 	var arrayOfAll = []
 	var tileToCheck
@@ -212,7 +285,7 @@ func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 	distanceFromOriginal = 0
 
 	# If enemy unit, no need to continue
-	if returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
+	if vision_returnIfEnemyUnitWhenCheckingVision(isABuilding, objectGivingSight):
 		return
 	
 	# Main loop, goes through (Vision) amount of times
@@ -223,7 +296,9 @@ func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 		for tile in queueOfRemaining:
 			arrayOfAll.append(tile)
 			
-			addOrRemoveFromSight(adding, objectGivingSight, tile)
+			vision_addOrRemoveFromSight(adding, objectGivingSight, tile, toCheck + 1)
+			vision_updateLightLevel(tile)
+			vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck)
 		
 		numberToCheckForAppend = queueOfRemaining.size()
 		distanceFromOriginal += 1
@@ -254,42 +329,55 @@ func updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 		tile.tempVisionSeenOnce = false
 	
 
-func addOrRemoveFromSight(adding, objectGivingSight, tile):
+func vision_updateLightLevel(tile):
+	var highestLevel = 0
+	
+	for source in tile.inSightOf:
+		if tile.inSightOf[source] > highestLevel:
+			highestLevel = tile.inSightOf[source]
+	
+	tile.lightLevel = highestLevel
+
+func vision_addOrRemoveFromSight(adding, objectGivingSight, tile, newLightLevel):
 	# Adding items to inSightOf
 	if adding:
-		var newItem = true
+		tile.inSightOf[objectGivingSight] = newLightLevel
 		
-		# Ensures this object isn't already listed in inSightOf
-		for item in tile.inSightOf:
-			if item == objectGivingSight:
-				newItem = false
-				
-		#If it's a new item, add it to the list of inSightOf
-		if newItem:
-			tile.inSightOf.append(objectGivingSight)
+		
+		
+#		var newItem = true
+#
+#		# Ensures this object isn't already listed in inSightOf
+#		for item in tile.inSightOf:
+#			if item == objectGivingSight:
+#				newItem = false
+#
+#		#If it's a new item, add it to the list of inSightOf
+#		if newItem:
+#			tile.inSightOf.append(objectGivingSight)
 			
 		# Check if this is an enemy tile that needs to be woken up.
-		tile.checkToWakeUp(distanceFromOriginal)
+#		tile.bldg_checkToWakeUp(distanceFromOriginal)
 	
 	# Remove items from inSightOf
 	else:
-		var index = 0
-		for item in tile.inSightOf:
-			if item == objectGivingSight:
-				tile.inSightOf.remove(index)
-			index += 1
+#		var index = 0
+#		for item in tile.inSightOf:
+#			if item == objectGivingSight:
+		tile.inSightOf.erase(objectGivingSight)
+#			index += 1
 	
-	tile.checkIfSeen(tile)
+	tile.vision_checkIfSeen(tile)
 
-func returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
+func vision_returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
 	# Is a unit
 	if not isBuilding:
 		# Is an ENEMY unit
 		if not objectGivingSight.isAlly:
-			checkIfSeen(self)
+			vision_checkIfSeen(self)
 			return true
 
-func resetTile():
+func basic_resetTile():
 	buildingName = "Blank"
 	description = "aa"
 	get_node("TileHolder/Background").set("texture", BLANK_PORTRAIT)
@@ -309,98 +397,84 @@ func resetTile():
 	pass
 	
 
-func checkIfSeen(tile):
-	# Hidden
+func vision_checkIfSeen(tile):
+	# Hidden, hide most things
 	if tile.inSightOf.empty():
 		tile.get_node("TileHolder/Background/Unseen").show()
-		tile.get_node("MapBackground").hide()
+#		tile.get_node("MapBackground").hide()
 		tile.get_node("TileHolder/BuildingProgressBar").hide()
 		tile.currentlySeen = false
-		tile.setEnemyVisibility(false)
+		tile.vision_setEnemyVisibility(false)
 	
-	#Seen
+	#Seen, show most things
 	else:
 		tile.get_node("TileHolder/Background/Unseen").hide()
+		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)
 		tile.get_node("MapBackground").show()
 		if !(tile.buildingComplete):
 			get_node("TileHolder/BuildingProgressBar").show()
 		tile.currentlySeen = true
 		tile.seenOnce = true
-		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)
-		tile.setEnemyVisibility(true)
+		
+		tile.vision_setEnemyVisibility(true)
 
-func checkToWakeUp(distance):
+func bldg_checkToWakeUp(distance):
 	if wakeThreshold >= distance:
 		tileAwake = true
 		
 
-func setEnemyVisibility(tileSeen):
+func vision_setEnemyVisibility(tileSeen):
 	if enemyStationed != null:
 		if tileSeen:
 			enemyStationed.show()
 		else:
 			enemyStationed.hide()
 
-func updateOutput(mana, unit, advanced, research):
+func stats_updateOutput(mana, unit, advanced, research):
 	outputMana = mana
 	outputUnit = unit
 	unitProduction = outputUnit
 	outputAdvanced = advanced
 	outputResearch = research
 
-func appendUnitMoving(unit):
+func unit_appendUnitMoving(unit):
 	if unit in movingUnits:
 		return
 	else:
 		movingUnits.append(unit)
 
-func setUnitStationed(unit):
+func unit_setUnitStationed(unit):
 	allyStationed = unit
-#	if enemyStationed != null:
-#		inBattle = true
-#		snareBothUnits()
-#		get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
-#		showBattleButton()
 
-func setEnemyStationed(unit):
+func unit_setEnemyStationed(unit):
 	enemyStationed = unit
-#	if allyStationed != null:
-#		inBattle = true
-#		snareBothUnits()
-#		showBattleButton()
 
-func getClosestMovingUnit():
+func unit_getClosestMovingUnit():
 	return movingUnits[0]
 
-func triggerBattleOnTile(ally, enemy):
+func battle_triggerBattleOnTile(ally, enemy):
 	inBattle = true
-	snareBothUnits(ally, enemy)
 	get_tree().get_root().get_node("Control/BattleScreen").addBattle(ally, enemy, self)
-	showBattleButton()
+	battle_showBattleButton()
 	
 	ally.battle_enter()
 	enemy.battle_enter()
 
-func snareBothUnits(ally, enemy):
-	enemy.snared = true
-	ally.snared = true
-
-func showBattleButton():
+func battle_showBattleButton():
 #	get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
 	get_node("TileHolder/ShowBattleButton").show()
 
-func hideBattleButton():
+func battle_hideBattleButton():
 	get_node("TileHolder/ShowBattleButton").hide()
 	
-	# Gives enemies their last movement order so that they may continue.
-	if enemyStationed != null:
-		print("Giving the enemy it's last movement order")
-		if (len(enemyStationed.pathToMove) != 0):
-			enemyStationed.currentPath = enemyStationed.pathToMove
-			enemyStationed.updatePath()
+#	# Gives enemies their last movement order so that they may continue.
+#	if enemyStationed != null:
+#		if (len(enemyStationed.pathToMove) > 0):
+#			print("Giving the enemy it's last movement order")
+#			enemyStationed.currentPath = enemyStationed.pathToMove
+#			enemyStationed.movement_updatePath()
 		
-
-func createUnit():
+func bldg_createUnit():
 	var unit = null
 	var newUnit = null
 	
@@ -412,44 +486,30 @@ func createUnit():
 		newUnit = unit.instance()
 		
 	newUnit.hostTile = self
-	newUnit.createUnit(unitProductionName, 1)
+	newUnit.stats_createUnit(unitProductionName, 1)
 	
 	
 	if unitProductionIsAlly:
 		if allyStationed == null:
 			get_tree().get_root().get_node("Control/UnitHolder/UnitController").add_child(newUnit)
 			newUnit.add_to_group("Units")
-			newUnit.setTile(self)
+			newUnit.hostTile = self
 			newUnit.set_position(Vector2(self.get_position()[0], self.get_position()[1] - 75))
-			setUnitStationed(newUnit)
+			unit_setUnitStationed(newUnit)
 		else:
-			allyStationed.mergeWithOtherGroup(newUnit)
+			allyStationed.stats_mergeWithOtherGroup(newUnit)
 	else:
 		if enemyStationed == null:
 			get_tree().get_root().get_node("Control/UnitHolder/EnemyController").add_child(newUnit)
 			newUnit.add_to_group("Enemies")
-			newUnit.setTile(self)
+			newUnit.hostTile = self
 			newUnit.set_position(Vector2(self.get_position()[0] + 65, self.get_position()[1] - 75))
-			setEnemyStationed(newUnit)
-			checkIfSeen(self)
+			unit_setEnemyStationed(newUnit)
+			vision_checkIfSeen(self)
 		else:
-			enemyStationed.mergeWithOtherGroup(newUnit)
-
-func getStationaryUnitOnTile():
-	for unit in get_tree().get_nodes_in_group("Units"):
-		# Unit is sitting on top of this tile, not moving.
-		if unit.hostTile == self and not unit.isMoving:
-			return unit
-
-func getAllUnitsStationed():
-	var foundUnits = []
-	for unit in get_tree().get_nodes_in_group("Units"):
-		if unit.hostTile == self:
-			foundUnits.append(unit)
+			enemyStationed.stats_mergeWithOtherGroup(newUnit)
 	
-	return foundUnits
-	
-func getAllUnitsForTile():
+func unit_getAllUnitsForTile():
 	var returnUnits = []
 	if allyStationed != null:
 		returnUnits.append(allyStationed)
@@ -462,31 +522,22 @@ func getAllUnitsForTile():
 	
 	return returnUnits
 	
-func checkIfAnyUnitsOnThisTile(alliance):
+func unit_checkIfAnyUnitsOnThisTile(alliance):
 	if alliance == "ally":
 		for unit in movingUnits:
 			if unit.isAlly:
 				return true
 		if allyStationed != null:
 			return true
-		
-#		for unit in get_tree().get_nodes_in_group("Units"):
-#			if unit.hostTile == self:
-#				return true
-
+	
 	else:
-#		for unit in get_tree().get_nodes_in_group("Enemies"):
-#			if unit.hostTile == self:
-#				return true
 		for unit in movingUnits:
 			if !unit.isAlly:
 				return true
 		if enemyStationed != null:
 			return true
-		
+	
 	return false
-	
-	
 
-func findDistanceFromBase(baseTile):
+func basic_findDistanceFromBase(baseTile):
 	distanceFromBase = rootRef.unitMovement.findDistanceBetweenTwoTiles(self, baseTile)

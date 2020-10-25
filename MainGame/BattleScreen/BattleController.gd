@@ -13,7 +13,7 @@ var allAATimers = []
 var hPBarRefsByUnitName = {}
 var aATimerByUnitName = {}
 var unitRefs = {}
-var attackRates = {}
+var incrementingAttackRate = {}
 var baseAttackRates = {}
 var currentTargettedPosition = {}
 var allyPositions = {}
@@ -31,26 +31,27 @@ func _ready():
 	set_process(false)
 	
 func _process(delta):
-	for unitName in attackRates:
+#	print(incrementingAttackRate)
+	for unitName in incrementingAttackRate:
 		if !(unitRefs[unitName].isAlive):
-			# Unit is dead, remove from attackRates
-			attackRates.erase(unitName)
+			# Unit is dead, remove from incrementingAttackRate
+			incrementingAttackRate.erase(unitName)
 			checkBattleStatus()
 			continue
 		
 		progressAAs(unitName, delta)
-		if attackRates[unitName] < 0:
+		if incrementingAttackRate[unitName] < 0:
 			triggerAttack(unitName)
 			
 			# Area for specific battle on the screen
 			if activeBattle:
 				updateHealthBars()
 			
-			attackRates[unitName] = baseAttackRates[unitName]
+			incrementingAttackRate[unitName] = baseAttackRates[unitName]
 
 func progressAAs(unitName, delta):
-	attackRates[unitName] -= delta * 10
-	aATimerByUnitName[unitName].value = 100 - ( attackRates[unitName] / baseAttackRates[unitName] ) * 100
+	incrementingAttackRate[unitName] -= delta * 10
+	aATimerByUnitName[unitName].value = 100 - ( incrementingAttackRate[unitName] / baseAttackRates[unitName] ) * 100
 
 func setActive():
 	activeBattle = true
@@ -59,6 +60,8 @@ func setNotActive():
 	activeBattle = false
 
 func refreshUnits():
+	print("This is all units: " + str(allUnits))
+	
 	pruneDeletedUnits()
 	
 	initializeUnitRefs()
@@ -92,17 +95,24 @@ func addBattle(ally, enemy, battleTile):
 	set_process(true)
 
 func pruneDeletedUnits():
+	var eraseThese = []
+	print(allUnits)
 	for unit in allUnits:
+#		print("Unit: " + str(unit.name) +", Valid: " + str(is_instance_valid(unit)))
 		if not is_instance_valid(unit):
-			allUnits.erase(unit)
+			print("NON VALID")
+			eraseThese.append(unit)
+	
+	for unit in eraseThese:
+		allUnits.erase(unit)
 
 func initializeHealthBarRefsAndAARefs():
 	# Get the references of all health bars in order
-	for row in get_parent().get_node("Panel/HBoxContainer/BattleHolder").get_children():
+	for row in get_parent().get_node("Panel/HBoxContainer/Battle_Fight_Section").get_children():
 		for panel in row.get_children():
 			allHPBars.append(panel.get_node("Health"))
 			
-	for row in get_parent().get_node("Panel/HBoxContainer/BattleHolder").get_children():
+	for row in get_parent().get_node("Panel/HBoxContainer/Battle_Fight_Section").get_children():
 		for panel in row.get_children():
 			allAATimers.append(panel.get_node("Timer"))
 			
@@ -149,7 +159,7 @@ func initializeHealthBarRefsAndAARefs():
 				aATimerByUnitName[enemyPositions[item]] = allAATimers[11]
 
 func initializeUnitRefs():
-	print("battlecontroller: " + str(allUnits))
+#	print("battlecontroller, all Units: " + str(allUnits))
 	for group in allUnits:
 		if is_instance_valid(group):
 			for unitName in group.unitTypes:
@@ -163,12 +173,14 @@ func initializePositions():
 		enemyPositions[enemyUnits.formation[item]] = item
 
 func initializeAttackRates():
+#	print("battlecontroller, all Units: " + str(allUnits))
 	for group in allUnits:
+#		print("battlecontroller, group: " + str(group))
 		for unitName in group.unitTypes:
 			if not baseAttackRates.has(unitName):
 				baseAttackRates[unitName] = unitRefs[unitName].baseAttackSpeed
-			if not attackRates.has(unitName):
-				attackRates[unitName] = unitRefs[unitName].baseAttackSpeed
+			if not incrementingAttackRate.has(unitName):
+				incrementingAttackRate[unitName] = unitRefs[unitName].baseAttackSpeed
 	
 
 func initializeAutoAttackTargets():
@@ -191,7 +203,7 @@ func triggerAttack(unitName):
 	var targettedUnit = getTargettedUnit(unitName, targetPosition)
 	var attack = unitRefs[unitName].getAutoAttack()
 	
-	print(str(unitName) + " dealing this much damage: " + str(attack))
+#	print(str(unitName) + " dealing this much damage: " + str(attack))
 	targettedUnit.takeDamage(attack)
 
 func getTargettedUnit(unitName, position):
@@ -255,16 +267,17 @@ func battleEnd(allyWin):
 		allyUnits.battle_lost()
 		enemyUnits.battle_won()
 #		tile.allyStationed = null
-		tile.updateInSightOf(allyUnits.vision, allyUnits, false, false)
+		tile.vision_updateInSightOf(allyUnits.vision, allyUnits, false, false)
 		
-	get_parent().removeBattle(tile)
 	tile.inBattle = false
 	tile.set_process(true)
+	get_parent().removeBattle(tile)
+	
 
 func resetAllVars():
 	print("Resetting all Vars")
 	unitRefs = {}
-	attackRates = {}
+	incrementingAttackRate = {}
 	currentTargettedPosition = {}
 	allyPositions = {}
 	enemyPositions = {}

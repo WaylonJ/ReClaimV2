@@ -36,9 +36,9 @@ func makeLeaderUnit(baseTile):
 	var unit = preload("Units/Unit.tscn")
 	leader = unit.instance()
 	leader.add_to_group("Units")
-	leader.setTile(baseTile)
-	baseTile.setUnitStationed(leader)
-	leader.createUnit("Leader", 100)
+	leader.hostTile = baseTile
+	baseTile.unit_setUnitStationed(leader)
+	leader.stats_createUnit("Leader", 1)
 	leader.set_position(Vector2(baseTilePosition[0], baseTilePosition[1] - 75))
 	add_child(leader)
 	

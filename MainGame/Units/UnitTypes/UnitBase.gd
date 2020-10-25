@@ -57,7 +57,7 @@ func getAutoAttack():
 func takeDamage(amount):
 	amount *= (1 - basePRes)
 	currentHP -= amount
-	print("Ally: " + str(isAlly) + ", HP: " + str(currentHP))
+#	print("Ally: " + str(isAlly) + ", HP: " + str(currentHP))
 #	print("Taking damage: " + str(amount))
 	calcEfficacy()
 	aliveCheck()
