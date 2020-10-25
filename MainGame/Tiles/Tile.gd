@@ -69,6 +69,8 @@ var inSightOf = []
 var currentlySeen = false
 var seenOnce = false
 var tempVisionSeenOnce = false
+var lightLevel
+
 
 var inBattle = false
 
@@ -98,7 +100,7 @@ func _ready():
 	
 func unit_checkIfInMovingUnit(unit):
 	if (unit in movingUnits):
-		print("Unit found in moving units")
+#		print("Unit found in moving units")
 		return true
 		
 func unit_removeMovingUnit(removeThis):
@@ -123,7 +125,7 @@ func bldg_updateWakeTimer(delta):
 	wakeTimer -= delta
 	if wakeTimer <= 0:
 		tileAwake = true
-		print("TILE AWAKE")
+#		print("TILE AWAKE")
 	
 func bldg_updateUnitProduction(delta):
 	unitProduction -= delta
@@ -203,8 +205,29 @@ func stats_setUnitCreationInfo(unitName):
 	elif buildingAlliance == "ally":
 		unitProductionIsAlly = true
 
+func vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck):
+	print("IN CHECK EDGE OF VISION")
 
-func vision_updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
+	
+	if adding:
+		# The tile is not an edge tile from this new object.
+		if toCheck > 0:
+			pass
+#			if edgeOfSight == true:
+#				pass
+				
+		# Need to check if I can make sightOf a dictionary. If I can make it the
+		# tile: toCheck, directionLightCameFrom
+		# Then it'd be easier to control what I need for this
+		
+		
+		
+		pass
+		
+	else:
+		pass
+
+func vision_updateInSightOf(toCheck, objectGivingSight, adding, isABuilding):
 	var queueOfRemaining = [self]
 	var arrayOfAll = []
 	var tileToCheck
@@ -213,7 +236,7 @@ func vision_updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 	distanceFromOriginal = 0
 
 	# If enemy unit, no need to continue
-	if vision_returnIfEnemyUnitWhenCheckingVision(isBuilding, objectGivingSight):
+	if vision_returnIfEnemyUnitWhenCheckingVision(isABuilding, objectGivingSight):
 		return
 	
 	# Main loop, goes through (Vision) amount of times
@@ -224,7 +247,8 @@ func vision_updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 		for tile in queueOfRemaining:
 			arrayOfAll.append(tile)
 			
-			vision_addOrRemoveFromSight(adding, objectGivingSight, tile)
+			vision_addOrRemoveFromSight(adding, objectGivingSight, tile, toCheck + 1)
+			vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck)
 		
 		numberToCheckForAppend = queueOfRemaining.size()
 		distanceFromOriginal += 1
@@ -255,7 +279,7 @@ func vision_updateInSightOf(toCheck, objectGivingSight, adding, isBuilding):
 		tile.tempVisionSeenOnce = false
 	
 
-func vision_addOrRemoveFromSight(adding, objectGivingSight, tile):
+func vision_addOrRemoveFromSight(adding, objectGivingSight, tile, newLightLevel):
 	# Adding items to inSightOf
 	if adding:
 		var newItem = true
@@ -270,7 +294,7 @@ func vision_addOrRemoveFromSight(adding, objectGivingSight, tile):
 			tile.inSightOf.append(objectGivingSight)
 			
 		# Check if this is an enemy tile that needs to be woken up.
-		tile.bldg_checkToWakeUp(distanceFromOriginal)
+#		tile.bldg_checkToWakeUp(distanceFromOriginal)
 	
 	# Remove items from inSightOf
 	else:
@@ -322,12 +346,13 @@ func vision_checkIfSeen(tile):
 	#Seen
 	else:
 		tile.get_node("TileHolder/Background/Unseen").hide()
+		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)
 		tile.get_node("MapBackground").show()
 		if !(tile.buildingComplete):
 			get_node("TileHolder/BuildingProgressBar").show()
 		tile.currentlySeen = true
 		tile.seenOnce = true
-		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)
+		
 		tile.vision_setEnemyVisibility(true)
 
 func bldg_checkToWakeUp(distance):
@@ -379,12 +404,12 @@ func battle_showBattleButton():
 func battle_hideBattleButton():
 	get_node("TileHolder/ShowBattleButton").hide()
 	
-	# Gives enemies their last movement order so that they may continue.
-	if enemyStationed != null:
-		print("Giving the enemy it's last movement order")
-		if (len(enemyStationed.pathToMove) != 0):
-			enemyStationed.currentPath = enemyStationed.pathToMove
-			enemyStationed.movement_updatePath()
+#	# Gives enemies their last movement order so that they may continue.
+#	if enemyStationed != null:
+#		if (len(enemyStationed.pathToMove) > 0):
+#			print("Giving the enemy it's last movement order")
+#			enemyStationed.currentPath = enemyStationed.pathToMove
+#			enemyStationed.movement_updatePath()
 		
 func bldg_createUnit():
 	var unit = null

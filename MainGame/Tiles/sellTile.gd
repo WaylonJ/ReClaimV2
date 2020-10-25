@@ -29,7 +29,7 @@ func sellTile(tileGroup):
 			sellCost = databaseRef.getSellInfo(tile.buildingName, tile.buildingTier - index)
 			rootRef.refundCost(sellCost[0] * sellMultiplier, sellCost[1] * sellMultiplier)
 			index += 1
-		# 
+		
 		tile.basic_resetTile()
 		tileInfoRef.removeTile(tile)
 		tileInfoRef.selectBaseTile()

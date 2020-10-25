@@ -166,6 +166,7 @@ func movement_updatePath():
 func movement_evaluateRemainingTraveling():
 	# Still remaining nodes to go
 	if len(currentPath) > 0:
+#		print("setting process true")
 		set_process(true)
 		movement_findDirection(currentPath[0])
 		movement_placeAtStartOfPath(hostTile)
@@ -187,7 +188,11 @@ func movement_checkCollision():
 	if isAlly:
 		if hostTile.unit_checkIfAnyUnitsOnThisTile("enemy") != false:
 			# Battle is currently underway, 
-#			if hostTile.inBattle:
+			if hostTile.inBattle:
+				rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+				# We don't want to trigger a new battle. If the unit ends here, it'll merge.
+				# If it keeps moving, it'll just move past.
+				return false
 				
 			if hostTile.enemyStationed != null:
 				hostTile.battle_triggerBattleOnTile(self, hostTile.enemyStationed)
@@ -198,6 +203,12 @@ func movement_checkCollision():
 	
 	else:
 		if hostTile.unit_checkIfAnyUnitsOnThisTile("ally") != false:
+			if hostTile.inBattle:
+				rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+				# We don't want to trigger a new battle. If the unit ends here, it'll merge.
+				# If it keeps moving, it'll just move past.
+				return false
+				
 			if hostTile.allyStationed != null:
 				hostTile.battle_triggerBattleOnTile(hostTile.allyStationed, self)
 			else:
@@ -213,6 +224,7 @@ func battle_placeAtBattlePositions():
 				
 func battle_enter():
 	set_process(false)
+	isMoving = false
 	currentPath.push_front(hostTile)
 	snared = true
 	
@@ -230,7 +242,13 @@ func battle_enter():
 	
 func battle_won():
 	snared = false
-	set_process(true)
+	
+	# Gives enemies their last movement order so that they may continue.
+	if (len(currentPath) > 0):
+		print("Giving the winning unit it's last movement order")
+		set_process(true)
+#		currentPath = pathToMove
+		movement_updatePath()
 
 	
 func battle_lost():
@@ -266,12 +284,15 @@ func host_setUnitStationedOnHost():
 		else:
 			hostTile.unit_setUnitStationed(self)
 	else:
+		print("AM ENEMY")
 		# Unit already exists on the tile, merge!
 		if hostTile.enemyStationed != null and hostTile.enemyStationed != self:
+			print("OTHER ENEMY HERE, MERGINE")
 			hostTile.enemyStationed.stats_mergeWithOtherGroup(self)
 		
 		# No unit here, set self!
 		else:
+			print("OTHER ENEMY NOT HERE, IM STATIONED")
 			hostTile.unit_setEnemyStationed(self)	
 
 func movement_calcDistances():
@@ -371,7 +392,7 @@ func vision_checkHighest():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				vision_setNew(15)
+				vision_setNew(4)
 			"Goblin":
 				vision_setNew(1)
 	
@@ -395,18 +416,15 @@ func stats_mergeWithOtherGroup(newAddition):
 	
 	# Updates UI components
 	ui_handleCurrentSelection(newAddition)
-
+	
 	#Removes sight of old unit
 	hostTile.vision_updateInSightOf(vision, newAddition, false, false)
-	
-	#Removes old unit.
-	newAddition.queue_free()
 	
 	# Updates vision
 	vision_checkHighest()
 	
-	if hostTile.inBattle:
-		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+	#Removes old unit.
+	newAddition.queue_free()
 
 func ui_handleCurrentSelection(newAddition):
 	# If Host is selected,

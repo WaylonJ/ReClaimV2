@@ -65,8 +65,8 @@ func stats_mergeWithOtherGroup(newAddition):
 	# Merge the units and the stats together
 	stats_mergeUnits(newAddition)
 	
-	if hostTile.inBattle:
-		rootRef.get_node("BattleScreen").refreshUnits(hostTile)
+	#Removes old unit.
+	newAddition.queue_free()
 	
 	if hostTile.buildingAlliance == "enemy":
 		checkAttackTrigger()
@@ -90,10 +90,10 @@ func checkAttackTrigger():
 		unitSizeTrigger = floor(unitSizeTriggerConstant * (pow(hostTile.distanceFromBase, 1.2)))
 	
 	if numUnits >= unitSizeTrigger:
-		print("Unit size: " + str(unitSizeTrigger))
+#		print("Unit size: " + str(unitSizeTrigger))
 		sendToBase()
 
 func sendToBase():
-	print("Sending enemy attack!!")
+#	print("Sending enemy attack!!")
 	rootRef.unitMovement.autoMoveUnit(self, rootRef.baseTile)
 	
