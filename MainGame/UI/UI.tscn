@@ -391,16 +391,35 @@ margin_bottom = 60.0
 size_flags_vertical = 3
 custom_constants/separation = 0
 
-[node name="ResourceBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+[node name="AdvResourceBldg" type="Button" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
 "ConstructionButtons",
-] instance=ExtResource( 15 )]
-margin_left = 0.0
-margin_top = 0.0
+]]
 margin_right = 60.0
 margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+size_flags_vertical = 4
 script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"]
+[node name="InsufficientShadeHolder" type="Sprite" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/AdvResourceBldg"]
+visible = false
+z_index = 85
+
+[node name="InsufficientShade" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/AdvResourceBldg/InsufficientShadeHolder"]
+modulate = Color( 1, 1, 1, 0.666667 )
+self_modulate = Color( 1, 0, 0, 1 )
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+texture = ExtResource( 20 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/AdvResourceBldg"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 17 )
@@ -408,7 +427,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MilitaryBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+[node name="GoblinBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
 "ConstructionButtons",
 ] instance=ExtResource( 15 )]
 margin_left = 60.0
@@ -416,7 +435,7 @@ margin_top = 0.0
 margin_right = 120.0
 margin_bottom = 60.0
 
-[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/MilitaryBldg"]
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/GoblinBldg"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 2.3327
@@ -438,7 +457,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 19 )
 
-[node name="ManaPool" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
+[node name="ManaPoolBldg" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow" groups=[
 "ConstructionButtons",
 ] instance=ExtResource( 15 )]
 margin_left = 180.0
@@ -446,7 +465,7 @@ margin_top = 0.0
 margin_right = 240.0
 margin_bottom = 60.0
 
-[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ManaPool"]
+[node name="TextureRect2" type="TextureRect" parent="BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ManaPoolBldg"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 10 )

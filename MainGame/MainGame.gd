@@ -94,7 +94,9 @@ func startNewGame():
 	
 
 func populateBoard():
-#	makeEnemyBases()
+#	makeBossBase()
+	makeEnemyBases()
+	makeUniqueTiles()
 	makeEnemyUnits()
 
 func setTileBorders(array):	
@@ -129,6 +131,11 @@ func makeEnemyBases():
 		if checkForAllyOrEnemyTilesNearby(tile, 3, true):
 			makeEnemyBase(tile)
 		createEnemyAttempts -= 1
+
+func makeUniqueTiles():
+	
+	
+	pass
 
 func makeEnemyUnits():
 	# Will attempt to create tiles / 2 locations to be enemy unit locations.

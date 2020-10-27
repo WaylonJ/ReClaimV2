@@ -1,7 +1,7 @@
 extends TextureRect
 
 var buttonCoordinates = []
-var test = "../../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"
+var test = "../../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/AdvResourceBldg"
 
 export var selectedBldg = "a"
 

@@ -49,13 +49,13 @@ func _on_mouse_entered_highlight(tile):
 			currentTile = tile
 			# Set the tile's BG to be the BG of whatever is selected.
 			match selectedBldg:
-				"ResourceBldg":
+				"AdvResourceBldg":
 					tile.get_node("TileHolder/Background").set("texture", Resource_Tile)
-				"MilitaryBldg":
+				"GoblinBldg":
 					tile.get_node("TileHolder/Background").set("texture", Military_Tile)
 				"UtilityBldg":
 					tile.get_node("TileHolder/Background").set("texture", Utility_Tile)
-				"ManaPool":
+				"ManaPoolBldg":
 					tile.get_node("TileHolder/Background").set("texture", Mana_Tile)
 				_:
 					pass
@@ -98,7 +98,8 @@ func _input(event):
 				
 				tempBG = null
 			else:
-				print("HoveringBldgImage: Building attempt failed")
+#				print("HoveringBldgImage: Building attempt failed")
+				pass
 			
 	if Input.is_key_pressed(KEY_ESCAPE):
 		if tempBG != null:
@@ -120,7 +121,6 @@ func createTile():
 	
 	tileInfoRef.selectedTile = currentTile
 	tileInfoRef.ignoreClick = true
-	print("THIS IS CURRENT: " + str(currentTile))
 	
 	# If shift not held down, revert to base tile. Otherwise don't change ui
 	if not Input.is_key_pressed(KEY_SHIFT):

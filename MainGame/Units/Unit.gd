@@ -157,7 +157,7 @@ func movement_updatePath():
 	
 	# When movement_updatePath is called, need to see if entering this new tile caused a collision
 	if (movement_checkCollision()):
-		print("Collision detected, starting battle")
+#		print("Collision detected, starting battle")
 		return
 	
 	movement_evaluateRemainingTraveling()
@@ -284,15 +284,15 @@ func host_setUnitStationedOnHost():
 		else:
 			hostTile.unit_setUnitStationed(self)
 	else:
-		print("AM ENEMY")
+#		print("AM ENEMY")
 		# Unit already exists on the tile, merge!
 		if hostTile.enemyStationed != null and hostTile.enemyStationed != self:
-			print("OTHER ENEMY HERE, MERGINE")
+#			print("OTHER ENEMY HERE, MERGINE")
 			hostTile.enemyStationed.stats_mergeWithOtherGroup(self)
 		
 		# No unit here, set self!
 		else:
-			print("OTHER ENEMY NOT HERE, IM STATIONED")
+#			print("OTHER ENEMY NOT HERE, IM STATIONED")
 			hostTile.unit_setEnemyStationed(self)	
 
 func movement_calcDistances():
@@ -392,7 +392,7 @@ func vision_checkHighest():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				vision_setNew(2)
+				vision_setNew(10)
 			"Goblin":
 				vision_setNew(1)
 	

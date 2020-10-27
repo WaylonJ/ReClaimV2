@@ -29,14 +29,15 @@ func addBattle(ally, enemy, tile):
 	add_child(battleController)
 	battleController.addBattle(ally, enemy, tile)
 	listOfBattles.append(battleController)
-	print("Battle Screen Children: " + str(get_children()))
-	print("List of battles: " + str(listOfBattles))
+#	print("Battle Screen Children: " + str(get_children()))
+#	print("Battle Screen Children: " + str(get_children()))
+#	print("List of battles: " + str(listOfBattles))
 	
 	
 func refreshUnits(tile):
 	var battleRef = findBattleFromTile(tile)
 	
-	print(battleRef)
+#	print(battleRef)
 	battleRef.refreshUnits()
 	
 func findBattleFromTile(tile):
@@ -53,7 +54,7 @@ func openBattleScreen(tile):
 	for item in listOfBattles:
 		if item.tile == tile:
 			updateScreen(item)
-			print("BATTLE STUFF: " + str(item))
+#			print("BATTLE STUFF: " + str(item))
 
 func hideBattleScreen():
 	if self.visible:

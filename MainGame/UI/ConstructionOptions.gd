@@ -19,6 +19,7 @@ func _process(delta):
 			bldg = child.get_name()
 			if bldg == 'Empty2':
 				return
+#			print(bldg)
 			costs = databaseRef.getUpgradeInfo(bldg, 0)
 			
 			# Buildable, remove filter

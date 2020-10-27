@@ -60,7 +60,7 @@ func setNotActive():
 	activeBattle = false
 
 func refreshUnits():
-	print("This is all units: " + str(allUnits))
+#	print("This is all units: " + str(allUnits))
 	
 	pruneDeletedUnits()
 	
@@ -96,11 +96,11 @@ func addBattle(ally, enemy, battleTile):
 
 func pruneDeletedUnits():
 	var eraseThese = []
-	print(allUnits)
+#	print(allUnits)
 	for unit in allUnits:
 #		print("Unit: " + str(unit.name) +", Valid: " + str(is_instance_valid(unit)))
 		if not is_instance_valid(unit):
-			print("NON VALID")
+#			print("NON VALID")
 			eraseThese.append(unit)
 	
 	for unit in eraseThese:
@@ -275,7 +275,7 @@ func battleEnd(allyWin):
 	
 
 func resetAllVars():
-	print("Resetting all Vars")
+#	print("Resetting all Vars")
 	unitRefs = {}
 	incrementingAttackRate = {}
 	currentTargettedPosition = {}

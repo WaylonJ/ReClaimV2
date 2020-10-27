@@ -17,14 +17,14 @@ func _ready():
 	add_child(sellRef)
 
 func connectConstructionOptions():
-	var resourceBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/ResourceBldg"
-	var militaryBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/MilitaryBldg"
+	var AdvResourceBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/AdvResourceBldg"
+	var GoblinBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/GoblinBldg"
 	var utilityBldg = "../BottomUI/MiddleSection/NoSelection/ConstructionOptions/TopRow/UtilityBldg"
 	
-	get_node(resourceBldg).connect("mouse_entered", self, "_on_BldgButton_mouseEntered", ["Resource"])
-	get_node(resourceBldg).connect("mouse_exited", self, "hidePanel")
-	get_node(militaryBldg).connect("mouse_entered", self, "_on_BldgButton_mouseEntered", ["Military"])
-	get_node(militaryBldg).connect("mouse_exited", self, "hidePanel")
+	get_node(AdvResourceBldg).connect("mouse_entered", self, "_on_BldgButton_mouseEntered", ["Resource"])
+	get_node(AdvResourceBldg).connect("mouse_exited", self, "hidePanel")
+	get_node(GoblinBldg).connect("mouse_entered", self, "_on_BldgButton_mouseEntered", ["Military"])
+	get_node(GoblinBldg).connect("mouse_exited", self, "hidePanel")
 	get_node(utilityBldg).connect("mouse_entered", self, "_on_BldgButton_mouseEntered", ["Utility"])
 	get_node(utilityBldg).connect("mouse_exited", self, "hidePanel")
 
