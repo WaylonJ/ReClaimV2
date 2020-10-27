@@ -105,7 +105,7 @@ func movement_appendPath(newPath, replacing):
 func movement_checkIfTurnAroundNeeded(newPath):
 	# If length is 0, unit is being asked to return to prev Tile
 	if newPath.size() == 1:
-		print("Return to host")
+#		print("Return to host")
 		ui_switchDirections()
 	
 	# Check if the newPath's first next tile is the same as the one currently being traveled to.
@@ -114,7 +114,7 @@ func movement_checkIfTurnAroundNeeded(newPath):
 	
 	# The unit needs to turn around, then reset the path
 	else:
-		print("Turn around, then continue on path")
+#		print("Turn around, then continue on path")
 		ui_switchDirections()
 		if currentPath[0] == newPath[0]:
 			var size = newPath.size()

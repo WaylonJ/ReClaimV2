@@ -53,6 +53,7 @@ var selected = false
 var allyStationed = null
 var enemyStationed = null
 var movingUnits = []
+var inBattle = false
 
 # Connections to other tiles variables
 var connections = []
@@ -71,8 +72,11 @@ var seenOnce = false
 var tempVisionSeenOnce = false
 var lightLevel = -1
 
+# Event variables
+var event
+var eventType = ""
+var eventCollideable = false
 
-var inBattle = false
 
 onready var databaseRef = get_tree().get_root().get_node("Control").tileDatabase
 onready var rootRef = get_tree().get_root().get_node("Control")
@@ -98,6 +102,30 @@ func _ready():
 	set_process(false)
 	vision_checkIfSeen(self)
 	
+func event_add(newEvent):
+	event = newEvent
+	eventType = event.get_type()
+	
+	add_child(event)
+	
+	buildingName = "TriggerEvent"
+	buildingAlliance = "unique"
+	
+	description = event.get_description()
+	portrait = event.get_portrait()
+	get_node("TileHolder/Background").set("texture", portrait)
+	
+	
+	match eventType:
+		# This type of event triggers once an ally unit moves over it.
+		"trigger":
+			eventCollideable = true
+			
+		_:
+			print("Non-existant Event Type")
+
+
+
 func unit_checkIfInMovingUnit(unit):
 	if (unit in movingUnits):
 #		print("Unit found in moving units")
@@ -233,7 +261,7 @@ func vision_checkIfEdgeOfVision(adding, objectGivingSight, tile, toCheck):
 	match conns:
 		# 1 sources
 		[0, 0, 0, 0]:
-			print("a")
+#			print("a")
 			tile.get_node("LightShades/0Source").show()
 		
 		# 1 sources

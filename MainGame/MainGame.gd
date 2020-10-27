@@ -74,8 +74,6 @@ func startNewGame():
 	get_node("UnitHolder").add_child(unitMovement)
 	unitMovement.makeCostGraph(startingArray)
 	
-	
-
 	# Establishes Base tile
 	makeBaseTile()
 
@@ -83,12 +81,20 @@ func startNewGame():
 	get_node("UnitHolder/UnitController").makeLeaderUnit(baseTile)
 
 	populateBoard()
+	
+	# Make test Event tile
+	var testEventTile = startingArray[length][length - 1]
+	var basicResourceEvent = load("res://MainGame/Tiles/Tiles/EventTiles/_baseTriggerEvent.gd").new()
+	testEventTile.event_add(basicResourceEvent)
+#	testEventTile.event_configureInitially(basicResourceEvent)
+#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+	
 	# Make test enemy unit
-	var testEnemyTile = startingArray[length][length - 1]
-	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
-#
-	testEnemyTile = startingArray[length][length + 1]
-	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+#	var testEnemyTile = startingArray[length][length - 1]
+#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+##
+#	testEnemyTile = startingArray[length][length + 1]
+#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
 	setTileBorders(startingArray)
 	
@@ -96,7 +102,7 @@ func startNewGame():
 func populateBoard():
 #	makeBossBase()
 	makeEnemyBases()
-	makeUniqueTiles()
+	makeEventTiles()
 	makeEnemyUnits()
 
 func setTileBorders(array):	
@@ -132,7 +138,7 @@ func makeEnemyBases():
 			makeEnemyBase(tile)
 		createEnemyAttempts -= 1
 
-func makeUniqueTiles():
+func makeEventTiles():
 	
 	
 	pass

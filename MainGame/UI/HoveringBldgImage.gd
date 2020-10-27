@@ -109,7 +109,7 @@ func attemptToCreateBuilding(bldg):
 	#CHECK RESOURCE COST AND THE LIKE HERE
 	var costs = databaseRef.getUpgradeInfo(bldg, 0)
 	
-	if rootRef.checkBuildable(costs[0], costs[1]):
+	if rootRef.checkBuildable(costs[0], costs[1]) and currentTile.buildingAlliance == "neutral":
 		createTile()
 		return true
 
