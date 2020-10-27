@@ -184,16 +184,15 @@ func movement_evaluateRemainingTraveling():
 		movement_placeAtStartOfPath(hostTile)
 
 func movement_checkCollision():
+	if hostTile.inBattle:
+		# We don't want to trigger a new battle. If the unit ends here, it'll merge.
+		# If it keeps moving, it'll just move past.
+		return false
+	
 	# Checks to see if theres conflicting units on the tile. Ally and enemy, or enemy and ally.
 	if isAlly:
-		if hostTile.unit_checkIfAnyUnitsOnThisTile("enemy") != false:
-			# Battle is currently underway, 
-			if hostTile.inBattle:
-				rootRef.get_node("BattleScreen").refreshUnits(hostTile)
-				# We don't want to trigger a new battle. If the unit ends here, it'll merge.
-				# If it keeps moving, it'll just move past.
-				return false
-				
+		# Looks for enemies
+		if hostTile.unit_checkIfAnyUnitsOnThisTile(!isAlly) != false:
 			if hostTile.enemyStationed != null:
 				hostTile.battle_triggerBattleOnTile(self, hostTile.enemyStationed)
 			else:
@@ -202,19 +201,20 @@ func movement_checkCollision():
 			return true
 	
 	else:
-		if hostTile.unit_checkIfAnyUnitsOnThisTile("ally") != false:
-			if hostTile.inBattle:
-				rootRef.get_node("BattleScreen").refreshUnits(hostTile)
-				# We don't want to trigger a new battle. If the unit ends here, it'll merge.
-				# If it keeps moving, it'll just move past.
-				return false
-				
+		# Looks for allies
+		if hostTile.unit_checkIfAnyUnitsOnThisTile(!isAlly) != false:
 			if hostTile.allyStationed != null:
 				hostTile.battle_triggerBattleOnTile(hostTile.allyStationed, self)
 			else:
 				# hostTile.unit_getClosestMovingUnit is not actually made, simply returning first found
 				hostTile.battle_triggerBattleOnTile(hostTile.unit_getClosestMovingUnit(), self)
 			return true
+	
+	# No battle triggers, check event triggers
+	event_checkCollision()
+	
+func event_checkCollision():
+	pass
 				
 func battle_placeAtBattlePositions():
 	if isAlly:
@@ -284,15 +284,12 @@ func host_setUnitStationedOnHost():
 		else:
 			hostTile.unit_setUnitStationed(self)
 	else:
-#		print("AM ENEMY")
 		# Unit already exists on the tile, merge!
 		if hostTile.enemyStationed != null and hostTile.enemyStationed != self:
-#			print("OTHER ENEMY HERE, MERGINE")
 			hostTile.enemyStationed.stats_mergeWithOtherGroup(self)
 		
 		# No unit here, set self!
 		else:
-#			print("OTHER ENEMY NOT HERE, IM STATIONED")
 			hostTile.unit_setEnemyStationed(self)	
 
 func movement_calcDistances():
@@ -425,6 +422,8 @@ func stats_mergeWithOtherGroup(newAddition):
 	
 	#Removes old unit.
 	newAddition.queue_free()
+	
+	hostTile.battle_checkRefresh()
 
 func ui_handleCurrentSelection(newAddition):
 	# If Host is selected,

@@ -488,6 +488,10 @@ func battle_triggerBattleOnTile(ally, enemy):
 	ally.battle_enter()
 	enemy.battle_enter()
 
+func battle_checkRefresh():
+	if inBattle:
+		rootRef.get_node("BattleScreen").refreshUnits(self)
+
 func battle_showBattleButton():
 #	get_tree().get_root().get_node("Control/BattleScreen").addBattle(allyStationed, enemyStationed, self)
 	get_node("TileHolder/ShowBattleButton").show()
@@ -550,14 +554,14 @@ func unit_getAllUnitsForTile():
 	
 	return returnUnits
 	
-func unit_checkIfAnyUnitsOnThisTile(alliance):
-	if alliance == "ally":
+func unit_checkIfAnyUnitsOnThisTile(ally):
+	if ally:
 		for unit in movingUnits:
 			if unit.isAlly:
 				return true
 		if allyStationed != null:
 			return true
-	
+			
 	else:
 		for unit in movingUnits:
 			if !unit.isAlly:
