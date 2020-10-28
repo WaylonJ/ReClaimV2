@@ -84,7 +84,7 @@ func startNewGame():
 	
 	# Make test Event tile
 	var testEventTile = startingArray[length][length - 1]
-	var basicResourceEvent = load("res://MainGame/Tiles/Tiles/EventTiles/_baseTriggerEvent.gd").new()
+	var basicResourceEvent = load("res://MainGame/Tiles/Tiles/EventTiles/_basePopupEvent.gd").new()
 	testEventTile.event_add(basicResourceEvent)
 #	testEventTile.event_configureInitially(basicResourceEvent)
 #	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)

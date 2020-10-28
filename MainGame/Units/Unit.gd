@@ -214,7 +214,8 @@ func movement_checkCollision():
 	event_checkCollision()
 	
 func event_checkCollision():
-	pass
+	if hostTile.eventCollideable:
+		hostTile.event_Trigger()
 				
 func battle_placeAtBattlePositions():
 	if isAlly:
@@ -389,7 +390,7 @@ func vision_checkHighest():
 	for item in unitTypes:
 		match item:
 			"Leader":
-				vision_setNew(10)
+				vision_setNew(2)
 			"Goblin":
 				vision_setNew(1)
 	

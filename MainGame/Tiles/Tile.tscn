@@ -52,6 +52,7 @@ texture = ExtResource( 2 )
 offset = Vector2( 62, 62 )
 
 [node name="Walls" type="Sprite" parent="."]
+visible = false
 modulate = Color( 0.611765, 0.611765, 0.611765, 1 )
 show_behind_parent = true
 z_index = 2

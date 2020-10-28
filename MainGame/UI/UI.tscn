@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
@@ -45,6 +45,9 @@
 [ext_resource path="res://MainGame/UI/SelectedHighlight.gd" type="Script" id=43]
 [ext_resource path="res://MainGame/UI/HoveringBldgImage.gd" type="Script" id=44]
 [ext_resource path="res://MainGame/UI/CostHolder.gd" type="Script" id=45]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
 
 [node name="UI" type="CanvasLayer"]
 
@@ -1501,6 +1504,120 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
+
+[node name="EventPanel" type="PanelContainer" parent="."]
+margin_left = 258.56
+margin_top = 75.7068
+margin_right = 1058.56
+margin_bottom = 616.707
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftRightHolder" type="HBoxContainer" parent="EventPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 793.0
+margin_bottom = 534.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PictureContainer" type="Container" parent="EventPanel/LeftRightHolder"]
+margin_right = 391.0
+margin_bottom = 527.0
+size_flags_horizontal = 3
+
+[node name="Picture" type="Sprite" parent="EventPanel/LeftRightHolder/PictureContainer"]
+position = Vector2( -786, 0 )
+
+[node name="popup_2Choices" type="VBoxContainer" parent="EventPanel/LeftRightHolder"]
+visible = false
+margin_left = 263.0
+margin_right = 522.0
+margin_bottom = 527.0
+size_flags_horizontal = 3
+
+[node name="Text" type="TextEdit" parent="EventPanel/LeftRightHolder/popup_2Choices"]
+margin_right = 259.0
+margin_bottom = 463.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Hello testing text"
+
+[node name="Choices" type="HBoxContainer" parent="EventPanel/LeftRightHolder/popup_2Choices"]
+margin_top = 467.0
+margin_right = 259.0
+margin_bottom = 527.0
+
+[node name="ChoiceOne" type="Button" parent="EventPanel/LeftRightHolder/popup_2Choices/Choices"]
+margin_right = 127.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 3
+
+[node name="ChoiceTwo" type="Button" parent="EventPanel/LeftRightHolder/popup_2Choices/Choices"]
+margin_left = 131.0
+margin_right = 259.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 3
+
+[node name="popup_TextOnly" type="VBoxContainer" parent="EventPanel/LeftRightHolder"]
+margin_left = 395.0
+margin_right = 786.0
+margin_bottom = 527.0
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="EventPanel/LeftRightHolder/popup_TextOnly"]
+margin_right = 391.0
+margin_bottom = 261.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="EventPanel/LeftRightHolder/popup_TextOnly/Panel"]
+margin_left = 4.00452
+margin_top = 5.33936
+margin_right = 387.005
+margin_bottom = 256.339
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+text = "This is example event text. Oh no the evil baddies are coming run away"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text2" type="TextEdit" parent="EventPanel/LeftRightHolder/popup_TextOnly"]
+visible = false
+margin_top = 4.0
+margin_right = 391.0
+margin_bottom = 263.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/caret_background_color = Color( 0, 0, 0, 0 )
+text = "This is example event text. Oh no the evil baddies are coming run away
+"
+context_menu_enabled = false
+shortcut_keys_enabled = false
+virtual_keyboard_enabled = false
+selecting_enabled = false
+wrap_enabled = true
+
+[node name="Text3" type="Label" parent="EventPanel/LeftRightHolder/popup_TextOnly"]
+margin_left = 95.0
+margin_top = 265.0
+margin_right = 295.0
+margin_bottom = 527.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 1 )
+text = "(Click anywhere to continue)"
+valign = 2
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]

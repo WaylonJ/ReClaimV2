@@ -107,8 +107,9 @@ func event_add(newEvent):
 	eventType = event.get_type()
 	
 	add_child(event)
+	event.add_parent(self)
 	
-	buildingName = "TriggerEvent"
+	buildingName = "PopupEvent"
 	buildingAlliance = "unique"
 	
 	description = event.get_description()
@@ -118,13 +119,14 @@ func event_add(newEvent):
 	
 	match eventType:
 		# This type of event triggers once an ally unit moves over it.
-		"trigger":
+		"popup":
 			eventCollideable = true
 			
 		_:
 			print("Non-existant Event Type")
 
-
+func event_Trigger():
+	event.triggerEvent()
 
 func unit_checkIfInMovingUnit(unit):
 	if (unit in movingUnits):
@@ -439,6 +441,7 @@ func vision_checkIfSeen(tile):
 		tile.get_node("TileHolder/Background/Unseen").hide()
 		tile.get_node("TileHolder/Background/Unseen").modulate = Color(1, 1, 1, 0.5)
 		tile.get_node("MapBackground").show()
+		tile.get_node("Walls").show()
 		if !(tile.buildingComplete):
 			get_node("TileHolder/BuildingProgressBar").show()
 		tile.currentlySeen = true
