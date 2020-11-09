@@ -80,26 +80,38 @@ var eventCollideable = false
 
 onready var databaseRef = get_tree().get_root().get_node("Control").tileDatabase
 onready var rootRef = get_tree().get_root().get_node("Control")
+onready var resourceController = rootRef.resourceController
+onready var timeController = rootRef.timeController
+onready var TIME_CONSTANT = timeController.TIME_CONSTANT
 
-func _process(delta):
+
+func time_Update():
 	# Updates timer for tiles being built
 	if !buildingComplete:
 		if buildingTime <= 0:
 			bldg_completeBuildingConstruction()
 		else:
-			bldg_continueBuildingConstruction(delta)
+			bldg_continueBuildingConstruction()
 		
 	# If the building produces units, is complete, and the tile is awake, CONTINUE PRODUCTION
 	if unitProduction != null and buildingComplete and tileAwake:
-		bldg_updateUnitProduction(delta)
+		bldg_updateUnitProduction()
 		
 	# Increments wakeTimer for sleeping tiles
 	if not tileAwake:
-		bldg_updateWakeTimer(delta)
-			
+		bldg_updateWakeTimer()
+
+func time_CheckIfNeeded():
+	# If any of the following occur, then add self to timeController. Otherwise no need to track.
+	
+	if !buildingComplete:
+		timeController.object_addItemToGroup(self, "Buildings")
+	if unitProduction != null and buildingComplete and tileAwake:
+		timeController.object_addItemToGroup(self, "Buildings")
+	if not tileAwake:
+		timeController.object_addItemToGroup(self, "Buildings")
 	
 func _ready():
-	set_process(false)
 	vision_checkIfSeen(self)
 	
 func event_add(newEvent):
@@ -151,14 +163,13 @@ func unit_removeUnitCompletely(removeThis):
 		unit_removeMovingUnit(removeThis)
 	
 	
-func bldg_updateWakeTimer(delta):
-	wakeTimer -= delta
+func bldg_updateWakeTimer():
+	wakeTimer -= TIME_CONSTANT
 	if wakeTimer <= 0:
 		tileAwake = true
-#		print("TILE AWAKE")
 	
-func bldg_updateUnitProduction(delta):
-	unitProduction -= delta
+func bldg_updateUnitProduction():
+	unitProduction -= TIME_CONSTANT
 	if unitProduction < 0:
 		bldg_createUnit()
 		unitProduction = outputUnit
@@ -171,14 +182,14 @@ func bldg_completeBuildingConstruction():
 	buildingTime = 0
 	
 	if unitProduction == null:
-		set_process(false)
+		timeController.object_removeItemFromGroup(self, "Buildings")
 	get_node("TileHolder/BuildingProgressBar").hide()
 	if buildingAlliance == "ally":
 		vision_updateInSightOf(vision, self, true, true)
-		stats_updateGlobalValues()
+		resourceController.updateTotalProduction(outputMana, outputAdvanced, outputResearch)
 		
-func bldg_continueBuildingConstruction(delta):
-	buildingTime -= delta
+func bldg_continueBuildingConstruction():
+	buildingTime -= TIME_CONSTANT
 	percentBuilt = (buildingTimeMax - buildingTime) / buildingTimeMax * 100
 	get_node("TileHolder/BuildingProgressBar").set("value", percentBuilt)
 
@@ -197,11 +208,7 @@ func bldg_createTile():
 		get_node("TileHolder/BuildingProgressBar").show()
 	
 	buildingComplete = false
-	set_process(true)
-	
-func stats_updateGlobalValues():
-	# Handles updating global production values
-	get_tree().get_root().get_node("Control").updateTotalProduction(outputMana, outputAdvanced, outputResearch)
+	time_CheckIfNeeded()
 
 func stats_updateTileInfo():
 	var data = databaseRef.getConstructionInfo(buildingName)
@@ -226,7 +233,7 @@ func stats_updateTileInfo():
 func bldg_activateEnemyTimer():
 	if distanceFromBase != 0:
 		wakeTimer = distanceFromBase * wakeTimerConstant
-		set_process(true)
+		time_CheckIfNeeded()
 	
 func stats_setUnitCreationInfo(unitName):
 	unitProductionName = unitName
@@ -361,7 +368,7 @@ func vision_updateInSightOf(toCheck, objectGivingSight, adding, isABuilding):
 
 func vision_updateLightLevel(tile):
 	var highestLevel = 0
-	
+#	print("In updateLightLevel, tile.inSightOf(): " + str(tile.inSightOf))
 	for source in tile.inSightOf:
 		if tile.inSightOf[source] > highestLevel:
 			highestLevel = tile.inSightOf[source]
@@ -371,31 +378,13 @@ func vision_updateLightLevel(tile):
 func vision_addOrRemoveFromSight(adding, objectGivingSight, tile, newLightLevel):
 	# Adding items to inSightOf
 	if adding:
+#		print("insight of (+) Tile: " + str(tile) + ", object: " + str(objectGivingSight))
 		tile.inSightOf[objectGivingSight] = newLightLevel
-		
-		
-		
-#		var newItem = true
-#
-#		# Ensures this object isn't already listed in inSightOf
-#		for item in tile.inSightOf:
-#			if item == objectGivingSight:
-#				newItem = false
-#
-#		#If it's a new item, add it to the list of inSightOf
-#		if newItem:
-#			tile.inSightOf.append(objectGivingSight)
-			
-		# Check if this is an enemy tile that needs to be woken up.
-#		tile.bldg_checkToWakeUp(distanceFromOriginal)
 	
 	# Remove items from inSightOf
 	else:
-#		var index = 0
-#		for item in tile.inSightOf:
-#			if item == objectGivingSight:
+#		print("insight of (-) Tile: " + str(tile) + ", object: " + str(objectGivingSight))
 		tile.inSightOf.erase(objectGivingSight)
-#			index += 1
 	
 	tile.vision_checkIfSeen(tile)
 
@@ -423,9 +412,7 @@ func basic_resetTile():
 	outputResearch = null
 
 	buildingComplete = true
-	set_process(true)
-	pass
-	
+	time_CheckIfNeeded()
 
 func vision_checkIfSeen(tile):
 	# Hidden, hide most things
@@ -461,11 +448,11 @@ func vision_setEnemyVisibility(tileSeen):
 		else:
 			enemyStationed.hide()
 
-func stats_updateOutput(mana, unit, advanced, research):
+func stats_updateOutput(mana, advanced, unit, research):
 	outputMana = mana
+	outputAdvanced = advanced
 	outputUnit = unit
 	unitProduction = outputUnit
-	outputAdvanced = advanced
 	outputResearch = research
 
 func unit_appendUnitMoving(unit):

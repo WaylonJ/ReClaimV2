@@ -14,6 +14,7 @@ var Utility_Tile = preload("res://MainGame/Tiles/Resources/PH_Tile_UtilityBldg.p
 
 onready var tileInfoRef = get_node("../../BottomUI/MiddleSection/TileInfo")
 onready var rootRef = get_tree().get_root().get_node("Control")
+onready var resourceController = rootRef.resourceController
 onready var databaseRef = rootRef.tileDatabase
 
 
@@ -28,15 +29,10 @@ func getAllTiles():
 	for button in buttonList:
 		button.connect("pressed", self, "_on_thisButton_pressed", [button])
 	
-
 	for tile in tiles:
 		tile.get_node("TileHolder/Background").connect("mouse_entered", self, "_on_mouse_entered_highlight", [tile])
 		tile.get_node("TileHolder/Background").connect("mouse_exited", self, "_on_mouse_exited_highlight", [tile])
-		
-#	var backButton = get_tree().get_root().get_node("UI/BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton")
-#	backButton.connect("pressed", self, "_on_BackButton_pressed")
-#	print(get_tree().get_nodes_in_group("Tiles"))
-
+	
 func _on_mouse_entered_highlight(tile):
 	if selectedBldg != null:
 		# Save the tile's current BG here
@@ -57,9 +53,6 @@ func _on_mouse_entered_highlight(tile):
 					tile.get_node("TileHolder/Background").set("texture", Utility_Tile)
 				"ManaPoolBldg":
 					tile.get_node("TileHolder/Background").set("texture", Mana_Tile)
-				_:
-					pass
-				
 	else:
 		pass
 	
@@ -109,7 +102,7 @@ func attemptToCreateBuilding(bldg):
 	#CHECK RESOURCE COST AND THE LIKE HERE
 	var costs = databaseRef.getUpgradeInfo(bldg, 0)
 	
-	if rootRef.checkBuildable(costs[0], costs[1]) and currentTile.buildingAlliance == "neutral":
+	if resourceController.checkBuildable(costs[0], costs[1]) and currentTile.buildingAlliance == "neutral":
 		createTile()
 		return true
 

@@ -1,21 +1,20 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://MainGame/MainGame.gd" type="Script" id=1]
-[ext_resource path="res://MainGame/Camera2D.tscn" type="PackedScene" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://MainGame/Utility/Camera2D.tscn" type="PackedScene" id=2]
 [ext_resource path="res://MainGame/UI/UI.tscn" type="PackedScene" id=4]
 [ext_resource path="res://MainGame/Tiles/Tile.tscn" type="PackedScene" id=5]
-[ext_resource path="res://MainGame/UnitController.gd" type="Script" id=6]
+[ext_resource path="res://MainGame/Units/UnitController.gd" type="Script" id=6]
 [ext_resource path="res://MainGame/Units/Unit.tscn" type="PackedScene" id=7]
-[ext_resource path="res://MainGame/EnemyController.gd" type="Script" id=8]
+[ext_resource path="res://MainGame/Units/EnemyController.gd" type="Script" id=8]
 [ext_resource path="res://MainGame/Units/EnemyUnit.tscn" type="PackedScene" id=9]
-[ext_resource path="res://MainGame/Links/Link.tscn" type="PackedScene" id=10]
-[ext_resource path="res://MainGame/BattleScreen.gd" type="Script" id=11]
+[ext_resource path="res://MainGame/Utility/Links/Link.tscn" type="PackedScene" id=10]
+[ext_resource path="res://MainGame/BattleScreen/BattleScreen.gd" type="Script" id=11]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_24.tres" type="DynamicFont" id=12]
-[ext_resource path="res://MainGame/UnitSkillsArea.gd" type="Script" id=13]
+[ext_resource path="res://MainGame/BattleScreen/UnitSkillsArea.gd" type="Script" id=13]
 [ext_resource path="res://MainGame/Units/Resources/Skills/Blank.png" type="Texture" id=14]
 [ext_resource path="res://MainGame/Units/Resources/SmallIcons/small_Unit_Blank.png" type="Texture" id=15]
-[ext_resource path="res://MainGame/Battle_Fight_Section.gd" type="Script" id=16]
+[ext_resource path="res://MainGame/BattleScreen/Battle_Fight_Section.gd" type="Script" id=16]
 [ext_resource path="res://MainGame/UI/Resources/Empty.png" type="Texture" id=17]
 [ext_resource path="res://MainGame/BattleScreen/BattleUnitColumn.tscn" type="PackedScene" id=18]
 [ext_resource path="res://MainGame/BattleScreen/BattleUnitColumnENEMY.tscn" type="PackedScene" id=19]
@@ -88,7 +87,6 @@ position = Vector2( 3.62384, 2.01764 )
 material = SubResource( 2 )
 position = Vector2( 1.11571, -0.231323 )
 scale = Vector2( 300, 200 )
-texture = ExtResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }

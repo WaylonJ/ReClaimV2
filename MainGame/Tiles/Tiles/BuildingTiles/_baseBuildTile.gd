@@ -42,7 +42,7 @@ func getConstructionInfo():
 	buildingTime,
 	buildingAlliance,
 	vision,
-	[mana, unit, advanced, research],
+	[mana, advanced, unit, research],
 	unitName
 	]
 

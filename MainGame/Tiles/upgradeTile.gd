@@ -2,6 +2,8 @@ extends Node
 
 onready var rootRef = get_tree().get_root().get_node("Control")
 onready var tileInfoRef = rootRef.get_node("UI/BottomUI/MiddleSection/TileInfo")
+onready var resourceController = rootRef.resourceController
+onready var timeController = rootRef.timeController
 onready var databaseRef = preload("res://MainGame/Tiles/TileDatabase.gd").new()
 var upgradeCost = []
 var newOutput = []
@@ -19,7 +21,7 @@ func upgradeTile(tileGroup):
 		upgradeCost = databaseRef.getUpgradeInfo(tile.buildingName, tile.buildingTier)
 		
 		# Check if the supply is available, subtracts it if true
-		if not rootRef.checkBuildable(upgradeCost[0], upgradeCost[1]):
+		if not resourceController.checkBuildable(upgradeCost[0], upgradeCost[1]):
 			break
 
 		# 
@@ -44,7 +46,7 @@ func updateTileWithUpgrade(tile):
 	tile.stats_updateOutput(newOutput[0], newOutput[1], newOutput[2], newOutput[3])
 	
 	# Add new values to production
-	rootRef.updateTotalProduction(tile.outputMana, tile.outputAdvanced, tile.outputResearch)
+	resourceController.updateTotalProduction(tile.outputMana, tile.outputAdvanced, tile.outputResearch)
 	removeThese.append(tile)
 	
 func removePastValuesFromProduction(tile):
@@ -59,7 +61,7 @@ func removePastValuesFromProduction(tile):
 	if newResearch != null:
 		newResearch *= -1
 
-	rootRef.updateTotalProduction(newMana, newAdvanced, newResearch)
+	resourceController.updateTotalProduction(newMana, newAdvanced, newResearch)
 	
 func removeAllUpgraded(originalAmount):
 	if removeThese.size() == originalAmount:

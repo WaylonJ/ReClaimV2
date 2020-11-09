@@ -1,9 +1,10 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://MainGame/EnemyUnit.gd" type="Script" id=1]
+[ext_resource path="res://MainGame/Units/EnemyUnit.gd" type="Script" id=1]
 [ext_resource path="res://MainGame/Units/Resources/TileIcons/PH_Unit_Leader.png" type="Texture" id=2]
 [ext_resource path="res://MainGame/Units/Resources/TileIcons/PH_Unit_Highlight.png" type="Texture" id=3]
 [ext_resource path="res://MainGame/Units/Resources/TileIcons/PH_Unit_NumberBG.png" type="Texture" id=4]
+
 
 [node name="EnemyUnit" type="Button"]
 margin_left = 1.94977

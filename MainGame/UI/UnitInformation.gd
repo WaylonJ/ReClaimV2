@@ -47,6 +47,7 @@ func printSelected():
 func HideOtherUIAndShowSelf():
 	for child in get_parent().get_children():
 		child.hide()
+#	print("here")
 	show()
 
 func checkIfUnitTypeAlreadyHere(newUnit):

@@ -5,7 +5,6 @@
 [ext_resource path="res://EscPopup/Buttons/EscPopupButton.tscn" type="PackedScene" id=3]
 
 [node name="EscPopup" type="WindowDialog"]
-visible = true
 margin_left = 1.58667
 margin_right = 1274.59
 margin_bottom = 720.0

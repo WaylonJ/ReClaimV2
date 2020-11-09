@@ -31,9 +31,13 @@ var advancedCap = 500
 var selectedName = "e"
 
 # Variables to hold scripts from other places
-var linkCreator = load("res://MainGame/GenerateTileLinks.gd").new()
+var linkCreator = load("res://MainGame/Utility/Links/GenerateTileLinks.gd").new()
 var unitMovement = load("res://MainGame/Units/UnitMovement.gd").new()
 var tileDatabase = load("res://MainGame/Tiles/TileDatabase.gd").new()
+var timeController = load("res://MainGame/Utility/TimeController.gd").new()
+var resourceController = load("res://MainGame/Utility/ResourceController.gd").new()
+var inputController = load("res://MainGame/Utility/InputController.gd").new()
+
 
 var testTime = 0
 var testTime2 = 0
@@ -45,22 +49,8 @@ func _ready():
 	# Calls functions in other scripts here to ensure nodes they use are already initialized
 	get_node("UI/HiddenItems/HoveringBldgImage").call("getAllTiles")
 	get_node("UI/BottomUI/MiddleSection/TileInfo").call("getAllTiles")
-
-
 	
-	set_process(true)
-	
-func _process(delta):
-	if myTimer <= 0:
-		myTimer = 0.05 + myTimer
-		manaSupply += manaProduction / 20.0
-		advancedSupply += advancedProduction / 20.0
-		researchSupply += researchProduction / 20.0
-	else:
-		myTimer -= delta
-	
-	checkCaps()
-	updateUI()
+	timeController.time_start()
 
 func startNewGame():
 	# Creates the starting array
@@ -76,16 +66,27 @@ func startNewGame():
 	
 	# Establishes Base tile
 	makeBaseTile()
-
+	
 	# Make leader unit
 	get_node("UnitHolder/UnitController").makeLeaderUnit(baseTile)
-
+	
+	#Populate board
 	populateBoard()
+	
+	#Initialize resourceController script
+	add_child(timeController)
+	add_child(resourceController)
+	add_child(inputController)
 	
 	# Make test Event tile
 	var testEventTile = startingArray[length][length - 1]
-	var basicResourceEvent = load("res://MainGame/Tiles/Tiles/EventTiles/_basePopupEvent.gd").new()
-	testEventTile.event_add(basicResourceEvent)
+#	var basePopupEvent = load("res://MainGame/Tiles/Tiles/EventTiles/_basePopupEvent.gd").new()
+#	testEventTile.event_add(basePopupEvent)
+	
+	var baseResourceEvent = load("res://MainGame/Tiles/Tiles/EventTiles/popupResourceEvent.gd").new()
+	testEventTile.event_add(baseResourceEvent)
+	
+	
 #	testEventTile.event_configureInitially(basicResourceEvent)
 #	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
@@ -102,7 +103,7 @@ func startNewGame():
 func populateBoard():
 #	makeBossBase()
 	makeEnemyBases()
-	makeEventTiles()
+#	makeEventTiles()
 	makeEnemyUnits()
 
 func setTileBorders(array):	
@@ -224,7 +225,6 @@ func makeEnemyBase(tile):
 	tile.bldg_createTile()
 	tile.get_node("TileHolder/Background").set("texture", enemyTilePNG)
 	
-
 func makeBaseArray():
 	var tile = preload("Tiles/Tile.tscn")
 	var arr = []
@@ -256,53 +256,7 @@ func makeBaseTile():
 	baseTile.bldg_createTile()
 	baseTile.get_node("TileHolder/Background").set("texture", BaseTilePNG)
 	
-func updateTotalProduction(mana, advanced, research):
-	if mana != null:
-		manaProduction += mana
-	if advanced != null:
-		advancedProduction += advanced
-	if research != null:
-		researchProduction += research
-		
-	# Updates the baseTile values and the UI portion
-	baseTile.set("outputMana", manaProduction)
-	baseTile.set("outputAdvanced", advancedProduction)
-	baseTile.set("outputResearch", researchProduction)
-	get_node("UI/BottomUI/MiddleSection/TileInfo/Production/OutputBox").updateUI(baseTile)
-
-func updateUI():
-	var mana = get_node("UI/BottomUI/RightSection/ResourceItems/Mana")
-	var advanced = get_node("UI/BottomUI/RightSection/ResourceItems/Advanced")
-	var research = get_node("UI/BottomUI/RightSection/ResourceItems/Research")
-	
-	mana.get_node("Label").set_text(str(floor(manaSupply)))
-	advanced.get_node("Label").set_text(str(floor(advancedSupply)))
-	research.get_node("Label").set_text(str(floor(researchSupply)))
-	
-func checkCaps():
-	if manaSupply > manaCap:
-		manaSupply = manaCap
-	if advancedSupply > advancedCap:
-		advancedSupply = advancedCap
-
-func checkSupply(manaCost, advancedCost):
-	if manaSupply >= manaCost and advancedSupply >= advancedCost:
-		return true
-	else:
-		return false
-
-func checkBuildable(manaCost, advancedCost):
-	if checkSupply(manaCost, advancedCost):
-		manaSupply -= manaCost
-		advancedSupply -= advancedCost
-		return true
-	else:
-		return false
-	
-func refundCost(manaCost, advancedCost):
-	manaSupply += manaCost
-	advancedSupply += advancedCost
-	checkCaps()
+	resourceController.addBaseTile(baseTile)
 	
 func checkIfSomethingSelected():
 	return selectedName

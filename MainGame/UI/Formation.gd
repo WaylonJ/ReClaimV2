@@ -12,63 +12,82 @@ var currentPos = null
 var originalPos = null
 
 onready var tempImageNode = get_node("../../../../HiddenItems/CursorImage")
+onready var rootRef = get_tree().get_root().get_node("Control")
+onready var timeController = rootRef.timeController
+onready var TIME_CONSTANT = timeController.TIME_CONSTANT
 
 var mousePos = null
 
 var timer = 0.05
+var letGo = false
+var skipFirstMouseMotion = false
 
-func _process(delta):
-	timer -= delta
-	if timer <= 0:
-		timer = 0.05
+# Ok this shit is a mess. When you hold down left click, _on_Mouse_Entered() doesn't fire
+# So that resulted in a lot of janky shit to figure out how to get drag and drops to work
+# idk if skipFirstMouseMotion does anything
+#
+# Current bug is that if you drag an empty tile onto a unit icon, it won't allow currentPos to be updated
+# until another click is registered. No idea why.
+
+
+func time_Update():
+	if currentPos != null:
+		switchOriginalAndCurrentPosUnits()
 		
-		if currentPos != null:
-			# Ensures current position has the update node, because it can't update until it's 'moved' 
-			get_viewport().warp_mouse(Vector2(mousePos[0] + 1, mousePos[1]))
-			get_viewport().warp_mouse(Vector2(mousePos[0] - 1, mousePos[1]))
-			switchOriginalAndCurrentPosUnits()
-			originalPos = null
-		set_process(false)
-		currentPos = null
+		# Ensures current position has the update node, because it can't update until it's 'moved' 
+		get_viewport().warp_mouse(Vector2(mousePos[0] + 1, mousePos[1]))
+		get_viewport().warp_mouse(Vector2(mousePos[0] - 1, mousePos[1]))
 		originalPos = null
+	timeController.object_removeItemFromGroup(self, "UI")
+	currentPos = null
+	originalPos = null
+	letGo = false
 
 func _ready():
 	connectMouseEntered(self, self)
 	tempImageNode.hide()
-	set_process(false)
-	pass
 	
 func _input(event):
+#	print(event)
 	if event is InputEventMouseButton and inFormations:
 		if event.is_pressed():
+			print("Letgo: " + str(letGo) + ", skipFirst: " + str(skipFirstMouseMotion))
 			if currentPos != null:
+
+#				print("clicked")
 				setDragTexture(currentPos.get_node("UnitFormation"))
 				setOriginalPos()
 				fadeOriginalPosUnit()
 		if !event.is_pressed() and originalPos != null:
+			letGo = true
+			skipFirstMouseMotion = true
 			restoreFadeOriginalPosUnit()
-			set_process(true)
 			hideDragTexture()
 	if event is InputEventMouseMotion:
+		if letGo and !skipFirstMouseMotion:
+			letGo = false
+		skipFirstMouseMotion = false
 		inputSetMousePositions(event)
 		updateDragTexturePos()
 
 func _mouseEntered(node):
 	inFormations = true
 	if node.name == "CenterContainer":
+		print("setting cur Pos, " + str(node))
 		currentPos = node
-#	if node.name == "UnitFormation":
-#		if currentUnit == null:
-#			currentUnit = node
+	if letGo:
+		changePicture()
+
+func changePicture():
+	timeController.object_addItemToGroup(self, "UI")
+	
+	pass
 
 func _mouseExited(node):
 	inFormations = false
 	if node.name == "CenterContainer":
 		if currentPos != null:
 			currentPos = null
-#	if node.name == "UnitFormation":
-#		if currentUnit != null:
-#			currentUnit = null
 
 func fadeOriginalPosUnit():
 	var color = originalPos.get_node("UnitFormation").get_self_modulate()
@@ -81,7 +100,10 @@ func restoreFadeOriginalPosUnit():
 func switchOriginalAndCurrentPosUnits():
 	var temp = originalPos.get_node("UnitFormation").get("texture")
 	if currentPos == null or originalPos == null or temp == null:
+#		print("returning")
 		return
+#	if currentPos == originalPos:
+#		print("theyre the same")
 	originalPos.get_node("UnitFormation").set("texture", currentPos.get_node("UnitFormation").get("texture"))
 	currentPos.get_node("UnitFormation").set("texture", temp)
 	
@@ -175,5 +197,3 @@ func getIcon(unit):
 			return [LEADER_ICON, "Leader"]
 		"Goblin":
 			return [GOBLIN_ICON, "Goblin"]
-
-

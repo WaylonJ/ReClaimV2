@@ -19,6 +19,10 @@ var currentTargettedPosition = {}
 var allyPositions = {}
 var enemyPositions = {}
 
+onready var rootRef = get_tree().get_root().get_node("Control")
+onready var timeController = rootRef.timeController
+onready var TIME_CONSTANT = timeController.TIME_CONSTANT
+
 # Var to control which battle is currently on the screen.
 var activeBattle = false
 
@@ -28,9 +32,9 @@ func _input(event):
 		get_parent().hideBattleScreen()
 
 func _ready():
-	set_process(false)
+	pass
 	
-func _process(delta):
+func time_Update():
 #	print(incrementingAttackRate)
 	for unitName in incrementingAttackRate:
 		if !(unitRefs[unitName].isAlive):
@@ -39,7 +43,7 @@ func _process(delta):
 			checkBattleStatus()
 			continue
 		
-		progressAAs(unitName, delta)
+		progressAAs(unitName)
 		if incrementingAttackRate[unitName] < 0:
 			triggerAttack(unitName)
 			
@@ -49,8 +53,8 @@ func _process(delta):
 			
 			incrementingAttackRate[unitName] = baseAttackRates[unitName]
 
-func progressAAs(unitName, delta):
-	incrementingAttackRate[unitName] -= delta * 10
+func progressAAs(unitName):
+	incrementingAttackRate[unitName] -= TIME_CONSTANT * 10
 	aATimerByUnitName[unitName].value = 100 - ( incrementingAttackRate[unitName] / baseAttackRates[unitName] ) * 100
 
 func setActive():
@@ -82,7 +86,7 @@ func addBattle(ally, enemy, battleTile):
 	allUnits = [ally, enemy]
 	tile = battleTile
 	tile.inBattle = true
-	tile.set_process(false)
+	timeController.object_removeItemFromGroup(tile, "Buildings")
 	
 	pruneDeletedUnits()
 	
@@ -92,7 +96,7 @@ func addBattle(ally, enemy, battleTile):
 	initializePositions()
 	initializeHealthBarRefsAndAARefs()
 	
-	set_process(true)
+	timeController.object_addItemToGroup(self, "Fights")
 
 func pruneDeletedUnits():
 	var eraseThese = []
@@ -248,29 +252,22 @@ func checkBattleStatus():
 		return
 	
 func battleEnd(allyWin):
-	set_process(false)
+	timeController.object_removeItemFromGroup(self, "Fights")
 	resetAllVars()
 	
 	if allyWin:
 		print("allies won")
-#		allyUnits.snared = false
-#		allyUnits.set_process(true)
-#		enemyUnits.queue_free()
 		allyUnits.battle_won()
 		enemyUnits.battle_lost()
-#		tile.enemyStationed = null
 	else:
 		print("enemies won")
-#		enemyUnits.snared = false
-#		enemyUnits.set_process(true)
-#		allyUnits.queue_free()
 		allyUnits.battle_lost()
 		enemyUnits.battle_won()
-#		tile.allyStationed = null
 		tile.vision_updateInSightOf(allyUnits.vision, allyUnits, false, false)
 		
 	tile.inBattle = false
-	tile.set_process(true)
+	
+	tile.time_CheckIfNeeded()
 	get_parent().removeBattle(tile)
 	
 

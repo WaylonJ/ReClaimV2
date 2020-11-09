@@ -35,9 +35,12 @@ var formation = {}
 var pathToMove = []
 var currentPath = []
 onready var rootRef = get_tree().get_root().get_node("Control")
+onready var timeController = rootRef.timeController
+onready var TIME_CONSTANT = timeController.TIME_CONSTANT
 
-var distanceTotal
-var distanceLeft
+var distanceTotal = 0
+var distanceLeft = 0
+var changeInDistance = 0
 var distanceMovedSinceLastTick = 0
 var directionMoving
 
@@ -49,31 +52,61 @@ var snared = false
 func _ready():
 	self.connect("mouse_entered", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseEntered", [self])
 	self.connect("mouse_exited", get_tree().get_root().get_node("Control/UnitHolder/UnitController"), "_mouseExited")
-	set_process(false)
+	timeController.object_removeItemFromGroup(self, "Units")
 
 func _init():
 	basic_generateUnitRefs()
 
-func _process(delta):
-	movement_updateMovement(delta)
-	
+func time_Update():
+	movement_updateMovement(TIME_CONSTANT)
 
 func movement_updateMovement(delta):
-	distanceLeft -= delta * totalSpeed
-	distanceMovedSinceLastTick += (delta * totalSpeed) / numUnits
+	# There is a total of 100 (?) pixels between tiles
+	# DistanceLeft is originally 10 * numUnits. 
+	changeInDistance = delta * totalSpeed
+	distanceLeft -= changeInDistance
+	
 	
 	# Progress unit towards next tile visually
-	if distanceMovedSinceLastTick >= 1:
+	distanceMovedSinceLastTick += changeInDistance / numUnits
+	if distanceMovedSinceLastTick >= 0.1:
 		movement_moveUnitAlongPath(distanceMovedSinceLastTick * 10)
-		distanceMovedSinceLastTick -= 1
+		distanceMovedSinceLastTick = 0
 	
 	# Units has reached its destination
 	if distanceLeft < 0:
-		set_process(false)
+		timeController.object_removeItemFromGroup(self, "Units")
 		
 		if isAlly:
 			hostTile.vision_updateInSightOf(vision, self, false, false)
+			currentPath.front().vision_updateInSightOf(vision, self, true, false)
 		movement_updatePath()
+
+func movement_moveUnitAlongPath(distanceMoved):
+	match directionMoving:
+		"up":
+			self.set_position(Vector2(self.get_position()[0], self.get_position()[1] - distanceMoved))
+		"down":
+			self.set_position(Vector2(self.get_position()[0], self.get_position()[1] + distanceMoved))
+		"right":
+			self.set_position(Vector2(self.get_position()[0] + distanceMoved, self.get_position()[1]))
+		"left":
+			self.set_position(Vector2(self.get_position()[0] - distanceMoved, self.get_position()[1]))
+	
+func movement_placeAtStartOfPath(tile):
+	var bufferChange = 0
+	if !isAlly:
+		bufferChange = 65
+		
+	match directionMoving:
+		"up":
+			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] - 75))
+		"down":
+			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] + 125))
+		"right":
+			self.set_position(Vector2(tile.get_position()[0] + 125, tile.get_position()[1] + bufferChange))
+		"left":
+			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1] + bufferChange))
 
 func basic_generateUnitRefs():
 	leaderRef = leaderScript.new()
@@ -149,7 +182,7 @@ func movement_updatePath():
 	#Append to unitMoving array on host.
 	if len(currentPath) != 0:
 		hostTile.unit_appendUnitMoving(self)
-	hostTile.vision_updateInSightOf(vision, self, true, false)
+#	hostTile.vision_updateInSightOf(vision, self, true, false)
 	
 	# Vision stuff
 	if !isAlly:
@@ -167,7 +200,7 @@ func movement_evaluateRemainingTraveling():
 	# Still remaining nodes to go
 	if len(currentPath) > 0:
 #		print("setting process true")
-		set_process(true)
+		timeController.object_addItemToGroup(self, "Units")
 		movement_findDirection(currentPath[0])
 		movement_placeAtStartOfPath(hostTile)
 		movement_calcDistances()
@@ -224,7 +257,7 @@ func battle_placeAtBattlePositions():
 		set_position(Vector2(hostTile.get_position()[0] + 65, hostTile.get_position()[1] - 75))
 				
 func battle_enter():
-	set_process(false)
+	timeController.object_removeItemFromGroup(self, "Units")
 	isMoving = false
 	currentPath.push_front(hostTile)
 	snared = true
@@ -247,7 +280,7 @@ func battle_won():
 	# Gives enemies their last movement order so that they may continue.
 	if (len(currentPath) > 0):
 		print("Giving the winning unit it's last movement order")
-		set_process(true)
+		timeController.object_addItemToGroup(self, "Units")
 #		currentPath = pathToMove
 		movement_updatePath()
 
@@ -295,35 +328,11 @@ func host_setUnitStationedOnHost():
 
 func movement_calcDistances():
 	# This calculates how many units of distance need to be covered. The unit speed is used in the 
-	# _process function, so it isn't needed here.
+	# movement_UpdateMovement function, so it isn't needed here.
 	distanceTotal = DIST_CONSTANT * numUnits
 	distanceLeft = distanceTotal
 
-func movement_moveUnitAlongPath(distanceMoved):
-	match directionMoving:
-		"up":
-			self.set_position(Vector2(self.get_position()[0], self.get_position()[1] - distanceMoved))
-		"down":
-			self.set_position(Vector2(self.get_position()[0], self.get_position()[1] + distanceMoved))
-		"right":
-			self.set_position(Vector2(self.get_position()[0] + distanceMoved, self.get_position()[1]))
-		"left":
-			self.set_position(Vector2(self.get_position()[0] - distanceMoved, self.get_position()[1]))
-	
-func movement_placeAtStartOfPath(tile):
-	var bufferChange = 0
-	if !isAlly:
-		bufferChange = 65
-		
-	match directionMoving:
-		"up":
-			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] - 75))
-		"down":
-			self.set_position(Vector2(tile.get_position()[0] + bufferChange, tile.get_position()[1] + 125))
-		"right":
-			self.set_position(Vector2(tile.get_position()[0] + 125, tile.get_position()[1] + bufferChange))
-		"left":
-			self.set_position(Vector2(tile.get_position()[0] - 75, tile.get_position()[1] + bufferChange))
+
 		
 
 func movement_findDirection(nextTile):
@@ -415,11 +424,11 @@ func stats_mergeWithOtherGroup(newAddition):
 	# Updates UI components
 	ui_handleCurrentSelection(newAddition)
 	
-	#Removes sight of old unit
-	hostTile.vision_updateInSightOf(vision, newAddition, false, false)
-	
 	# Updates vision
 	vision_checkHighest()
+	
+	#Removes sight of old unit
+	hostTile.vision_updateInSightOf(vision, newAddition, false, false)
 	
 	#Removes old unit.
 	newAddition.queue_free()

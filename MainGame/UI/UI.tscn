@@ -1,6 +1,6 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
-[ext_resource path="res://MainGame/Panel.gd" type="Script" id=1]
+[ext_resource path="res://MainGame/UI/Panel.gd" type="Script" id=1]
 [ext_resource path="res://TitleScreen/Fonts/BLKCHCRY_20.tres" type="DynamicFont" id=2]
 [ext_resource path="res://MainGame/UI/Resources/PH_UI_Background.png" type="Texture" id=3]
 [ext_resource path="res://MainGame/UI/TileInfo.gd" type="Script" id=4]
@@ -48,6 +48,8 @@
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
+
+[sub_resource type="GradientTexture" id=2]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -616,8 +618,8 @@ margin_bottom = 180.0
 
 [node name="TileActions" type="VBoxContainer" parent="BottomUI/MiddleSection"]
 visible = false
-margin_left = 1100.0
-margin_right = 1400.0
+margin_left = 800.0
+margin_right = 1100.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/separation = 0
@@ -1006,7 +1008,7 @@ texture = ExtResource( 21 )
 [node name="UnitInformation" type="HBoxContainer" parent="BottomUI/MiddleSection"]
 visible = false
 margin_left = 800.0
-margin_right = 1600.0
+margin_right = 800.0
 margin_bottom = 180.0
 size_flags_horizontal = 5
 size_flags_vertical = 3
@@ -1124,8 +1126,7 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="RowHolder" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-margin_left = 200.0
-margin_right = 600.0
+margin_right = 400.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 400, 0 )
 
@@ -1141,8 +1142,7 @@ margin_bottom = 180.0
 size_flags_vertical = 3
 
 [node name="Formation" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-margin_left = 600.0
-margin_right = 800.0
+margin_right = 200.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 0
@@ -1194,6 +1194,9 @@ stretch_mode = 1
 [node name="CenterContainer" type="CenterContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left/PosBot"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Left/PosBot/CenterContainer"]
 margin_left = 33.0
@@ -1213,19 +1216,19 @@ rect_min_size = Vector2( 0, 20 )
 
 [node name="Mid" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation"]
 margin_left = 66.0
-margin_right = 132.0
+margin_right = 133.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="FillerTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
-margin_right = 66.0
+margin_right = 67.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="PosTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
 margin_top = 20.0
-margin_right = 66.0
+margin_right = 67.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1248,7 +1251,7 @@ script = ExtResource( 40 )
 
 [node name="PosBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
 margin_top = 90.0
-margin_right = 66.0
+margin_right = 67.0
 margin_bottom = 160.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1271,25 +1274,25 @@ script = ExtResource( 40 )
 
 [node name="FillerBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Mid"]
 margin_top = 160.0
-margin_right = 66.0
+margin_right = 67.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="Right" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation/Formation"]
-margin_left = 132.0
+margin_left = 133.0
 margin_right = 200.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="FillerTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
-margin_right = 68.0
+margin_right = 67.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="PosTop" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
 margin_top = 20.0
-margin_right = 68.0
+margin_right = 67.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1301,9 +1304,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right/PosTop/CenterContainer"]
-margin_left = 34.0
+margin_left = 33.0
 margin_top = 35.0
-margin_right = 34.0
+margin_right = 33.0
 margin_bottom = 35.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -1312,7 +1315,7 @@ script = ExtResource( 40 )
 
 [node name="PosBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
 margin_top = 90.0
-margin_right = 68.0
+margin_right = 67.0
 margin_bottom = 160.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1328,9 +1331,9 @@ margin_right = -3.59344
 margin_bottom = -0.513306
 
 [node name="UnitFormation" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right/PosBot/CenterContainer"]
-margin_left = 34.0
+margin_left = 33.0
 margin_top = 35.0
-margin_right = 34.0
+margin_right = 33.0
 margin_bottom = 35.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -1339,7 +1342,7 @@ script = ExtResource( 40 )
 
 [node name="FillerBot" type="TextureRect" parent="BottomUI/MiddleSection/UnitInformation/Formation/Right"]
 margin_top = 160.0
-margin_right = 68.0
+margin_right = 67.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 0, 20 )
 
@@ -1504,21 +1507,38 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
-
-[node name="EventPanel" type="PanelContainer" parent="."]
-margin_left = 258.56
-margin_top = 75.7068
-margin_right = 1058.56
-margin_bottom = 616.707
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LeftRightHolder" type="HBoxContainer" parent="EventPanel"]
+[node name="EventHolder" type="CenterContainer" parent="."]
+visible = false
+margin_left = -852.222
+margin_top = -1097.14
+margin_right = 2147.78
+margin_bottom = 1902.86
+rect_min_size = Vector2( 3000, 3000 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EventUpperHolder" type="Node2D" parent="EventHolder"]
+z_index = 7
+
+[node name="EventPanel" type="PanelContainer" parent="EventHolder/EventUpperHolder"]
+margin_left = 1116.0
+margin_top = 1243.0
+margin_right = 1884.0
+margin_bottom = 1757.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftRightHolder" type="HBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 793.0
-margin_bottom = 534.0
+margin_right = 761.0
+margin_bottom = 507.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -1526,59 +1546,62 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PictureContainer" type="Container" parent="EventPanel/LeftRightHolder"]
-margin_right = 391.0
-margin_bottom = 527.0
+[node name="PictureContainer" type="Container" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
+margin_right = 375.0
+margin_bottom = 500.0
+rect_min_size = Vector2( 375, 500 )
 size_flags_horizontal = 3
 
-[node name="Picture" type="Sprite" parent="EventPanel/LeftRightHolder/PictureContainer"]
+[node name="Picture" type="Sprite" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/PictureContainer"]
 position = Vector2( -786, 0 )
 
-[node name="popup_2Choices" type="VBoxContainer" parent="EventPanel/LeftRightHolder"]
+[node name="popup_2Choices" type="VBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
 visible = false
-margin_left = 263.0
-margin_right = 522.0
-margin_bottom = 527.0
+margin_left = 289.0
+margin_right = 575.0
+margin_bottom = 498.0
+rect_min_size = Vector2( 375, 500 )
 size_flags_horizontal = 3
 
-[node name="Text" type="TextEdit" parent="EventPanel/LeftRightHolder/popup_2Choices"]
-margin_right = 259.0
-margin_bottom = 463.0
+[node name="Text" type="TextEdit" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices"]
+margin_right = 286.0
+margin_bottom = 434.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Hello testing text"
 
-[node name="Choices" type="HBoxContainer" parent="EventPanel/LeftRightHolder/popup_2Choices"]
-margin_top = 467.0
-margin_right = 259.0
-margin_bottom = 527.0
+[node name="Choices" type="HBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices"]
+margin_top = 438.0
+margin_right = 286.0
+margin_bottom = 498.0
 
-[node name="ChoiceOne" type="Button" parent="EventPanel/LeftRightHolder/popup_2Choices/Choices"]
-margin_right = 127.0
+[node name="ChoiceOne" type="Button" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices/Choices"]
+margin_right = 141.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 0, 60 )
 size_flags_horizontal = 3
 
-[node name="ChoiceTwo" type="Button" parent="EventPanel/LeftRightHolder/popup_2Choices/Choices"]
-margin_left = 131.0
-margin_right = 259.0
+[node name="ChoiceTwo" type="Button" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices/Choices"]
+margin_left = 145.0
+margin_right = 286.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 0, 60 )
 size_flags_horizontal = 3
 
-[node name="popup_TextOnly" type="VBoxContainer" parent="EventPanel/LeftRightHolder"]
-margin_left = 395.0
-margin_right = 786.0
-margin_bottom = 527.0
+[node name="popup_TextOnly" type="VBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
+margin_left = 379.0
+margin_right = 754.0
+margin_bottom = 500.0
+rect_min_size = Vector2( 375, 500 )
 size_flags_horizontal = 3
 
-[node name="Panel" type="Panel" parent="EventPanel/LeftRightHolder/popup_TextOnly"]
-margin_right = 391.0
-margin_bottom = 261.0
+[node name="Panel" type="Panel" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_TextOnly"]
+margin_right = 375.0
+margin_bottom = 248.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="EventPanel/LeftRightHolder/popup_TextOnly/Panel"]
+[node name="Label" type="Label" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_TextOnly/Panel"]
 margin_left = 4.00452
 margin_top = 5.33936
 margin_right = 387.005
@@ -1591,11 +1614,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Text2" type="TextEdit" parent="EventPanel/LeftRightHolder/popup_TextOnly"]
+[node name="Text2" type="TextEdit" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_TextOnly"]
 visible = false
-margin_top = 4.0
-margin_right = 391.0
-margin_bottom = 263.0
+margin_top = 22.0
+margin_right = 200.0
+margin_bottom = 41.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_colors/caret_background_color = Color( 0, 0, 0, 0 )
@@ -1607,21 +1630,41 @@ virtual_keyboard_enabled = false
 selecting_enabled = false
 wrap_enabled = true
 
-[node name="Text3" type="Label" parent="EventPanel/LeftRightHolder/popup_TextOnly"]
-margin_left = 95.0
-margin_top = 265.0
-margin_right = 295.0
-margin_bottom = 527.0
+[node name="Text3" type="Label" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_TextOnly"]
+margin_left = 87.0
+margin_top = 252.0
+margin_right = 287.0
+margin_bottom = 500.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
 custom_styles/normal = SubResource( 1 )
 text = "(Click anywhere to continue)"
 valign = 2
+
+[node name="EventLowerHolder" type="Node2D" parent="EventHolder"]
+z_index = 6
+
+[node name="ShadedBG" type="TextureRect" parent="EventHolder/EventLowerHolder"]
+modulate = Color( 0, 0, 0, 0.368627 )
+self_modulate = Color( 0, 0, 0, 1 )
+margin_left = 500.0
+margin_top = 500.0
+margin_right = 2500.0
+margin_bottom = 2500.0
+rect_min_size = Vector2( 2000, 2000 )
+mouse_filter = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 2 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

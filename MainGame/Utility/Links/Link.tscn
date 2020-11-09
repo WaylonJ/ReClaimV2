@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/PH_Link_Horizontal.png-27613173e2ef54afd843c252228cd2da.stex"
+
+[sub_resource type="StreamTexture" id=2]
+flags = 4
+load_path = "res://.import/PH_Link_Vertical.png-06c6545b402dfa55f22f63f0fa38aa45.stex"
+
+[node name="Link" type="Sprite"]
+show_behind_parent = true
+z_index = 2
+
+[node name="HorizontalLink" type="TextureRect" parent="."]
+visible = false
+show_behind_parent = true
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+texture = SubResource( 1 )
+
+[node name="VerticalLink" type="TextureRect" parent="."]
+visible = false
+show_behind_parent = true
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+texture = SubResource( 2 )

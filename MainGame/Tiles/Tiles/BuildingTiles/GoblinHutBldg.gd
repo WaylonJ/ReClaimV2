@@ -1,6 +1,23 @@
 extends "res://MainGame/Tiles/Tiles/BuildingTiles/_baseBuildTile.gd"
 	
 func _init():	
+	# Tier Upgrade / Output 
+	tileUpgradeCosts = [
+	[125, 25],
+	[300, 100],
+	[1000, 300],
+	[5000, 1000],
+	[20000, 5000],
+	[75000, 15000],]
+	
+	tileOutput = [
+	[0, 0, 2.0, 0],
+	[0, 0, 0.25, 0],
+	[0, 0, 0.125, 0],
+	[0, 0, 0.0625, 0],
+	[0, 0, 0.03125, 0],
+	[0, 0, 0.015625, 0],]
+
 	# UI Values
 	tileDescription = "    This building creates troops for your army. It must be supplied with enough " + \
 	"supplies to continue this production."
@@ -13,25 +30,10 @@ func _init():
 	
 	# Output values
 	mana = null
-	unit = 0.5
+	unit = tileOutput[0][2]
 	advanced = null
 	research = 0
 	unitName = "Goblin"
 	
-	# Tier Upgrade / Output 
-	tileUpgradeCosts = [
-	[125, 25],
-	[300, 100],
-	[1000, 300],
-	[5000, 1000],
-	[20000, 5000],
-	[75000, 15000],]
-	
-	tileOutput = [
-	[0, 0, 0.5, 0],
-	[0, 0, 0.25, 0],
-	[0, 0, 0.125, 0],
-	[0, 0, 0.0625, 0],
-	[0, 0, 0.03125, 0],
-	[0, 0, 0.015625, 0],]
+
 

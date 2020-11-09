@@ -18,7 +18,6 @@ onready var hoverBldgRef = rootRef.get_node("UI/HiddenItems/HoveringBldgImage")
 
 func _ready():
 	show()
-	set_process(true)
 	get_node("../TileActions").hide()
 	get_node("../NoSelection/ConstructionOptions").hide()
 	get_node("../NoSelection").show()
