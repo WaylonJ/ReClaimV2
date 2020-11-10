@@ -22,7 +22,7 @@ func _ready():
 	get_node("../NoSelection/ConstructionOptions").hide()
 	get_node("../NoSelection").show()
 	
-func _input(event):
+func input_receive(event):
 	if event is InputEventMouseButton and event.position[1] < 540:
 		if ignoreClick:
 			ignoreClick = false

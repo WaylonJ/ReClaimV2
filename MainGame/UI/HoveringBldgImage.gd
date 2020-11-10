@@ -68,7 +68,7 @@ func _on_thisButton_pressed(button):
 func _on_BackButton_pressed():
 	unselectEverything()
 	
-func _input(event):
+func input_receive(event):
 	# We have a tile selected, we've clicked a tile on the board
 	if event is InputEventMouseButton and selectedBldg != null and !event.is_pressed() and event.button_index == 1:
 		# Click on map, not tile

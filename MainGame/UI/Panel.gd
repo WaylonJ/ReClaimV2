@@ -70,7 +70,6 @@ func _on_TileAction_mouseEntered(type):
 			print("Panel.gd: Everything else??")
 
 func refreshPanel():
-	print("refreshing")
 	hidePanel()
 	_on_TileAction_mouseEntered("Upgrade")
 

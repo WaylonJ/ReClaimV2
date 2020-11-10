@@ -91,11 +91,11 @@ func startNewGame():
 #	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
 	# Make test enemy unit
-#	var testEnemyTile = startingArray[length][length - 1]
+	var testEnemyTile = startingArray[length][length - 1]
 #	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 ##
-#	testEnemyTile = startingArray[length][length + 1]
-#	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
+	testEnemyTile = startingArray[length][length + 1]
+	get_node("UnitHolder/EnemyController").makeTestEnemy(testEnemyTile)
 	
 	setTileBorders(startingArray)
 	

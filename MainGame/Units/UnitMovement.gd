@@ -25,7 +25,7 @@ func _mouseInTile(tile):
 func _mouseOutOfTile(tile):
 	tileHovered = null
 
-func _input(event):
+func input_receive(event):
 	if Input.is_key_pressed(KEY_SHIFT):
 		shiftHeld = true
 	else:

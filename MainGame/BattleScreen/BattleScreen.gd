@@ -6,6 +6,7 @@ extends Sprite
 var skillUnitPositions = []
 var tileUnitPositions = []
 var listOfBattles = []
+var lastOpenedBattle = null
 
 var Battle_Fight_Section
 var oldZoom
@@ -16,11 +17,12 @@ onready var rootRef = get_tree().get_root().get_node("Control")
 func _ready():
 	initializeSkillAndTileUnitPositions()
 	Battle_Fight_Section = get_node("Panel/HBoxContainer/Battle_Fight_Section")
-#	battleController = load("res://MainGame/BattleScreen/BattleController.gd").new()
-#	add_child(battleController)
 	pass 
 	
-		
+func input_receive(event):
+	if Input.is_key_pressed(KEY_ESCAPE) and lastOpenedBattle != null:
+		lastOpenedBattle.setNotActive()
+		lastOpenedBattle.get_parent().hideBattleScreen()
 
 func addBattle(ally, enemy, tile):
 #	battles.append([ally, enemy, tile])
@@ -53,6 +55,7 @@ func openBattleScreen(tile):
 	get_tree().get_root().get_node("Control").selectSomething("Battle")
 	for item in listOfBattles:
 		if item.tile == tile:
+			lastOpenedBattle = item
 			updateScreen(item)
 #			print("BATTLE STUFF: " + str(item))
 

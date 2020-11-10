@@ -26,11 +26,6 @@ onready var TIME_CONSTANT = timeController.TIME_CONSTANT
 # Var to control which battle is currently on the screen.
 var activeBattle = false
 
-func _input(event):
-	if Input.is_key_pressed(KEY_ESCAPE):
-		setNotActive()
-		get_parent().hideBattleScreen()
-
 func _ready():
 	pass
 	

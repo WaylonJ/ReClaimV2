@@ -9,7 +9,7 @@ var allyUnit = true
 
 var inArea = false
 
-func _input(event):
+func input_receive(event):
 	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
 	if event is InputEventMouseButton and !event.is_pressed() and event.position[1] < 540 and inArea:
 		inArea = false
@@ -27,6 +27,7 @@ func _input(event):
 
 		# Click onto something that was not a unit
 		if !overUnit and !selectedUnits.empty() and !Input.is_key_pressed(KEY_SHIFT) and event.button_index == 1:
+#			print(event.is_pressed())
 			_unhighlightAll()
 	elif event is InputEventMouseButton and event.is_pressed() and event.position[1] < 540:
 		inArea = true
@@ -44,19 +45,16 @@ func makeLeaderUnit(baseTile):
 	
 func setGlobalSelected():
 	get_tree().get_root().get_node("Control").selectSomething("allyUnit")
-	print("setting allyunit")
 	
 func unitClicked(unit):
 	setGlobalSelected()
 	unit.get_node("Highlight").show()
-	print("highlighting")
 	if !checkIfUnitAlreadySelected(unit):
 		selectedUnits.append(unit)
 		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").displayUnitGroup(unit)
 	
 func _unhighlightAll():
 	get_tree().get_root().get_node("Control").unselectEverything()
-	print("unselecting")
 	if !selectedUnits.empty():
 		for unit in selectedUnits:
 			# Ensures the unit wasn't queue'd for deletion
@@ -85,7 +83,6 @@ func _mouseEntered(unit):
 	if unit.isAlly:
 		currentUnit = unit
 		overUnit = true
-		print("overunit true")
 	
 func checkIfUnitAlreadySelected(unit):
 	for item in selectedUnits:

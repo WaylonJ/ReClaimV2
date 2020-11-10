@@ -47,11 +47,11 @@ func _ready():
 	connectMouseEntered(self, self)
 	tempImageNode.hide()
 	
-func _input(event):
+func input_receive(event):
 #	print(event)
 	if event is InputEventMouseButton and inFormations:
 		if event.is_pressed():
-			print("Letgo: " + str(letGo) + ", skipFirst: " + str(skipFirstMouseMotion))
+#			print("Letgo: " + str(letGo) + ", skipFirst: " + str(skipFirstMouseMotion))
 			if currentPos != null:
 
 #				print("clicked")
@@ -73,7 +73,7 @@ func _input(event):
 func _mouseEntered(node):
 	inFormations = true
 	if node.name == "CenterContainer":
-		print("setting cur Pos, " + str(node))
+#		print("setting cur Pos, " + str(node))
 		currentPos = node
 	if letGo:
 		changePicture()

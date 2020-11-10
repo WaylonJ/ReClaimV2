@@ -35,10 +35,10 @@ func _ready():
 	# Connects function for unit box selection
 	connect("area_selected", get_node("../UnitHolder/UnitController"), "_on_AreaSelected")
 
-func _input(event):
+func input_receive(event):
 	# Prevents any interaction when a battle screen is up
 	globalSelected = get_tree().get_root().get_node("Control").checkIfSomethingSelected()
-	print(globalSelected)
+	
 	if globalSelected == "Battle":
 		return
 	
