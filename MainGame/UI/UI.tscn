@@ -1546,44 +1546,48 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PictureContainer" type="Container" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
+[node name="PictureContainer" type="CenterContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
 margin_right = 375.0
 margin_bottom = 500.0
 rect_min_size = Vector2( 375, 500 )
 size_flags_horizontal = 3
 
-[node name="Picture" type="Sprite" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/PictureContainer"]
-position = Vector2( -786, 0 )
+[node name="Picture" type="TextureRect" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/PictureContainer"]
+margin_left = 87.0
+margin_top = 49.0
+margin_right = 287.0
+margin_bottom = 449.0
+rect_min_size = Vector2( 200, 400 )
 
 [node name="popup_2Choices" type="VBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
 visible = false
-margin_left = 289.0
-margin_right = 575.0
-margin_bottom = 498.0
+margin_left = 379.0
+margin_right = 754.0
+margin_bottom = 500.0
 rect_min_size = Vector2( 375, 500 )
 size_flags_horizontal = 3
 
 [node name="Text" type="TextEdit" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices"]
-margin_right = 286.0
-margin_bottom = 434.0
+margin_right = 375.0
+margin_bottom = 436.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Hello testing text"
 
 [node name="Choices" type="HBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices"]
-margin_top = 438.0
-margin_right = 286.0
-margin_bottom = 498.0
+margin_top = 440.0
+margin_right = 375.0
+margin_bottom = 500.0
 
 [node name="ChoiceOne" type="Button" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices/Choices"]
-margin_right = 141.0
+margin_right = 185.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 0, 60 )
 size_flags_horizontal = 3
 
 [node name="ChoiceTwo" type="Button" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_2Choices/Choices"]
-margin_left = 145.0
-margin_right = 286.0
+margin_left = 189.0
+margin_right = 375.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 0, 60 )
 size_flags_horizontal = 3
@@ -1602,14 +1606,15 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_TextOnly/Panel"]
-margin_left = 4.00452
-margin_top = 5.33936
-margin_right = 387.005
-margin_bottom = 256.339
+margin_left = 4.0
+margin_top = 5.0
+margin_right = 369.0
+margin_bottom = 256.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 3
-text = "This is example event text. Oh no the evil baddies are coming run away"
+text = "This is example event text. Oh no the evil baddies areaaaaaa coming run away"
 autowrap = true
+clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1663,8 +1668,8 @@ __meta__ = {
 }
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

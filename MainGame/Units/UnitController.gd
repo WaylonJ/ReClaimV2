@@ -47,13 +47,16 @@ func setGlobalSelected():
 	get_tree().get_root().get_node("Control").selectSomething("allyUnit")
 	
 func unitClicked(unit):
+	print(unit)
 	setGlobalSelected()
 	unit.get_node("Highlight").show()
 	if !checkIfUnitAlreadySelected(unit):
+		print("ere")
 		selectedUnits.append(unit)
 		get_tree().get_root().get_node("Control/UI/BottomUI/MiddleSection/UnitInformation").displayUnitGroup(unit)
 	
 func _unhighlightAll():
+	print("ss")
 	get_tree().get_root().get_node("Control").unselectEverything()
 	if !selectedUnits.empty():
 		for unit in selectedUnits:

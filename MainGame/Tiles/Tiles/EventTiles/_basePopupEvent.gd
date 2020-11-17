@@ -1,6 +1,7 @@
 extends Node
 
-var portrait
+var tile_portrait
+var trigger_portrait
 var description
 var parent
 var eventType = "popup_TextOnly"
@@ -17,13 +18,16 @@ func _ready():
 	pass 
 	
 func _init():
-	portrait = preload("res://MainGame/Tiles/Resources/Question_Mark.png")
+	tile_portrait = preload("res://MainGame/Tiles/Resources/Question_Mark.png")
 #	description
 	pass
 
 func triggerEvent():
 	# Shows the event on UI
 	UIRef.get_node("EventHolder").show()
+	print("TRIGGERED")
+	UIRef.get_node("EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/PictureContainer/Picture").texture = trigger_portrait
+	UIRef.get_node("EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/popup_TextOnly/Panel/Label").text = description
 	hideOtherEventTypes()
 	
 	# This picks the specific eventType to show once the eventScreen is up.
@@ -42,8 +46,10 @@ func event_end():
 	print("hiding")
 	UIRef.get_node("EventHolder").hide()
 	inputController.event_removeListener()
+	parent.event_remove()
 	
 func event_details():
+	# This should be overwritten in the events that extend this class
 	pass
 
 func hideOtherEventTypes():
@@ -58,7 +64,7 @@ func get_description():
 	return description
 	
 func get_portrait():
-	return portrait
+	return tile_portrait
 
 func add_parent(tile):
 	parent = tile

@@ -136,6 +136,21 @@ func event_add(newEvent):
 			
 		_:
 			print("Non-existant Event Type")
+			
+func event_remove():
+	remove_child(event)
+	
+	buildingName = "Blank"
+	buildingAlliance = "neutral"
+	
+	description = "TILE DESCRIPTION: NEEDS TO BE CHANGED"
+	portrait = BLANK_PORTRAIT
+	get_node("TileHolder/Background").set("texture", portrait)
+	
+	event = null
+	eventType = null
+	eventCollideable = false
+	
 
 func event_Trigger():
 	event.triggerEvent()

@@ -61,11 +61,13 @@ func input_receive(event):
 	
 	if event is InputEventMouseButton and !event.is_pressed() and event.button_index == 1 and boxDragging:
 		if start.distance_to(mousePos) > 20:
+			print("Greater than 20")
 			get_node("../UI/BottomUI/MiddleSection/TileInfo").emptyTileGroup()
 			end = mousePos
 			endGlobal = mousePosGlobal
 			boxDragging = false
 			draw_area(false)
+			print("Start: " + str(startGlobal) + ", End: " + str(endGlobal))
 			emit_signal("area_selected", [startGlobal, endGlobal])
 		else:
 			endGlobal = startGlobal
