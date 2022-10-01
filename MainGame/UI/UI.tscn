@@ -200,6 +200,7 @@ size_flags_horizontal = 5
 custom_constants/separation = 0
 
 [node name="TileInfo" type="HBoxContainer" parent="BottomUI/MiddleSection"]
+visible = false
 margin_right = 500.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 500, 0 )
@@ -346,6 +347,7 @@ text = "+5"
 align = 1
 
 [node name="NoSelection" type="HBoxContainer" parent="BottomUI/MiddleSection"]
+visible = false
 margin_left = 500.0
 margin_right = 800.0
 margin_bottom = 180.0
@@ -1006,8 +1008,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 21 )
 
 [node name="UnitInformation" type="HBoxContainer" parent="BottomUI/MiddleSection"]
-visible = false
-margin_left = 800.0
 margin_right = 800.0
 margin_bottom = 180.0
 size_flags_horizontal = 5
@@ -1126,7 +1126,8 @@ texture = ExtResource( 35 )
 stretch_mode = 1
 
 [node name="RowHolder" type="VBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-margin_right = 400.0
+margin_left = 200.0
+margin_right = 600.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 400, 0 )
 
@@ -1142,7 +1143,8 @@ margin_bottom = 180.0
 size_flags_vertical = 3
 
 [node name="Formation" type="HBoxContainer" parent="BottomUI/MiddleSection/UnitInformation"]
-margin_right = 200.0
+margin_left = 600.0
+margin_right = 800.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 0
@@ -1554,9 +1556,9 @@ size_flags_horizontal = 3
 
 [node name="Picture" type="TextureRect" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder/PictureContainer"]
 margin_left = 87.0
-margin_top = 49.0
+margin_top = 50.0
 margin_right = 287.0
-margin_bottom = 449.0
+margin_bottom = 450.0
 rect_min_size = Vector2( 200, 400 )
 
 [node name="popup_2Choices" type="VBoxContainer" parent="EventHolder/EventUpperHolder/EventPanel/LeftRightHolder"]
@@ -1666,10 +1668,11 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
+
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_Constructions_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
-[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/BasicOptions/Constructions" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_Constructions_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/BasicOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="BottomUI/MiddleSection/NoSelection/ConstructionOptions" method="_on_BackButton_pressed"]
+[connection signal="pressed" from="BottomUI/MiddleSection/NoSelection/ConstructionOptions/BotRow/BackButton" to="HiddenItems/HoveringBldgImage" method="_on_BackButton_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/TileActions" method="_on_Return_pressed"]
 [connection signal="pressed" from="BottomUI/MiddleSection/UpgradeMenu/BotRow/Return" to="BottomUI/MiddleSection/UpgradeMenu" method="_on_Return_pressed"]

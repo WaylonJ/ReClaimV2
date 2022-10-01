@@ -12,6 +12,9 @@ margin_left = 0.250351
 margin_right = 0.250366
 size_flags_horizontal = 3
 size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_right = 40.0
@@ -34,11 +37,17 @@ valign = 1
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.41422
+margin_right = 1.41422
+margin_bottom = 2.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 18.0
 margin_right = 21.0
-margin_bottom = 36.0
+margin_bottom = 37.0
 size_flags_vertical = 7
 text = "1/2"
 align = 1
@@ -50,9 +59,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 36.0
+margin_top = 37.0
 margin_right = 21.0
-margin_bottom = 54.0
+margin_bottom = 56.0
 size_flags_vertical = 7
 text = "1/2"
 align = 1
@@ -64,7 +73,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 54.0
+margin_top = 56.0
 margin_right = 21.0
 margin_bottom = 75.0
 size_flags_vertical = 7
